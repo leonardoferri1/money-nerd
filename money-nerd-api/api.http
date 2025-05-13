@@ -1,71 +1,33 @@
-###
-# @name createAsset
-POST http://localhost:3000/assets
+## Create Admin
+POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-    "name": "Amazon",
-    "symbol": "A1",
-    "price": 100,
-    "image": "AMZN.png"
+    "name": "Admin",
+    "email": "admin@user.com",
+    "password": "admin",
+    "role": "ADMIN"
 }
 
 ###
 
-@assetId = {{ createAsset.response.body._id }}
+## GET Usrrs
+GET http://localhost:3000/users
+Authorization: Bearer {{token}}
 
 ###
-GET http://localhost:3000/assets
 
-###
-GET http://localhost:3000/assets/A1
-
-###
-POST http://localhost:3000/assets/A1/dailies
+# @name adminLogin
+POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-  "date": "2024-12-10",
-  "price": 100
+    "email": "admin@user.com",
+    "password": "admin"
 }
 
 ###
-GET http://localhost:3000/assets/A1/dailies
+
+@token = {{ adminLogin.response.body.access_token }}
 
 ###
-# @name createWallet
-POST http://localhost:3000/wallets
-
-###
-
-@walletId = {{ createWallet.response.body._id }}
-
-###
-GET http://localhost:3000/wallets
-
-###
-GET http://localhost:3000/wallets/{{ walletId }}
-
-###
-POST http://localhost:3000/wallets/{{ walletId }}/assets
-Content-Type: application/json
-
-{
-    "assetId": "{{ assetId }}",
-    "shares": 100
-}
-
-###
-POST http://localhost:3000/orders
-Content-Type: application/json
-
-{
-    "walletId": "{{ walletId }}",
-    "assetId": "{{ assetId }}",
-    "shares": 10,
-    "price": 100,
-    "type": "BUY"
-}
-
-###
-GET http://localhost:3000/orders?walletId=fcc4de1c-f0fb-4c1e-afbb-f259f1672447
