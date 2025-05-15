@@ -13,22 +13,24 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UserPresenter } from './user.presenter';
 import { AuthGuard } from 'src/auth/auth.guard';
 
-@UseGuards(AuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    const user = await this.usersService.create(createUserDto);
+    return new UserPresenter(user);
   }
 
+  @UseGuards(AuthGuard)
   @Get()
   async findAll() {
     const users = await this.usersService.findAll();
     return users.map((user) => new UserPresenter(user));
   }
 
+  @UseGuards(AuthGuard)
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const user = await this.usersService.findOne(id);
@@ -40,6 +42,7 @@ export class UsersController {
   //   return this.usersService.update(+id, updateUserDto);
   // }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);

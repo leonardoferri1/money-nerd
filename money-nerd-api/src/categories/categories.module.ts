@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { UsersController } from './users.controller';
-import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from './entities/user.entity';
-import { JwtModule } from '@nestjs/jwt';
+import { CategoriesService } from './categories.service';
+import { CategoriesController } from './categories.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Category, CategorySchema } from './entities/category.entity';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       {
-        name: User.name,
-        schema: UserSchema,
+        name: Category.name,
+        schema: CategorySchema,
       },
     ]),
     JwtModule.registerAsync({
@@ -27,8 +27,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       inject: [ConfigService],
     }),
   ],
-  controllers: [UsersController],
-  providers: [UsersService],
-  exports: [UsersService, MongooseModule],
+  controllers: [CategoriesController],
+  providers: [CategoriesService],
 })
-export class UsersModule {}
+export class CategoriesModule {}

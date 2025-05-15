@@ -1,17 +1,19 @@
 import { Module } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { UsersController } from './users.controller';
-import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from './entities/user.entity';
-import { JwtModule } from '@nestjs/jwt';
+import { TransactionsService } from './transactions.service';
+import { TransactionsController } from './transactions.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Transaction, TransactionSchema } from './entities/transaction.entity';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
+    UsersModule,
     MongooseModule.forFeature([
       {
-        name: User.name,
-        schema: UserSchema,
+        name: Transaction.name,
+        schema: TransactionSchema,
       },
     ]),
     JwtModule.registerAsync({
@@ -27,8 +29,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       inject: [ConfigService],
     }),
   ],
-  controllers: [UsersController],
-  providers: [UsersService],
-  exports: [UsersService, MongooseModule],
+  controllers: [TransactionsController],
+  providers: [TransactionsService],
 })
-export class UsersModule {}
+export class TransactionsModule {}
