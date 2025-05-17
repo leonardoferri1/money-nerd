@@ -1,6 +1,7 @@
 import { HydratedDocument } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import crypto from 'crypto';
+import { User, UserDocument } from 'src/users/entities/user.entity';
 
 export type CategoryDocument = HydratedDocument<Category>;
 
@@ -18,6 +19,9 @@ export class Category {
 
   @Prop({ required: true })
   name: string;
+
+  @Prop({ type: String, ref: User.name })
+  user?: UserDocument | string;
 
   createdAt!: Date;
   updatedAt!: Date;

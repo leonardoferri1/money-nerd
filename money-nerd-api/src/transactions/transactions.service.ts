@@ -12,10 +12,11 @@ export class TransactionsService {
     private transactionSchema: Model<Transaction>,
   ) {}
 
-  async create(createTransactionsDto: CreateTransactionDto[]) {
+  async create(createTransactionsDto: CreateTransactionDto[], userId: string) {
     const converted = createTransactionsDto.map((dto) => ({
       ...dto,
       date: new Date(dto.date),
+      user: userId,
     }));
 
     const transactions = await this.transactionSchema.insertMany(converted);
@@ -24,19 +25,21 @@ export class TransactionsService {
       .populate('category');
   }
 
-  findAll() {
-    return this.transactionSchema.find().populate('category');
+  findAll(userId: string) {
+    return this.transactionSchema.find({ user: userId }).populate('category');
   }
 
-  findOne(id: string) {
-    return this.transactionSchema.findOne({ id }).populate('category');
+  findOne(id: string, userId: string) {
+    return this.transactionSchema
+      .findOne({ id, user: userId })
+      .populate('category');
   }
 
   // update(id: number, updateTransactionDto: UpdateTransactionDto) {
   //   return `This action updates a #${id} transaction`;
   // }
 
-  remove(id: number) {
-    return this.transactionSchema.deleteOne({ id });
+  remove(id: string, userId: string) {
+    return this.transactionSchema.deleteOne({ _id: id, user: userId });
   }
 }

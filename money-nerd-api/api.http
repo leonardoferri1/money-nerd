@@ -3,14 +3,19 @@ POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-    "name": "Admin",
-    "email": "admin@user.com",
-    "password": "admin",
-    "role": "ADMIN"
+    "name": "user2",
+    "email": "use2@user.com",
+    "password": "admin"
 }
 
 ###
 
+## Create Admin
+DELETE http://localhost:3000/users/e0764689-d1cb-4417-ab43-e72aa45cc2a2
+Authorization: Bearer {{token}}
+
+
+###
 ## GET Users
 GET http://localhost:3000/users
 Authorization: Bearer {{token}}
@@ -57,7 +62,7 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
     {
-    "name": "category 2"
+    "name": "category 1"
 }
 
 ###

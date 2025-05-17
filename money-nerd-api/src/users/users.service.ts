@@ -29,7 +29,7 @@ export class UsersService {
   //   return `This action updates a #${id} user`;
   // }
 
-  remove(id: number) {
-    return this.userSchema.deleteOne({ id });
+  remove(id: string) {
+    return this.userSchema.deleteOne({ _id: id });
   }
 }

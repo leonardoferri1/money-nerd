@@ -11,23 +11,25 @@ export class CategoriesService {
     private categorySchema: Model<Category>,
   ) {}
 
-  create(createCategoryDto: CreateCategoryDto) {
-    return this.categorySchema.create(createCategoryDto);
+  create(createCategoryDto: CreateCategoryDto, userId: string) {
+    return this.categorySchema.create({ ...createCategoryDto, user: userId });
   }
 
-  findAll() {
-    return this.categorySchema.find();
+  findAll(userId: string) {
+    return this.categorySchema.find({
+      user: userId,
+    });
   }
 
-  findOne(id: string) {
-    return this.categorySchema.findOne({ id });
+  findOne(id: string, userId: string) {
+    return this.categorySchema.findOne({ id, user: userId });
   }
 
   // update(id: number, updateCategoryDto: UpdateCategoryDto) {
   //   return `This action updates a #${id} category`;
   // }
 
-  remove(id: number) {
-    return this.categorySchema.deleteOne({ id });
+  remove(id: string, userId: string) {
+    return this.categorySchema.deleteOne({ _id: id, user: userId });
   }
 }
