@@ -1,0 +1,15 @@
+textarea {
+  font-size: 0.9rem;
+  border: 1px solid $input-border;
+  border-radius: 4px;
+  padding-top: 0.5rem;
+  background: rgb(44, 43, 41);
+  padding-left: 1rem;
+  padding-right: 1rem;
+  color: #fff;
+  width: 100% !important;
+
+  &:focus {
+    border: 1px solid $yellow-vivid;
+  }
+}
