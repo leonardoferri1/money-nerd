@@ -1,0 +1,13 @@
+{
+  "HELLO": "Hello",
+  "WELCOME": "Welcome to our site!",
+  "LANGUAGE_PLACEH": "Language",
+  "PASSWORD_LOGIN": "Password",
+  "NO_ACCOUNT": "Don't have an account?",
+  "FREE_REGISTER": "Sign up for free",
+  "HAS_ACCOUNT": "Already have an account?",
+  "REGISTER_NAME": "Name",
+  "CONFIRM_PASSWORD": "Confirm your password",
+  "LOGIN_BUTTON": "Login",
+  "GOOGLE_BUTTON": "Continue with Google"
+}

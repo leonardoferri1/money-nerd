@@ -41,6 +41,7 @@ export class TextInputComponent implements ControlValueAccessor {
   @Output() valueChange = new EventEmitter<string | null>();
 
   value: string | null = '';
+  hide: boolean = true;
 
   onTouched: () => void = () => {};
   onChange: (value: string | null) => void = () => {};
@@ -79,5 +80,13 @@ export class TextInputComponent implements ControlValueAccessor {
         event.preventDefault();
       }
     }
+  }
+
+  get inputType(): string {
+    return this.type === 'password' && this.hide ? 'password' : 'text';
+  }
+
+  toggleVisibility(): void {
+    this.hide = !this.hide;
   }
 }

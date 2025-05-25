@@ -4,3 +4,35 @@ button {
 a {
   text-decoration: none;
 }
+
+.default-icon-button {
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+
+  background: none;
+  color: white;
+  cursor: pointer;
+
+  i {
+    font-size: 15px;
+  }
+
+  &:hover {
+    background-color: $background-main-hover;
+    transition: background-color 0.1s ease;
+  }
+
+  &:disabled,
+  &.disabled {
+    opacity: 65%;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: not-allowed;
+    box-shadow: none;
+    pointer-events: none;
+  }
+}

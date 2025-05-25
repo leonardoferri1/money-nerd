@@ -1,13 +1,25 @@
-<input
-  [type]="type"
-  [placeholder]="placeholder"
-  [attr.maxlength]="maxLength"
-  (input)="handleMaxLength()"
-  [attr.disabled]="disabled ? true : null"
-  [(ngModel)]="value"
-  (ngModelChange)="onInputChange($event)"
-  (keypress)="onKeyPress($event)"
-  [readonly]="isReadonly"
-  [mask]="mask"
-  [ngClass]="{ 'invalid-input': invalidValidator }"
-/>
+<div class="input-wrapper">
+  <input
+    [type]="inputType"
+    [placeholder]="placeholder"
+    [attr.maxlength]="maxLength"
+    (input)="handleMaxLength()"
+    [attr.disabled]="disabled ? true : null"
+    [(ngModel)]="value"
+    (ngModelChange)="onInputChange($event)"
+    (keypress)="onKeyPress($event)"
+    [readonly]="isReadonly"
+    [mask]="mask"
+    [ngClass]="{ 'invalid-input': invalidValidator }"
+  />
+
+  <button
+    *ngIf="type === 'password'"
+    type="button"
+    class="eye-button default-icon-button"
+    (click)="toggleVisibility()"
+  >
+    <i *ngIf="hide" class="fa-regular fa-eye"></i>
+    <i *ngIf="!hide" class="fa-regular fa-eye-slash"></i>
+  </button>
+</div>

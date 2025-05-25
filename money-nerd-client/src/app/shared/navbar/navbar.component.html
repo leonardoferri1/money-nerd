@@ -1,0 +1,16 @@
+<div class="header-container">
+  <div class="left-container"></div>
+
+  <div>
+    <div class="user-container">
+      <dropdown
+        [(ngModel)]="currentLang"
+        [options]="optionsLang"
+        [placeholder]="'LANGUAGE_PLACEH' | translate"
+        [labelField]="'name'"
+        [valueField]="'id'"
+        (valueChange)="onLangSelect(currentLang)"
+      ></dropdown>
+    </div>
+  </div>
+</div>

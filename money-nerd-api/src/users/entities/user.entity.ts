@@ -22,7 +22,7 @@ export class User {
   @Prop({ unique: true, index: true })
   email: string;
 
-  @Prop()
+  @Prop({ maxlength: 24 })
   password: string;
 
   createdAt!: Date;
