@@ -20,12 +20,75 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const token = this.jwtService.sign({
+    const payload = {
       name: user.name,
       email: user.email,
       sub: user._id.toString(),
+    };
+    const accessToken = this.jwtService.sign(payload, {
+      expiresIn: '10s',
     });
 
-    return { access_token: token };
+    const refreshToken = this.jwtService.sign(payload, {
+      expiresIn: '20s',
+    });
+
+    await this.userSchema.updateOne(
+      { _id: user._id },
+      { $push: { refreshTokens: refreshToken } },
+    );
+
+    return {
+      accessToken,
+      refreshToken,
+    };
+  }
+
+  async refresh(refreshToken: string) {
+    try {
+      const payload = this.jwtService.verify<{
+        name: string;
+        email: string;
+        sub: string;
+      }>(refreshToken);
+      const user = await this.userSchema.findById({ _id: payload.sub });
+
+      if (!user || !user.refreshTokens.includes(refreshToken)) {
+        throw new UnauthorizedException('Refresh token not valid');
+      }
+
+      const newAccessToken = this.jwtService.sign(
+        {
+          name: user.name,
+          email: user.email,
+          sub: user._id.toString(),
+        },
+        {
+          expiresIn: '10s',
+          algorithm: 'HS256',
+        },
+      );
+
+      // const newRefreshToken = this.jwtService.sign(
+      //   {
+      //     name: user.name,
+      //     email: user.email,
+      //     sub: user._id.toString(),
+      //   },
+      //   {
+      //     expiresIn: '20s',
+      //     algorithm: 'HS256',
+      //   },
+      // );
+
+      // user.refreshTokens = user.refreshTokens.filter((t) => t !== refreshToken);
+      // user.refreshTokens.push(newRefreshToken);
+      await user.save();
+      return { accessToken: newAccessToken };
+    } catch (error) {
+      throw new UnauthorizedException('Invalid refresh token', {
+        cause: error,
+      });
+    }
   }
 }

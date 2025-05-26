@@ -9,5 +9,9 @@
   "REGISTER_NAME": "Nome",
   "CONFIRM_PASSWORD": "Confirme sua senha",
   "LOGIN_BUTTON": "Entrar",
-  "GOOGLE_BUTTON": "Continuar com o Google"
+  "GOOGLE_BUTTON": "Continuar com o Google",
+  "VALIDATION": {
+    "REQUIRED": "Necessário preencher todos os campos obrigatórios.",
+    "PASSWORDS_DO_NOT_MATCH": "As senhas não coincidem."
+  }
 }

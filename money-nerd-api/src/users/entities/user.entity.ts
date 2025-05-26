@@ -22,8 +22,11 @@ export class User {
   @Prop({ unique: true, index: true })
   email: string;
 
-  @Prop({ maxlength: 24 })
+  @Prop({ maxlength: 300 })
   password: string;
+
+  @Prop({ type: [String], default: [] })
+  refreshTokens: string[];
 
   createdAt!: Date;
   updatedAt!: Date;

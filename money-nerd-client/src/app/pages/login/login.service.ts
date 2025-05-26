@@ -6,12 +6,20 @@ import { environment } from '../../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
-export class AgenciaService {
+export class LoginService {
   private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
   login(payload: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/auth/login`, payload);
+    return this.http.post<any>(`${this.apiUrl}/auth/login`, payload, {
+      withCredentials: true,
+    });
+  }
+
+  teste(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/users`, {
+      withCredentials: true,
+    });
   }
 }

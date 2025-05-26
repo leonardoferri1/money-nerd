@@ -23,7 +23,11 @@
       <h3>E-mail:</h3>
     </div>
 
-    <text-input formControlName="email"></text-input>
+    <text-input
+      formControlName="email"
+      [invalidValidator]="invalidLoginEmail"
+      (valueChange)="onInputChange('login-email')"
+    ></text-input>
   </div>
 
   <div class="full-width-div">
@@ -35,10 +39,16 @@
       formControlName="password"
       [maxLength]="24"
       type="password"
+      [invalidValidator]="invalidLoginPassword"
+      (valueChange)="onInputChange('login-password')"
     ></text-input>
   </div>
 
-  <button class="login-button">{{ "LOGIN_BUTTON" | translate }}</button>
+  <button class="login-button" (click)="submitLogin()">
+    {{ "LOGIN_BUTTON" | translate }}
+  </button>
+
+  <button class="login-button" (click)="teste()">teste</button>
 
   <div class="divider"></div>
 
@@ -67,7 +77,11 @@
       <h3>{{ "REGISTER_NAME" | translate }}:</h3>
     </div>
 
-    <text-input formControlName="name"></text-input>
+    <text-input
+      formControlName="name"
+      [invalidValidator]="invalidName"
+      (valueChange)="onInputChange('name')"
+    ></text-input>
   </div>
 
   <div class="full-width-div">
@@ -75,7 +89,11 @@
       <h3>E-mail:</h3>
     </div>
 
-    <text-input formControlName="email"></text-input>
+    <text-input
+      formControlName="email"
+      [invalidValidator]="invalidRegisterEmail"
+      (valueChange)="onInputChange('register-email')"
+    ></text-input>
   </div>
 
   <div class="full-width-div">
@@ -87,6 +105,8 @@
       formControlName="password"
       [maxLength]="24"
       type="password"
+      [invalidValidator]="invalidRegisterPassword"
+      (valueChange)="onInputChange('register-password')"
     ></text-input>
   </div>
 
@@ -99,10 +119,14 @@
       formControlName="passwordConfirm"
       [maxLength]="24"
       type="password"
+      [invalidValidator]="invalidPasswordConfirm"
+      (valueChange)="onInputChange('password-confirm')"
     ></text-input>
   </div>
 
-  <button class="login-button">{{ "FREE_REGISTER" | translate }}</button>
+  <button class="login-button" (click)="submitRegistration()">
+    {{ "FREE_REGISTER" | translate }}
+  </button>
 
   <div class="divider"></div>
 
