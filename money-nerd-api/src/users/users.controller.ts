@@ -34,7 +34,7 @@ export class UsersController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const user = await this.usersService.findOne(id);
-    return new UserPresenter(user!);
+    return new UserPresenter(user);
   }
 
   // @Patch(':id')

@@ -41,7 +41,7 @@ export class CategoriesController {
   @Get(':id')
   async findOne(@Param('id') id: string, @Req() req: RequestWithUser) {
     const category = await this.categoriesService.findOne(id, req.user._id);
-    return new CategoryPresenter(category!);
+    return new CategoryPresenter(category);
   }
 
   //   @Patch(':id')

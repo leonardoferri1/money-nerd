@@ -46,7 +46,7 @@ export class TransactionsController {
       id,
       req.user._id,
     );
-    return new TransactionPresenter(transaction!);
+    return new TransactionPresenter(transaction);
   }
 
   // @Patch(':id')

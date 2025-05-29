@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { Category } from './entities/category.entity';
 import { InjectModel } from '@nestjs/mongoose';
@@ -11,25 +15,62 @@ export class CategoriesService {
     private categorySchema: Model<Category>,
   ) {}
 
-  create(createCategoryDto: CreateCategoryDto, userId: string) {
-    return this.categorySchema.create({ ...createCategoryDto, user: userId });
+  async create(createCategoryDto: CreateCategoryDto, userId: string) {
+    try {
+      return await this.categorySchema.create({
+        ...createCategoryDto,
+        user: userId,
+      });
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to create category', {
+        cause: error,
+      });
+    }
   }
 
-  findAll(userId: string) {
-    return this.categorySchema.find({
-      user: userId,
-    });
+  async findAll(userId: string) {
+    try {
+      return await this.categorySchema.find({ user: userId });
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to fetch categories', {
+        cause: error,
+      });
+    }
   }
 
-  findOne(id: string, userId: string) {
-    return this.categorySchema.findOne({ id, user: userId });
+  async findOne(id: string, userId: string) {
+    try {
+      const category = await this.categorySchema.findOne({
+        _id: id,
+        user: userId,
+      });
+      if (!category) {
+        throw new NotFoundException('Category not found');
+      }
+      return category;
+    } catch (error) {
+      if (error instanceof NotFoundException) throw error;
+      throw new InternalServerErrorException('Failed to fetch the category');
+    }
   }
 
   // update(id: number, updateCategoryDto: UpdateCategoryDto) {
   //   return `This action updates a #${id} category`;
   // }
 
-  remove(id: string, userId: string) {
-    return this.categorySchema.deleteOne({ _id: id, user: userId });
+  async remove(id: string, userId: string) {
+    try {
+      const result = await this.categorySchema.deleteOne({
+        _id: id,
+        user: userId,
+      });
+      if (result.deletedCount === 0) {
+        throw new NotFoundException('Category not found or already deleted');
+      }
+      return { deleted: true };
+    } catch (error) {
+      if (error instanceof NotFoundException) throw error;
+      throw new InternalServerErrorException('Failed to delete category');
+    }
   }
 }

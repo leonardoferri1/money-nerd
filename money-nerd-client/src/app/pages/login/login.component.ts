@@ -11,6 +11,7 @@ import {
 } from '@angular/forms';
 import { SnackbarService } from '../../shared/components/snackbar/snackbar.service';
 import { LoginService } from './login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -39,7 +40,8 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private snackBar: SnackbarService,
     private translate: TranslateService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -78,24 +80,13 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       this.loginService.login(this.loginForm.value).subscribe({
         next: (response) => {
-          console.log(response);
+          this.router.navigateByUrl('/home');
         },
         error: (e) => {
           console.log(e);
         },
       });
     }
-  }
-
-  async teste() {
-    this.loginService.teste().subscribe({
-      next: (response) => {
-        console.log(response);
-      },
-      error: (e) => {
-        console.log(e);
-      },
-    });
   }
 
   async submitRegistration() {

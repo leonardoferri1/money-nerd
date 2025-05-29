@@ -28,7 +28,7 @@ export class AuthController {
       secure: true,
       sameSite: 'strict',
       path: '/',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
     });
 
     res.cookie('access_token', accessToken, {
@@ -36,7 +36,7 @@ export class AuthController {
       secure: true,
       sameSite: 'strict',
       path: '/',
-      maxAge: 15 * 60 * 1000,
+      maxAge: 60 * 60 * 1000,
     });
 
     return { message: 'Login successful' };
