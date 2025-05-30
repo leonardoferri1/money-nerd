@@ -56,8 +56,14 @@ export class LoginComponent implements OnInit {
       password: ['', Validators.required],
       passwordConfirm: ['', Validators.required],
     });
+  }
 
-    console.log(document.cookie);
+  googleLogin() {
+    window.location.href = 'http://localhost:3000/auth/google';
+  }
+
+  githubLogin() {
+    window.location.href = 'http://localhost:3000/auth/github';
   }
 
   triggerLoginFadeOut() {

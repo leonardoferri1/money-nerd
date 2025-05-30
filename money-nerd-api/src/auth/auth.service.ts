@@ -1,5 +1,6 @@
 import {
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -9,6 +10,7 @@ import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './login.dto';
 import { User, UserDocument } from 'src/users/entities/user.entity';
+import { RequestWithUser } from './types/request-with-user';
 
 @Injectable()
 export class AuthService {
@@ -96,6 +98,104 @@ export class AuthService {
       throw new UnauthorizedException('Invalid refresh token', {
         cause: error,
       });
+    }
+  }
+
+  async loginWithGoogle(googleUser: RequestWithUser) {
+    try {
+      const existingUser = await this.userSchema
+        .findOne({ email: googleUser.user.email })
+        .exec();
+
+      let finalUser: UserDocument;
+
+      if (!existingUser) {
+        finalUser = await this.userSchema.create({
+          email: googleUser.user.email,
+          name: googleUser.user.name,
+          googleId: googleUser.user.googleId,
+          picture: googleUser.user.picture,
+          provider: 'google',
+        });
+      } else {
+        finalUser = existingUser;
+        await this.userSchema.updateOne(
+          { _id: finalUser?._id },
+          {
+            $set: { provider: 'google', googleId: googleUser.user.googleId },
+          },
+        );
+      }
+
+      const payload = {
+        sub: finalUser._id,
+        email: finalUser.email,
+        name: finalUser.name,
+      };
+
+      const accessToken = this.jwtService.sign(payload, { expiresIn: '1h' });
+      const refreshToken = this.jwtService.sign(payload, { expiresIn: '30d' });
+
+      await this.userSchema.updateOne(
+        { _id: finalUser._id },
+        {
+          $push: { refreshTokens: refreshToken },
+        },
+      );
+
+      return { accessToken, refreshToken };
+    } catch (error) {
+      console.error('Error during Google login:', error);
+      throw new InternalServerErrorException('Failed to login with Google');
+    }
+  }
+
+  async loginWithGithub(githubUser: RequestWithUser) {
+    try {
+      const existingUser = await this.userSchema
+        .findOne({ email: githubUser.user.email })
+        .exec();
+
+      let finalUser: UserDocument;
+
+      if (!existingUser) {
+        finalUser = await this.userSchema.create({
+          githubId: githubUser.user.githubId,
+          email: githubUser.user.email,
+          name: githubUser.user.name,
+          picture: githubUser.user.picture,
+          provider: 'github',
+        });
+      } else {
+        finalUser = existingUser;
+        await this.userSchema.updateOne(
+          { _id: finalUser?._id },
+          {
+            $set: { provider: 'github', githubId: githubUser.user.githubId },
+          },
+        );
+      }
+
+      const payload = {
+        sub: finalUser?._id,
+        email: finalUser?.email,
+        name: finalUser?.name,
+      };
+
+      const accessToken = this.jwtService.sign(payload, { expiresIn: '1h' });
+      const refreshToken = this.jwtService.sign(payload, { expiresIn: '30d' });
+
+      await this.userSchema.updateOne(
+        { _id: finalUser?._id },
+        {
+          $push: { refreshTokens: refreshToken },
+        },
+      );
+
+      return { accessToken, refreshToken };
+    } catch (error) {
+      console.error('Error during Github login:', error);
+      throw new InternalServerErrorException('Failed to login with Github');
     }
   }
 }

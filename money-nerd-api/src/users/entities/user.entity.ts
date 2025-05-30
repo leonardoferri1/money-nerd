@@ -17,7 +17,7 @@ export class User {
   _id: string;
 
   @Prop()
-  name: string;
+  name?: string;
 
   @Prop({ unique: true, index: true })
   email: string;
@@ -27,6 +27,18 @@ export class User {
 
   @Prop({ type: [String], default: [] })
   refreshTokens: string[];
+
+  @Prop({ unique: true, sparse: true })
+  googleId?: string;
+
+  @Prop({ unique: true, sparse: true })
+  githubId?: string;
+
+  @Prop()
+  picture?: string;
+
+  @Prop({ default: 'local' })
+  provider?: 'local' | 'google' | 'github';
 
   createdAt!: Date;
   updatedAt!: Date;

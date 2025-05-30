@@ -40,7 +40,6 @@ export class AuthService {
       .post(`${this.apiUrl}/auth/logout`, {}, { withCredentials: true })
       .subscribe({
         next: () => {
-          debugger;
           this.router.navigate(['/login']);
         },
         error: () => {

@@ -9,10 +9,16 @@
   </div>
 
   <div class="full-width-div">
-    <button class="google-button">
+    <button class="google-github-button" (click)="googleLogin()">
       <img src="img/google-logo.png" alt="Logo" class="logo-img" />
 
       <h3>{{ "GOOGLE_BUTTON" | translate }}</h3>
+    </button>
+
+    <button class="google-github-button" (click)="githubLogin()">
+      <img src="img/github-logo.png" alt="Logo" class="logo-img" />
+
+      <h3>{{ "GITHUB_BUTTON" | translate }}</h3>
     </button>
   </div>
 

@@ -1,19 +1,94 @@
 import {
   Body,
   Controller,
+  Get,
+  InternalServerErrorException,
   Post,
   Req,
   Res,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 import { LoginDto } from './login.dto';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { RequestWithCookies } from './types/request-with-cookies';
+import { AuthGuard } from '@nestjs/passport';
+import { RequestWithUser } from './types/request-with-user';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  @Get('github')
+  @UseGuards(AuthGuard('github'))
+  async githubLogin() {}
+
+  @Get('google')
+  @UseGuards(AuthGuard('google'))
+  googleAuth() {}
+
+  @Get('github/redirect')
+  @UseGuards(AuthGuard('github'))
+  async githubRedirect(@Req() req: RequestWithUser, @Res() res: Response) {
+    try {
+      const { accessToken, refreshToken } =
+        await this.authService.loginWithGithub(req);
+
+      res.cookie('access_token', accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        path: '/',
+        maxAge: 60 * 60 * 1000,
+      });
+
+      res.cookie('refresh_token', refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        path: '/',
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+      });
+
+      return res.redirect(`${process.env.FRONTEND_URL}/home`);
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to login with Github', {
+        cause: error,
+      });
+    }
+  }
+
+  @Get('google/redirect')
+  @UseGuards(AuthGuard('google'))
+  async googleRedirect(@Req() req: RequestWithUser, @Res() res: Response) {
+    try {
+      const { accessToken, refreshToken } =
+        await this.authService.loginWithGoogle(req);
+
+      res.cookie('access_token', accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        path: '/',
+        maxAge: 60 * 60 * 1000,
+      });
+
+      res.cookie('refresh_token', refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        path: '/',
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+      });
+
+      return res.redirect(`${process.env.FRONTEND_URL}/home`);
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to login with Google', {
+        cause: error,
+      });
+    }
+  }
 
   @Post('login')
   async login(
@@ -25,7 +100,7 @@ export class AuthController {
 
     res.cookie('refresh_token', refreshToken, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
       path: '/',
       maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -33,7 +108,7 @@ export class AuthController {
 
     res.cookie('access_token', accessToken, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
       path: '/',
       maxAge: 60 * 60 * 1000,
