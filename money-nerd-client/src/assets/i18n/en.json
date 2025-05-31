@@ -11,6 +11,12 @@
   "LOGIN_BUTTON": "Login",
   "GOOGLE_BUTTON": "Continue with Google",
   "GITHUB_BUTTON": "Continue with Github",
+  "VERIFY_EMAIL": "Verify your email",
+  "CODE_SENT": "We sent a verification code to",
+  "INSERT_CODE": "Enter the code sent to your email",
+  "CODE_EXPIRES": "Code expires in",
+  "WAIT": "Please wait",
+  "RESEND": "Resend",
   "VALIDATION": {
     "REQUIRED": "All required fields must be filled.",
     "PASSWORDS_DO_NOT_MATCH": "Passwords do not match."

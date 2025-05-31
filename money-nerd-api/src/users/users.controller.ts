@@ -12,15 +12,17 @@ import { CreateUserDto } from './dto/create-user.dto';
 // import { UpdateUserDto } from './dto/update-user.dto';
 import { UserPresenter } from './user.presenter';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { Throttle } from '@nestjs/throttler';
 
+@Throttle({ default: { limit: 10, ttl: 30000 } })
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
-    const user = await this.usersService.create(createUserDto);
-    return new UserPresenter(user);
+    await this.usersService.create(createUserDto);
+    return { message: 'Confirm E-mail' };
   }
 
   @UseGuards(AuthGuard)

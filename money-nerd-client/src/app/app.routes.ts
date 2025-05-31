@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
+import { EmailVerificationComponent } from './pages/email-verification/email-verification.component';
+import { AuthComponent } from './pages/auth/auth.component';
 
 export const routes: Routes = [
   {
@@ -10,10 +11,14 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    loadComponent: () => LoginComponent,
+    loadComponent: () => AuthComponent,
   },
   {
     path: 'home',
     loadComponent: () => HomeComponent,
+  },
+  {
+    path: 'email-verification/:email',
+    loadComponent: () => EmailVerificationComponent,
   },
 ];

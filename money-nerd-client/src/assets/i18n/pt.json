@@ -11,6 +11,12 @@
   "LOGIN_BUTTON": "Entrar",
   "GOOGLE_BUTTON": "Continuar com o Google",
   "GITHUB_BUTTON": "Continuar com o Github",
+  "VERIFY_EMAIL": "Verifique o seu e-mail",
+  "CODE_SENT": "Enviamos um código de verificação para",
+  "INSERT_CODE": "Insira o código enviado para seu e-mail",
+  "CODE_EXPIRES": "Código expira em",
+  "WAIT": "Aguarde",
+  "RESEND": "Enviar Novamente",
   "VALIDATION": {
     "REQUIRED": "Necessário preencher todos os campos obrigatórios.",
     "PASSWORDS_DO_NOT_MATCH": "As senhas não coincidem."

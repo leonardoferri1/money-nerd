@@ -14,7 +14,8 @@ import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { TransactionPresenter } from './transaction.presenter';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { RequestWithUser } from 'src/auth/types/request-with-user';
-
+import { SkipThrottle } from '@nestjs/throttler';
+@SkipThrottle()
 @UseGuards(AuthGuard)
 @Controller('transactions')
 export class TransactionsController {

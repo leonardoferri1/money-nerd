@@ -6,12 +6,16 @@ import { environment } from '../../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
-export class LoginService {
+export class AuthService {
   private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
   login(payload: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/auth/login`, payload);
+  }
+
+  register(payload: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/users`, payload);
   }
 }

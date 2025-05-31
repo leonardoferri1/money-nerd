@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -11,6 +12,7 @@ import * as bcrypt from 'bcrypt';
 import { LoginDto } from './login.dto';
 import { User, UserDocument } from 'src/users/entities/user.entity';
 import { RequestWithUser } from './types/request-with-user';
+import { VerifyEmailDto } from 'src/users/dto/verify-email.dto';
 
 @Injectable()
 export class AuthService {
@@ -29,6 +31,16 @@ export class AuthService {
 
       if (!(await bcrypt.compare(loginDto.password, user.password))) {
         throw new UnauthorizedException('Incorrect password');
+      }
+
+      if (!user.isEmailVerified) {
+        throw new UnauthorizedException('Please verify your email first.');
+      }
+
+      if (!user.canLoginWithPassword) {
+        throw new UnauthorizedException(
+          'Login with password is not allowed for this account.',
+        );
       }
 
       const payload = {
@@ -116,6 +128,8 @@ export class AuthService {
           googleId: googleUser.user.googleId,
           picture: googleUser.user.picture,
           provider: 'google',
+          canLoginWithPassword: false,
+          isEmailVerified: true,
         });
       } else {
         finalUser = existingUser;
@@ -165,6 +179,8 @@ export class AuthService {
           name: githubUser.user.name,
           picture: githubUser.user.picture,
           provider: 'github',
+          canLoginWithPassword: false,
+          isEmailVerified: true,
         });
       } else {
         finalUser = existingUser;
@@ -197,5 +213,36 @@ export class AuthService {
       console.error('Error during Github login:', error);
       throw new InternalServerErrorException('Failed to login with Github');
     }
+  }
+
+  async verifyEmail(dto: VerifyEmailDto): Promise<void> {
+    const user = await this.userSchema.findOne({ email: dto.email });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (user.isEmailVerified) {
+      throw new BadRequestException('Email is already verified');
+    }
+
+    if (
+      user.emailVerificationCode !== dto.code ||
+      !user.emailVerificationCodeExpires ||
+      user.emailVerificationCodeExpires < new Date()
+    ) {
+      throw new BadRequestException('Invalid code');
+    }
+
+    if (user.emailVerificationCodeExpires < new Date()) {
+      throw new BadRequestException('Expired code');
+    }
+
+    user.isEmailVerified = true;
+    user.canLoginWithPassword = true;
+    user.emailVerificationCode = undefined;
+    user.emailVerificationCodeExpires = undefined;
+
+    await user.save();
   }
 }

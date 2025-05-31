@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -9,22 +10,54 @@ import { InjectModel } from '@nestjs/mongoose';
 import bcrypt from 'bcrypt';
 import { User } from './entities/user.entity';
 import { Model } from 'mongoose';
+import { MongoError } from './types/mongo-error';
+import { MailService } from 'src/mail/mail.service';
+import { generateCodeEmailHtml } from '../mail/templates/verification-email.template';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private userSchema: Model<User>) {}
+  constructor(
+    @InjectModel(User.name) private userSchema: Model<User>,
+    private readonly mailService: MailService,
+  ) {}
 
   async create(createUserDto: CreateUserDto) {
+    const code = this.generateVerificationCode();
+    const expires = new Date(Date.now() + 1000 * 60 * 10);
+
     try {
-      return await this.userSchema.create({
+      const newUser = await this.userSchema.create({
         ...createUserDto,
         password: bcrypt.hashSync(createUserDto.password, 10),
+        provider: 'local',
+        canLoginWithPassword: true,
+        isEmailVerified: false,
+        emailVerificationCode: code,
+        emailVerificationCodeExpires: expires,
       });
-    } catch (error) {
+
+      await this.mailService.sendMail(
+        createUserDto.email,
+        'Verify your email',
+        generateCodeEmailHtml(code),
+      );
+
+      return newUser;
+    } catch (err: unknown) {
+      const error = err as MongoError;
+
+      if (error.code === 11000 && error.keyPattern?.email) {
+        throw new ConflictException('Email is already in use');
+      }
+
       throw new InternalServerErrorException('Failed to create user', {
         cause: error,
       });
     }
+  }
+
+  private generateVerificationCode(): string {
+    return Math.floor(100000 + Math.random() * 900000).toString();
   }
 
   async findAll() {

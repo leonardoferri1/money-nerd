@@ -1,0 +1,43 @@
+<div class="email-verification-container">
+  <h3>{{ "VERIFY_EMAIL" | translate }}</h3>
+  <p>{{ "CODE_SENT" | translate }} {{ email }}</p>
+
+  <h4>{{ "INSERT_CODE" | translate }}</h4>
+
+  <p class="code-expiration-text">
+    {{ "CODE_EXPIRES" | translate }}: {{ codeExpireTime }}
+  </p>
+
+  <div
+    class="code-input-container"
+    (click)="onBoxClick()"
+    (paste)="onPaste($event)"
+  >
+    <input
+      *ngFor="let digit of codeDigits; let i = index"
+      maxlength="1"
+      type="text"
+      class="code-input"
+      [(ngModel)]="code[i]"
+      (input)="onInput($event, i)"
+      (keydown)="onKeyDown($event, i)"
+      #inputBox
+    />
+  </div>
+
+  <button
+    class="resend-button"
+    [disabled]="resendCooldownSeconds > 0"
+    (click)="resendCode()"
+  >
+    {{
+      resendCooldownSeconds > 0
+        ? ("WAIT" | translate) + " " + resendCooldownSeconds + "s"
+        : ("RESEND" | translate)
+    }}
+  </button>
+
+  <button class="email-verify-confirm" [disabled]="getCode().length < 6">
+    {{ "VERIFY_EMAIL" | translate }}
+  </button>
+</div>

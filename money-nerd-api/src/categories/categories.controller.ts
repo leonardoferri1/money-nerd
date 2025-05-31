@@ -14,7 +14,8 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { CategoryPresenter } from './category.presenter';
 import { RequestWithUser } from 'src/auth/types/request-with-user';
 import { AuthGuard } from 'src/auth/auth.guard';
-
+import { SkipThrottle } from '@nestjs/throttler';
+@SkipThrottle()
 @UseGuards(AuthGuard)
 @Controller('categories')
 export class CategoriesController {

@@ -1,5 +1,6 @@
 @import "styles/variables";
 @import "styles/components/buttons";
+@import "styles/components/authpage";
 @import "styles/components/input";
 @import "styles/components/text-area";
 @import "styles/components/general";
@@ -8,7 +9,15 @@
   padding: 0;
   outline: none;
   box-sizing: border-box;
+  max-width: 100%;
   font-family: "Plus Jakarta sans";
+}
+
+body,
+html {
+  overflow-x: hidden;
+
+  margin: 0 auto;
 }
 
 input,

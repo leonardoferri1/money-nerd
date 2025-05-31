@@ -34,11 +34,23 @@ export class User {
   @Prop({ unique: true, sparse: true })
   githubId?: string;
 
+  @Prop({ default: false })
+  canLoginWithPassword?: boolean;
+
   @Prop()
   picture?: string;
 
   @Prop({ default: 'local' })
   provider?: 'local' | 'google' | 'github';
+
+  @Prop({ default: false })
+  isEmailVerified: boolean;
+
+  @Prop()
+  emailVerificationCode?: string;
+
+  @Prop()
+  emailVerificationCodeExpires?: Date;
 
   createdAt!: Date;
   updatedAt!: Date;

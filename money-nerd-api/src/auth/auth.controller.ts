@@ -15,7 +15,10 @@ import { Response } from 'express';
 import { RequestWithCookies } from './types/request-with-cookies';
 import { AuthGuard } from '@nestjs/passport';
 import { RequestWithUser } from './types/request-with-user';
+import { Throttle } from '@nestjs/throttler';
+import { VerifyEmailDto } from 'src/users/dto/verify-email.dto';
 
+@Throttle({ default: { limit: 10, ttl: 30000 } })
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -143,6 +146,12 @@ export class AuthController {
         cause: error,
       });
     }
+  }
+
+  @Post('verify-email')
+  async verifyEmail(@Body() dto: VerifyEmailDto) {
+    await this.authService.verifyEmail(dto);
+    return { message: 'Email verified successfully' };
   }
 
   @Post('logout')

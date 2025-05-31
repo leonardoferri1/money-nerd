@@ -1,0 +1,69 @@
+<div
+  class="login-register-container"
+  *ngIf="!registering"
+  [class.fade-out]="isLoginFadingOut"
+  [formGroup]="loginForm"
+>
+  <div class="login-screen-title">
+    <h3>Money Nerd</h3>
+  </div>
+
+  <div class="full-width-div">
+    <button class="google-github-button" (click)="googleLogin()">
+      <img src="img/google-logo.png" alt="Logo" class="logo-img" />
+
+      <h3>{{ "GOOGLE_BUTTON" | translate }}</h3>
+    </button>
+
+    <button class="google-github-button" (click)="githubLogin()">
+      <img src="img/github-logo.png" alt="Logo" class="logo-img" />
+
+      <h3>{{ "GITHUB_BUTTON" | translate }}</h3>
+    </button>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="full-width-div">
+    <div class="title">
+      <h3>E-mail:</h3>
+    </div>
+
+    <text-input
+      formControlName="email"
+      [invalidValidator]="invalidEmail"
+      [allowSpecial]="true"
+      (valueChange)="onInputChange('email')"
+    ></text-input>
+  </div>
+
+  <div class="full-width-div">
+    <div class="title">
+      <h3>{{ "PASSWORD_LOGIN" | translate }}:</h3>
+    </div>
+
+    <text-input
+      formControlName="password"
+      [maxLength]="24"
+      type="password"
+      [allowSpecial]="true"
+      [invalidValidator]="invalidPassword"
+      (valueChange)="onInputChange('password')"
+    ></text-input>
+  </div>
+
+  <button class="login-register-button" (click)="submitForm()">
+    {{ "LOGIN_BUTTON" | translate }}
+  </button>
+
+  <div class="divider"></div>
+
+  <button class="register-button" (click)="triggerLoginFadeOut()">
+    <div class="label-container">
+      <p style="color: #b1b1b1">{{ "NO_ACCOUNT" | translate }}</p>
+      <p style="color: #8db15e">{{ "FREE_REGISTER" | translate }}</p>
+    </div>
+
+    <i class="fa fa-chevron-right" style="color: #b1b1b1"></i>
+  </button>
+</div>
