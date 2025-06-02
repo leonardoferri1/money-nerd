@@ -95,9 +95,9 @@ export class RegisterPanelComponent {
   }
 
   async submitForm() {
-    // if (this.registerValidate() == true) {
-    //   return;
-    // }
+    if (this.registerValidate() == true) {
+      return;
+    }
 
     this.formEmit.emit(this.registerForm.value);
   }

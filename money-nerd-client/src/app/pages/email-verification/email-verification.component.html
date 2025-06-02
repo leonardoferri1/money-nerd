@@ -37,7 +37,11 @@
     }}
   </button>
 
-  <button class="email-verify-confirm" [disabled]="getCode().length < 6">
+  <button
+    class="email-verify-confirm"
+    [disabled]="getCode().length < 6"
+    (click)="emailVerify()"
+  >
     {{ "VERIFY_EMAIL" | translate }}
   </button>
 </div>

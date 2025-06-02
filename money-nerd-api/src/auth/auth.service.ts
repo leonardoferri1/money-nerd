@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  HttpException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -26,11 +27,11 @@ export class AuthService {
       const user = await this.userSchema.findOne({ email: loginDto.email });
 
       if (!user) {
-        throw new NotFoundException('User not found');
+        throw new NotFoundException('User not found.');
       }
 
       if (!(await bcrypt.compare(loginDto.password, user.password))) {
-        throw new UnauthorizedException('Incorrect password');
+        throw new UnauthorizedException('Incorrect password.');
       }
 
       if (!user.isEmailVerified) {
@@ -69,7 +70,7 @@ export class AuthService {
         refreshToken,
       };
     } catch (error) {
-      if (error instanceof UnauthorizedException) {
+      if (error instanceof HttpException) {
         throw error;
       }
       throw new UnauthorizedException(
@@ -159,8 +160,9 @@ export class AuthService {
 
       return { accessToken, refreshToken };
     } catch (error) {
-      console.error('Error during Google login:', error);
-      throw new InternalServerErrorException('Failed to login with Google');
+      throw new InternalServerErrorException('Failed to login with Google', {
+        cause: error,
+      });
     }
   }
 
@@ -210,39 +212,46 @@ export class AuthService {
 
       return { accessToken, refreshToken };
     } catch (error) {
-      console.error('Error during Github login:', error);
-      throw new InternalServerErrorException('Failed to login with Github');
+      throw new InternalServerErrorException('Failed to login with Github', {
+        cause: error,
+      });
     }
   }
 
   async verifyEmail(dto: VerifyEmailDto): Promise<void> {
-    const user = await this.userSchema.findOne({ email: dto.email });
+    try {
+      const user = await this.userSchema.findOne({ email: dto.email });
 
-    if (!user) {
-      throw new NotFoundException('User not found');
+      if (!user) {
+        throw new NotFoundException('User not found.');
+      }
+
+      if (user.isEmailVerified) {
+        throw new BadRequestException('Email is already verified.');
+      }
+
+      if (user.emailVerificationCode !== dto.code) {
+        throw new BadRequestException('Invalid code.');
+      }
+
+      if (user.emailVerificationCodeExpires! < new Date()) {
+        throw new BadRequestException('Expired code.');
+      }
+
+      user.isEmailVerified = true;
+      user.canLoginWithPassword = true;
+      user.emailVerificationCode = undefined;
+      user.emailVerificationCodeExpires = undefined;
+
+      await user.save();
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new UnauthorizedException(
+        'E-mail verification failed due to an unexpected error',
+        { cause: error },
+      );
     }
-
-    if (user.isEmailVerified) {
-      throw new BadRequestException('Email is already verified');
-    }
-
-    if (
-      user.emailVerificationCode !== dto.code ||
-      !user.emailVerificationCodeExpires ||
-      user.emailVerificationCodeExpires < new Date()
-    ) {
-      throw new BadRequestException('Invalid code');
-    }
-
-    if (user.emailVerificationCodeExpires < new Date()) {
-      throw new BadRequestException('Expired code');
-    }
-
-    user.isEmailVerified = true;
-    user.canLoginWithPassword = true;
-    user.emailVerificationCode = undefined;
-    user.emailVerificationCodeExpires = undefined;
-
-    await user.save();
   }
 }

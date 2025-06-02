@@ -19,6 +19,13 @@
   "RESEND": "Resend",
   "VALIDATION": {
     "REQUIRED": "All required fields must be filled.",
-    "PASSWORDS_DO_NOT_MATCH": "Passwords do not match."
+    "PASSWORDS_DO_NOT_MATCH": "Passwords do not match.",
+    "VERIFY_FIRST": "Please verify your email first.",
+    "INCORRECT_PASSWORD": "Incorrect password.",
+    "USER_NOT_FOUND": "User not found.",
+    "BAD_CODE": "Invalid code.",
+    "EXPIRED_CODE": "Expired code.",
+    "EMAIL_ALREADY_VERIFIED": "E-mail is already verified.",
+    "EMAIL_USED": "E-mail is already in use."
   }
 }

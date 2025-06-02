@@ -20,4 +20,14 @@ export class EmailVerificationService {
       }
     );
   }
+
+  resendEmail(email: string | null): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}/users/resend-email`,
+      { email },
+      {
+        withCredentials: true,
+      }
+    );
+  }
 }

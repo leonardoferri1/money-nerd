@@ -21,8 +21,7 @@ export class UsersController {
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
-    await this.usersService.create(createUserDto);
-    return { message: 'Confirm E-mail' };
+    return await this.usersService.create(createUserDto);
   }
 
   @UseGuards(AuthGuard)
@@ -48,5 +47,10 @@ export class UsersController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
+  }
+
+  @Post('resend-email')
+  async resendEmail(@Body() body: { email: string }) {
+    return await this.usersService.resendEmailVerification(body.email);
   }
 }

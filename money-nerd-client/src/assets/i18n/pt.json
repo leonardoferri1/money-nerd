@@ -19,6 +19,13 @@
   "RESEND": "Enviar Novamente",
   "VALIDATION": {
     "REQUIRED": "Necessário preencher todos os campos obrigatórios.",
-    "PASSWORDS_DO_NOT_MATCH": "As senhas não coincidem."
+    "PASSWORDS_DO_NOT_MATCH": "As senhas não coincidem.",
+    "VERIFY_FIRST": "Por favor confirme seu email antes.",
+    "INCORRECT_PASSWORD": "Senha incorreta.",
+    "USER_NOT_FOUND": "Usuário não encontrado.",
+    "BAD_CODE": "Código inválido.",
+    "EXPIRED_CODE": "Código expirado.",
+    "EMAIL_ALREADY_VERIFIED": "E-mail já confirmado.",
+    "EMAIL_USED": "E-mail em uso."
   }
 }

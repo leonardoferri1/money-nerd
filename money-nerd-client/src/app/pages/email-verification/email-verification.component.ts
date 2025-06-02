@@ -5,11 +5,12 @@ import {
   QueryList,
   ViewChildren,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EmailVerificationService } from './email-verification.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { SnackbarService } from '../../shared/components/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-email-verification',
@@ -31,7 +32,10 @@ export class EmailVerificationComponent implements AfterViewInit {
 
   constructor(
     private route: ActivatedRoute,
-    private emailVerificationService: EmailVerificationService
+    private emailVerificationService: EmailVerificationService,
+    private router: Router,
+    private snackBar: SnackbarService,
+    private translate: TranslateService
   ) {
     this.email = this.route.snapshot.paramMap.get('email');
     this.startCodeCountdown();
@@ -46,18 +50,45 @@ export class EmailVerificationComponent implements AfterViewInit {
   }
 
   async emailVerify() {
-    if (!this.email) {
-      console.log('fail');
-    }
-
     this.emailVerificationService
       .emailVerify(this.email, this.getCode())
       .subscribe({
         next: (response) => {
-          console.log(response);
+          this.router.navigateByUrl('/login');
         },
-        error: (e) => {
-          console.log(e);
+        error: (error) => {
+          console.log(error);
+          if (
+            error.status === 404 &&
+            error.error?.message === 'User not found.'
+          ) {
+            this.snackBar.openErrorSnackbar(
+              this.translate.instant('VALIDATION.USER_NOT_FOUND')
+            );
+          } else if (
+            error.status === 400 &&
+            error.error?.message === 'Invalid code.'
+          ) {
+            this.snackBar.openErrorSnackbar(
+              this.translate.instant('VALIDATION.BAD_CODE')
+            );
+          } else if (
+            error.status === 400 &&
+            error.error?.message === 'Expired code.'
+          ) {
+            this.snackBar.openErrorSnackbar(
+              this.translate.instant('VALIDATION.EXPIRED_CODE')
+            );
+          } else if (
+            error.status === 400 &&
+            error.error?.message === 'Email is already verified.'
+          ) {
+            this.snackBar.openErrorSnackbar(
+              this.translate.instant('VALIDATION.EMAIL_ALREADY_VERIFIED')
+            );
+          } else {
+            this.snackBar.openErrorSnackbar(error.error?.message);
+          }
         },
       });
   }
@@ -65,7 +96,14 @@ export class EmailVerificationComponent implements AfterViewInit {
   resendCode() {
     if (this.resendCooldownSeconds > 0) return;
 
-    console.log('Code resent to:', this.email);
+    this.emailVerificationService.resendEmail(this.email).subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (e) => {
+        console.log(e);
+      },
+    });
 
     this.codeExpireSeconds = 600;
     this.resendCooldownSeconds = 60;
