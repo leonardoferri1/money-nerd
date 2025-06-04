@@ -4,14 +4,16 @@
   position: fixed;
   top: 70px;
   left: 0;
-  width: 50px;
-  min-width: 50px;
-  max-width: 250px;
+  align-items: center;
+  padding-top: 1rem;
+  width: 75px;
+
+  min-width: 75px;
+  max-width: 200px;
   height: 100vh;
   background: $background-main-lighter;
-  padding: 16px;
   z-index: 9;
-  transition: 0.3s ease-in-out;
+  transition: 0.2s ease-in-out;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -21,14 +23,81 @@
   width: 250px;
 }
 
-.menu-content {
+.menu-container {
   flex-grow: 1;
+  width: 100%;
   overflow-y: auto;
+}
+
+.menu-outter-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 2rem;
+
+  .menu-inner-content {
+    display: flex;
+    width: 100%;
+    margin-top: 0.5rem;
+    flex-direction: column;
+
+    .nav-button {
+      display: flex;
+      width: 100% !important;
+      height: 4rem;
+      align-items: center;
+      background: none;
+      color: $grey-light;
+      border: 0;
+      opacity: 0;
+      gap: 1.5rem;
+      animation: fadeIn 0.2s ease forwards;
+      animation-delay: 0.2s;
+      cursor: pointer;
+
+      &:hover {
+        background: $light-background;
+        transition: background-color 0.1s ease;
+      }
+
+      p {
+        font-size: 14px;
+        font-weight: 300;
+        margin: 0;
+      }
+
+      i {
+        font-size: 20px;
+      }
+
+      &.active {
+        border-left: 2px solid $light-green;
+        color: $base-green;
+        font-weight: 500;
+
+        i {
+          color: $base-green;
+        }
+
+        p {
+          color: $base-green;
+        }
+      }
+    }
+
+    .closed {
+      padding-left: 2rem;
+    }
+
+    .collapsed {
+      justify-content: center;
+    }
+  }
 }
 
 .toggle-button {
   position: absolute;
-  top: 1rem;
+  top: 4rem;
   right: -0.75rem;
   width: 24px;
   height: 24px;
@@ -41,6 +110,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  opacity: 0;
+  animation: fadeIn 0.2s ease forwards;
+  animation-delay: 0.2s;
   cursor: pointer;
   z-index: 13;
 
@@ -60,5 +132,40 @@
 
   i {
     font-size: 11px;
+  }
+}
+
+.new-item-button {
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  border: 0;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  align-self: center;
+  background: $base-green;
+  color: $background-main;
+  opacity: 0;
+  animation: fadeIn 0.2s ease forwards;
+  animation-delay: 0.2s;
+  cursor: pointer;
+
+  i {
+    font-size: 18px;
+  }
+
+  &:hover {
+    background-color: $light-green;
+    transition: background-color 0.1s ease;
+  }
+
+  &:disabled,
+  &.disabled {
+    opacity: 65%;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: not-allowed;
+    box-shadow: none;
+    pointer-events: none;
   }
 }

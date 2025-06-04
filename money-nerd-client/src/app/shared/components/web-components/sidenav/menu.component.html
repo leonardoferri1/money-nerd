@@ -1,4 +1,4 @@
-<div class="menu" [ngClass]="{ open: opened }">
+<div class="menu" [ngClass]="{ open: opened }" *ngIf="shouldHideElement()">
   <button
     class="toggle-button"
     matTooltip="{{ opened ? 'Fechar' : 'Abrir' }}"
@@ -11,7 +11,57 @@
     ></i>
   </button>
 
-  <div class="menu-content">
-    <ng-content></ng-content>
+  <div class="menu-container">
+    <div class="menu-outter-content">
+      <button class="new-item-button">
+        <i class="fa-solid fa-plus"></i>
+      </button>
+
+      <div class="menu-inner-content">
+        <div>
+          <a
+            class="nav-button collapsed"
+            *ngIf="!opened"
+            routerLink="/home"
+            routerLinkActive="active"
+          >
+            <i class="fa-solid fa-house"></i>
+          </a>
+
+          <a
+            class="nav-button closed"
+            *ngIf="opened"
+            routerLink="/home"
+            routerLinkActive="active"
+          >
+            <i class="fa-solid fa-dollar-sign"></i>
+            <p>Dashboard</p>
+          </a>
+        </div>
+
+        <div>
+          <a
+            class="nav-button collapsed"
+            *ngIf="!opened"
+            routerLink="/transactions"
+            routerLinkActive="active"
+          >
+            <i class="fa-solid fa-dollar-sign"></i>
+          </a>
+
+          <a
+            class="nav-button closed"
+            *ngIf="opened"
+            routerLink="/transactions"
+            routerLinkActive="active"
+          >
+            <i class="fa-solid fa-dollar-sign"></i>
+            <p>
+              {{ "TRANSACTIONS" | translate }}
+            </p>
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

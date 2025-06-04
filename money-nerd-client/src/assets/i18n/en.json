@@ -27,6 +27,7 @@
   "PASSWORD_RECOVERED": "Your password has been updated successfully",
   "BACK_TO_LOGIN": "Go back to login",
   "CONTINUE": "Continue",
+  "TRANSACTIONS": "Transactions",
   "VALIDATION": {
     "REQUIRED": "All required fields must be filled.",
     "PASSWORDS_DO_NOT_MATCH": "Passwords do not match.",

@@ -3,6 +3,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { EmailVerificationComponent } from './pages/email-verification/email-verification.component';
 import { AuthComponent } from './pages/auth/auth.component';
 import { PasswordRecoveryComponent } from './pages/password-recovery/password-recovery.component';
+import { TransactionsComponent } from './pages/transactions/transactions.component';
 
 export const routes: Routes = [
   {
@@ -17,6 +18,10 @@ export const routes: Routes = [
   {
     path: 'home',
     loadComponent: () => HomeComponent,
+  },
+  {
+    path: 'transactions',
+    loadComponent: () => TransactionsComponent,
   },
   {
     path: 'password-recovery',

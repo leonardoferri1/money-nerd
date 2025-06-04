@@ -27,6 +27,7 @@
   "PASSWORD_RECOVERED": "A sua senha foi atualizada com sucesso.",
   "BACK_TO_LOGIN": "Voltar para o login",
   "CONTINUE": "Continuar",
+  "TRANSACTIONS": "Transações",
   "VALIDATION": {
     "REQUIRED": "Necessário preencher todos os campos obrigatórios.",
     "PASSWORDS_DO_NOT_MATCH": "As senhas não coincidem.",
