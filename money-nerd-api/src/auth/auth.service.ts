@@ -90,7 +90,7 @@ export class AuthService {
       const user = await this.userSchema.findById({ _id: payload.sub });
 
       if (!user || !user.refreshTokens.includes(refreshToken)) {
-        throw new UnauthorizedException('Refresh token not valid');
+        throw new UnauthorizedException('Refresh token not valid.');
       }
 
       const newAccessToken = this.jwtService.sign(
@@ -108,7 +108,7 @@ export class AuthService {
       await user.save();
       return { accessToken: newAccessToken };
     } catch (error) {
-      throw new UnauthorizedException('Invalid refresh token', {
+      throw new UnauthorizedException('Invalid refresh token.', {
         cause: error,
       });
     }
@@ -227,7 +227,7 @@ export class AuthService {
       }
 
       if (user.isEmailVerified) {
-        throw new BadRequestException('Email is already verified.');
+        throw new BadRequestException('E-mail already verified.');
       }
 
       if (user.emailVerificationCode !== dto.code) {

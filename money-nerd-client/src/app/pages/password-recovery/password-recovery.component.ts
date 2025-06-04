@@ -1,3 +1,4 @@
+import { NgFor, NgIf } from '@angular/common';
 import {
   AfterViewInit,
   Component,
@@ -5,22 +6,27 @@ import {
   QueryList,
   ViewChildren,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { EmailVerificationService } from './email-verification.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SnackbarService } from '../../shared/components/snackbar/snackbar.service';
+import { TextInputComponent } from '../../shared/components/web-components/text-input/text-input.component';
+import { PasswordRecoveryService } from './password-recovery.service';
 
 @Component({
-  selector: 'app-email-verification',
+  selector: 'app-password-recovery',
   standalone: true,
-  imports: [TranslateModule, FormsModule, NgFor],
-  templateUrl: './email-verification.component.html',
-  styleUrl: './email-verification.component.scss',
+  imports: [TranslateModule, FormsModule, NgFor, NgIf, TextInputComponent],
+  templateUrl: './password-recovery.component.html',
+  styleUrl: './password-recovery.component.scss',
 })
-export class EmailVerificationComponent implements AfterViewInit {
-  email: string | null = null;
+export class PasswordRecoveryComponent implements AfterViewInit {
+  email: string | null = '';
+  password: string | null = '';
+  isCodeVerification: boolean = false;
+  isPasswordInput: boolean = false;
+  invalidEmail: boolean = false;
+  invalidPassword: boolean = false;
   codeDigits = new Array(6);
   code: string[] = new Array(6).fill('');
 
@@ -31,32 +37,51 @@ export class EmailVerificationComponent implements AfterViewInit {
   @ViewChildren('inputBox') inputs!: QueryList<ElementRef>;
 
   constructor(
-    private route: ActivatedRoute,
-    private emailVerificationService: EmailVerificationService,
     private router: Router,
     private snackBar: SnackbarService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private passwordRecoveryService: PasswordRecoveryService
   ) {
-    this.email = this.route.snapshot.paramMap.get('email');
     this.startCodeCountdown();
   }
 
   ngAfterViewInit() {
-    this.focusNextEmpty();
+    this.inputs.changes.subscribe((inputs: QueryList<ElementRef>) => {
+      if (inputs.length) {
+        this.focusNextEmpty();
+      }
+    });
   }
 
   ngOnDestroy() {
     clearInterval(this.intervalId);
   }
 
-  async emailVerify() {
-    this.emailVerificationService
-      .emailVerify(this.email, this.getCode())
+  resendCode() {
+    if (this.resendCooldownSeconds > 0) return;
+
+    this.sendCodeEmail();
+
+    this.codeExpireSeconds = 600;
+    this.resendCooldownSeconds = 60;
+  }
+
+  submitPasswordReset() {
+    if (!this.password) {
+      this.invalidPassword = true;
+      this.snackBar.openErrorSnackbar(
+        this.translate.instant('VALIDATION.REQUIRED')
+      );
+      return;
+    }
+
+    this.passwordRecoveryService
+      .passwordReset(this.email, this.getCode(), this.password)
       .subscribe({
         next: (response) => {
-          if (response.message == 'E-mail verified successfully.') {
+          if (response.message == 'Password updated successfully.') {
             this.snackBar.openSuccessSnackbar(
-              this.translate.instant('EMAIL_CONFIRMED')
+              this.translate.instant('PASSWORD_RECOVERED')
             );
           }
           this.router.navigateByUrl('/login');
@@ -85,50 +110,17 @@ export class EmailVerificationComponent implements AfterViewInit {
             );
           } else if (
             error.status === 400 &&
-            error.error?.message === 'E-mail already verified.'
+            error.error?.message ===
+              'Your new password is the same as the previous one.'
           ) {
             this.snackBar.openErrorSnackbar(
-              this.translate.instant('VALIDATION.EMAIL_ALREADY_VERIFIED')
+              this.translate.instant('VALIDATION.SAME_PASSWORD')
             );
           } else {
             this.snackBar.openErrorSnackbar(error.error?.message);
           }
         },
       });
-  }
-
-  resendCode() {
-    if (this.resendCooldownSeconds > 0) return;
-
-    this.emailVerificationService.resendEmail(this.email).subscribe({
-      next: (response) => {
-        if (response.email == 'Verification code resent.') {
-          this.snackBar.openSuccessSnackbar(this.translate.instant('RESENT'));
-        }
-      },
-      error: (error) => {
-        if (
-          error.status === 404 &&
-          error.error?.message === 'User not found.'
-        ) {
-          this.snackBar.openErrorSnackbar(
-            this.translate.instant('VALIDATION.USER_NOT_FOUND')
-          );
-        } else if (
-          error.status === 400 &&
-          error.error?.message === 'E-mail already verified.'
-        ) {
-          this.snackBar.openErrorSnackbar(
-            this.translate.instant('VALIDATION.EMAIL_ALREADY_VERIFIED')
-          );
-        } else {
-          this.snackBar.openErrorSnackbar(error.error?.message);
-        }
-      },
-    });
-
-    this.codeExpireSeconds = 600;
-    this.resendCooldownSeconds = 60;
   }
 
   onInput(event: any, index: number) {
@@ -195,5 +187,61 @@ export class EmailVerificationComponent implements AfterViewInit {
       .padStart(2, '0');
     const sec = (this.codeExpireSeconds % 60).toString().padStart(2, '0');
     return `${min}:${sec}`;
+  }
+
+  onInputChange(inputName: string) {
+    switch (inputName) {
+      case 'email':
+        this.invalidEmail = false;
+        break;
+      case 'password':
+        this.invalidPassword = false;
+        break;
+    }
+  }
+
+  async setEmail() {
+    if (!this.email) {
+      this.invalidEmail = true;
+      this.snackBar.openErrorSnackbar(
+        this.translate.instant('VALIDATION.REQUIRED')
+      );
+      return;
+    }
+
+    await this.sendCodeEmail();
+  }
+
+  backToLogin() {
+    this.email = '';
+    this.router.navigateByUrl('/login');
+  }
+
+  sendCodeEmail() {
+    this.passwordRecoveryService.sendPasswordResetEmail(this.email).subscribe({
+      next: (response) => {
+        if (response.email == 'Password reset code has been sent.') {
+          this.snackBar.openSuccessSnackbar(
+            this.translate.instant('PASSWORD_CODE_RESENT')
+          );
+        }
+        this.isCodeVerification = true;
+      },
+      error: (error) => {
+        if (
+          error.status === 404 &&
+          error.error?.message === 'User not found.'
+        ) {
+          this.snackBar.openErrorSnackbar(
+            this.translate.instant('VALIDATION.USER_NOT_FOUND')
+          );
+        } else {
+          this.snackBar.openErrorSnackbar(error.error?.message);
+        }
+      },
+    });
+
+    this.codeExpireSeconds = 600;
+    this.resendCooldownSeconds = 60;
   }
 }

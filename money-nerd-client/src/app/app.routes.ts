@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { EmailVerificationComponent } from './pages/email-verification/email-verification.component';
 import { AuthComponent } from './pages/auth/auth.component';
+import { PasswordRecoveryComponent } from './pages/password-recovery/password-recovery.component';
 
 export const routes: Routes = [
   {
@@ -16,6 +17,10 @@ export const routes: Routes = [
   {
     path: 'home',
     loadComponent: () => HomeComponent,
+  },
+  {
+    path: 'password-recovery',
+    loadComponent: () => PasswordRecoveryComponent,
   },
   {
     path: 'email-verification/:email',

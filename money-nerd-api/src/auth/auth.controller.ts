@@ -56,7 +56,7 @@ export class AuthController {
 
       return res.redirect(`${process.env.FRONTEND_URL}/home`);
     } catch (error) {
-      throw new InternalServerErrorException('Failed to login with Github', {
+      throw new InternalServerErrorException('Failed to login with Github.', {
         cause: error,
       });
     }
@@ -87,7 +87,7 @@ export class AuthController {
 
       return res.redirect(`${process.env.FRONTEND_URL}/home`);
     } catch (error) {
-      throw new InternalServerErrorException('Failed to login with Google', {
+      throw new InternalServerErrorException('Failed to login with Google.', {
         cause: error,
       });
     }
@@ -117,7 +117,7 @@ export class AuthController {
       maxAge: 60 * 60 * 1000,
     });
 
-    return { message: 'Login successful' };
+    return { message: 'Login successful.' };
   }
 
   @Post('refresh')
@@ -128,7 +128,7 @@ export class AuthController {
     try {
       const refreshToken = request.cookies?.refresh_token;
       if (!refreshToken) {
-        throw new UnauthorizedException('No refresh token');
+        throw new UnauthorizedException('No refresh token.');
       }
 
       const newAccessToken = await this.authService.refresh(refreshToken);
@@ -142,7 +142,7 @@ export class AuthController {
 
       return { access_token: newAccessToken };
     } catch (error) {
-      throw new UnauthorizedException('Invalid refresh token', {
+      throw new UnauthorizedException('Invalid refresh token.', {
         cause: error,
       });
     }
@@ -151,7 +151,7 @@ export class AuthController {
   @Post('verify-email')
   async verifyEmail(@Body() dto: VerifyEmailDto) {
     await this.authService.verifyEmail(dto);
-    return { message: 'Email verified successfully' };
+    return { message: 'E-mail verified successfully.' };
   }
 
   @Post('logout')
@@ -167,6 +167,6 @@ export class AuthController {
       secure: process.env.NODE_ENV === 'production',
     });
 
-    return { message: 'Logged out successfully' };
+    return { message: 'Logged out successfully.' };
   }
 }

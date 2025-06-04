@@ -1,8 +1,9 @@
-<div
+<form
   class="login-register-container"
   *ngIf="registering"
   [class.fade-out]="isRegisterFadingOut"
   [formGroup]="registerForm"
+  (ngSubmit)="submitForm()"
 >
   <div class="login-screen-title">
     <h3>{{ "FREE_REGISTER" | translate }}</h3>
@@ -63,13 +64,17 @@
     ></text-input>
   </div>
 
-  <button class="login-register-button" (click)="submitForm()">
+  <button class="login-register-button" type="submit">
     {{ "FREE_REGISTER" | translate }}
   </button>
 
   <div class="divider"></div>
 
-  <button class="register-button" (click)="triggerRegisterFadeOut()">
+  <button
+    class="register-button"
+    type="button"
+    (click)="triggerRegisterFadeOut()"
+  >
     <div class="label-container">
       <p style="color: #b1b1b1">{{ "HAS_ACCOUNT" | translate }}</p>
       <p style="color: #8db15e">{{ "LOGIN_BUTTON" | translate }}</p>
@@ -77,4 +82,4 @@
 
     <i class="fa fa-chevron-right" style="color: #b1b1b1"></i>
   </button>
-</div>
+</form>

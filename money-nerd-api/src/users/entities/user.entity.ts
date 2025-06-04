@@ -52,6 +52,12 @@ export class User {
   @Prop()
   emailVerificationCodeExpires?: Date;
 
+  @Prop()
+  passwordResetCode?: string;
+
+  @Prop()
+  passwordResetCodeExpires?: Date;
+
   createdAt!: Date;
   updatedAt!: Date;
 }

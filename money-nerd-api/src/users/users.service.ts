@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ConflictException,
+  HttpException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -14,6 +15,7 @@ import { Model } from 'mongoose';
 import { MongoError } from './types/mongo-error';
 import { MailService } from 'src/mail/mail.service';
 import { generateCodeEmailHtml } from '../mail/templates/verification-email.template';
+import { generatePasswordResetEmailHtml } from 'src/mail/templates/password-reset-emai.template';
 
 @Injectable()
 export class UsersService {
@@ -48,6 +50,22 @@ export class UsersService {
     }
   }
 
+  async passwordResetCode(email: string) {
+    try {
+      const user = await this.userSchema.findOne({
+        email: email,
+      });
+      if (!user) {
+        throw new NotFoundException('User not found.');
+      }
+
+      await this.sendPasswordReseter(user);
+    } catch (error) {
+      if (error instanceof NotFoundException) throw error;
+      throw new InternalServerErrorException('Failed to fetch the user');
+    }
+  }
+
   private async sendEmailVerificationCode(user: UserDocument): Promise<void> {
     const code = this.generateVerificationCode();
     const expires = new Date(Date.now() + 1000 * 60 * 10);
@@ -63,24 +81,75 @@ export class UsersService {
     );
   }
 
+  private async sendPasswordReseter(user: UserDocument): Promise<void> {
+    const code = this.generateVerificationCode();
+    const expires = new Date(Date.now() + 1000 * 60 * 10);
+
+    user.passwordResetCode = code;
+    user.passwordResetCodeExpires = expires;
+    await user.save();
+
+    await this.mailService.sendMail(
+      user.email,
+      'Reset your password',
+      generatePasswordResetEmailHtml(code),
+    );
+  }
+
   async resendEmailVerification(email: string) {
     const user = await this.userSchema.findOne({ email });
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('User not found.');
     }
 
     if (user.isEmailVerified) {
-      throw new BadRequestException('Email already verified');
+      throw new BadRequestException('E-mail already verified.');
     }
 
     await this.sendEmailVerificationCode(user);
 
-    return { message: 'Verification code resent' };
+    return { message: 'Verification code resent.' };
   }
 
   private generateVerificationCode(): string {
     return Math.floor(100000 + Math.random() * 900000).toString();
+  }
+
+  async resetPassword(email: string, code: string, newPassword: string) {
+    try {
+      const user = await this.userSchema.findOne({
+        email: email,
+      });
+
+      if (!user) {
+        throw new NotFoundException('User not found.');
+      }
+
+      if (user?.passwordResetCode != code) {
+        throw new BadRequestException('Invalid code.');
+      }
+
+      if (user.passwordResetCodeExpires! < new Date()) {
+        throw new BadRequestException('Expired code.');
+      }
+
+      if (await bcrypt.compare(newPassword, user.password)) {
+        throw new BadRequestException(
+          'Your new password is the same as the previous one.',
+        );
+      }
+
+      user.password = bcrypt.hashSync(newPassword, 10);
+      user.passwordResetCode = undefined;
+      user.passwordResetCodeExpires = undefined;
+      await user.save();
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new BadRequestException(error);
+    }
   }
 
   async findAll() {
@@ -99,7 +168,7 @@ export class UsersService {
         _id: id,
       });
       if (!user) {
-        throw new NotFoundException('User not found');
+        throw new NotFoundException('User not found.');
       }
       return user;
     } catch (error) {

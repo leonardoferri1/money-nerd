@@ -16,4 +16,10 @@ export class HomeService {
       withCredentials: true,
     });
   }
+
+  getUser(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/users/me`, {
+      withCredentials: true,
+    });
+  }
 }

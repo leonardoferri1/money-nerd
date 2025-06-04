@@ -1,6 +1,13 @@
 .main-container {
-  width: 100%;
-  // min-height: 100vh;
+  position: relative;
   margin-top: 75px;
+  transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
   padding: 1rem;
+  width: calc(100% - 50px);
+  transform: translateX(50px);
+
+  &.with-menu {
+    width: calc(100% - 250px);
+    transform: translateX(250px);
+  }
 }

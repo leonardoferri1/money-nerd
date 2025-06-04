@@ -9,6 +9,7 @@ import { TextInputComponent } from '../../../../shared/components/web-components
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NgIf } from '@angular/common';
 import { SnackbarService } from '../../../../shared/components/snackbar/snackbar.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-panel',
@@ -32,7 +33,8 @@ export class LoginPanelComponent {
   constructor(
     private formBuilder: FormBuilder,
     private snackBar: SnackbarService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -42,11 +44,11 @@ export class LoginPanelComponent {
     });
   }
 
-  googleLogin() {
+  async googleLogin() {
     window.location.href = 'http://localhost:3000/auth/google';
   }
 
-  githubLogin() {
+  async githubLogin() {
     window.location.href = 'http://localhost:3000/auth/github';
   }
 
@@ -57,7 +59,6 @@ export class LoginPanelComponent {
   }
 
   loginValidate(): boolean {
-    console.log(this.loginForm);
     this.loginForm.markAllAsTouched();
 
     const erros = this.getFormValidationErrors(this.loginForm);
@@ -88,6 +89,10 @@ export class LoginPanelComponent {
     }
 
     this.formEmit.emit(this.loginForm.value);
+  }
+
+  passwordForgot() {
+    this.router.navigateByUrl(`/password-recovery`);
   }
 
   getFormValidationErrors(form: any): { control: string; error: string }[] {

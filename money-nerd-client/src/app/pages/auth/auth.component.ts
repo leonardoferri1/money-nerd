@@ -87,11 +87,9 @@ export class AuthComponent implements OnInit {
 
   async resendCode(email: string) {
     await this.emailVerificationService.resendEmail(email).subscribe({
-      next: (response) => {
-        console.log(response);
-      },
-      error: (e) => {
-        console.log(e);
+      next: (response) => {},
+      error: (error) => {
+        this.snackBar.openErrorSnackbar(error.error?.message);
       },
     });
   }
@@ -99,11 +97,9 @@ export class AuthComponent implements OnInit {
   async submitRegistration(formValue: any) {
     this.authService.register(formValue).subscribe({
       next: (response) => {
-        console.log(response);
         this.router.navigateByUrl(`/email-verification/${response.email}`);
       },
       error: (error) => {
-        console.log(error);
         if (
           error.status === 409 &&
           error.error?.message === 'Email is already in use.'

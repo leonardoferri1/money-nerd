@@ -21,7 +21,7 @@ export class MailService {
   async sendMail(to: string, subject: string, html: string): Promise<void> {
     try {
       await this.transporter.sendMail({
-        from: `"My App" <${process.env.SMTP_FROM}>`,
+        from: `"Money Nerd" <${process.env.SMTP_FROM}>`,
         to,
         subject,
         html,

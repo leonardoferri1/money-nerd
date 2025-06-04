@@ -1,9 +1,9 @@
-import { HydratedDocument } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { HydratedDocument } from 'mongoose';
 import crypto from 'crypto';
 import { User, UserDocument } from 'src/users/entities/user.entity';
 
-export type CategoryDocument = HydratedDocument<Category>;
+export type AccountDocument = HydratedDocument<Account>;
 
 @Schema({
   timestamps: true,
@@ -13,12 +13,15 @@ export type CategoryDocument = HydratedDocument<Category>;
     },
   },
 })
-export class Category {
+export class Account {
   @Prop({ default: () => crypto.randomUUID() })
   _id: string;
 
-  @Prop({ required: true, unique: true })
-  name: string;
+  @Prop({ nullable: true })
+  description?: string;
+
+  @Prop({ nullable: false, unique: true })
+  name?: string;
 
   @Prop({ type: String, ref: User.name })
   user?: UserDocument | string;
@@ -27,4 +30,4 @@ export class Category {
   updatedAt!: Date;
 }
 
-export const CategorySchema = SchemaFactory.createForClass(Category);
+export const AccountSchema = SchemaFactory.createForClass(Account);

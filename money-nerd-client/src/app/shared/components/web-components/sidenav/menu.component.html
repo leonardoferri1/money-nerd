@@ -1,0 +1,17 @@
+<div class="menu" [ngClass]="{ open: opened }">
+  <button
+    class="toggle-button"
+    matTooltip="{{ opened ? 'Fechar' : 'Abrir' }}"
+    [matTooltipPosition]="'below'"
+    (click)="toggle()"
+  >
+    <i
+      class="fa"
+      [ngClass]="opened ? 'fa-chevron-left' : 'fa-chevron-right'"
+    ></i>
+  </button>
+
+  <div class="menu-content">
+    <ng-content></ng-content>
+  </div>
+</div>

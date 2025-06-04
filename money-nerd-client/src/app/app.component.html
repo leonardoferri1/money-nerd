@@ -1,6 +1,7 @@
 <app-navbar></app-navbar>
+<app-menu [(opened)]="menuOpened"></app-menu>
 
-<div class="main-container">
+<div class="main-container" [class.with-menu]="menuOpened">
   <router-outlet></router-outlet>
 </div>
 

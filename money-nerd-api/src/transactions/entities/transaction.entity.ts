@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import { TransactionType } from '../enums/transaction-type.enum';
 import { CategoryDocument } from 'src/categories/entities/category.entity';
 import { User, UserDocument } from 'src/users/entities/user.entity';
+import { AccountDocument } from 'src/accounts/entities/account.entity';
 
 export type TransactionDocument = HydratedDocument<Transaction>;
 
@@ -36,8 +37,14 @@ export class Transaction {
   @Prop()
   value: number;
 
+  @Prop({ default: false })
+  isCreditCard: boolean;
+
   @Prop({ type: String, ref: 'Category', nullable: true })
   category?: CategoryDocument | string;
+
+  @Prop({ type: String, ref: 'Account', nullable: true })
+  account?: AccountDocument | string;
 
   @Prop({ type: String, ref: User.name })
   user?: UserDocument | string;

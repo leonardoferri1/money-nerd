@@ -13,10 +13,20 @@
   "GITHUB_BUTTON": "Continuar com o Github",
   "VERIFY_EMAIL": "Verifique o seu e-mail",
   "CODE_SENT": "Enviamos um código de verificação para",
+  "RECOVERY_CODE_SENT": "Enviamos um código de recuperação de senha para",
   "INSERT_CODE": "Insira o código enviado para seu e-mail",
   "CODE_EXPIRES": "Código expira em",
   "WAIT": "Aguarde",
   "RESEND": "Enviar Novamente",
+  "RESENT": "Código de verificação reenviado.",
+  "PASSWORD_CODE_RESENT": "Código de recuperação de senha enviado.",
+  "LOGGED_OUT": "Sessão encerrada com sucesso.",
+  "EMAIL_CONFIRMED": "E-mail confirmado com sucesso.",
+  "RECOVER_PASSWORD": "Recuperar a minha senha",
+  "FORGOT_PASSWORD": "Esqueceu sua senha?",
+  "PASSWORD_RECOVERED": "A sua senha foi atualizada com sucesso.",
+  "BACK_TO_LOGIN": "Voltar para o login",
+  "CONTINUE": "Continuar",
   "VALIDATION": {
     "REQUIRED": "Necessário preencher todos os campos obrigatórios.",
     "PASSWORDS_DO_NOT_MATCH": "As senhas não coincidem.",
@@ -26,6 +36,7 @@
     "BAD_CODE": "Código inválido.",
     "EXPIRED_CODE": "Código expirado.",
     "EMAIL_ALREADY_VERIFIED": "E-mail já confirmado.",
-    "EMAIL_USED": "E-mail em uso."
+    "EMAIL_USED": "E-mail em uso.",
+    "SAME_PASSWORD": "A sua nova senha é a mesma da anterior."
   }
 }

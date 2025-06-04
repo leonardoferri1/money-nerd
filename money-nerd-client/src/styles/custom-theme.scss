@@ -43,7 +43,7 @@ $custom-theme: mat.m2-define-light-theme(
 .success-snackbar {
   @include mat.snack-bar-overrides(
     (
-      container-color: #8cbd7d,
+      container-color: #9fcf61,
       supporting-text-color: white,
       button-color: white,
     )

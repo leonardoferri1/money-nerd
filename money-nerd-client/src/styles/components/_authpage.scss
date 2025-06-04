@@ -122,3 +122,30 @@
     opacity: 0;
   }
 }
+
+.designless-button {
+  display: flex;
+  margin: 0;
+  justify-content: center;
+  align-self: flex-end;
+  max-width: 200px;
+  border-radius: 4px;
+  margin-top: 0.7rem;
+  border: 0;
+  color: $grey-light;
+  background: none;
+  padding: 0.3rem 0.8rem 0.5rem 0.8rem;
+  font-size: 14px;
+  font-weight: 600;
+
+  &:hover {
+    filter: brightness(110%);
+  }
+}
+
+.control-panel {
+  display: flex;
+  flex-direction: column;
+  color: $grey-light;
+  gap: 0;
+}

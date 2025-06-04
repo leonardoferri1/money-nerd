@@ -13,10 +13,20 @@
   "GITHUB_BUTTON": "Continue with Github",
   "VERIFY_EMAIL": "Verify your email",
   "CODE_SENT": "We sent a verification code to",
+  "RECOVERY_CODE_SENT": "We sent a password recovery code to",
   "INSERT_CODE": "Enter the code sent to your email",
   "CODE_EXPIRES": "Code expires in",
   "WAIT": "Please wait",
   "RESEND": "Resend",
+  "RESENT": "Verification code resent.",
+  "PASSWORD_CODE_RESENT": "Password recovery code sent.",
+  "LOGGED_OUT": "Logged out successfully.",
+  "EMAIL_CONFIRMED": "E-mail verified successfully.",
+  "FORGOT_PASSWORD": "Forgot your password?",
+  "RECOVER_PASSWORD": "Recover my password",
+  "PASSWORD_RECOVERED": "Your password has been updated successfully",
+  "BACK_TO_LOGIN": "Go back to login",
+  "CONTINUE": "Continue",
   "VALIDATION": {
     "REQUIRED": "All required fields must be filled.",
     "PASSWORDS_DO_NOT_MATCH": "Passwords do not match.",
@@ -26,6 +36,7 @@
     "BAD_CODE": "Invalid code.",
     "EXPIRED_CODE": "Expired code.",
     "EMAIL_ALREADY_VERIFIED": "E-mail is already verified.",
-    "EMAIL_USED": "E-mail is already in use."
+    "EMAIL_USED": "E-mail is already in use.",
+    "SAME_PASSWORD": "Your new password is the same as the previous one."
   }
 }

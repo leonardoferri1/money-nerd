@@ -1,4 +1,4 @@
-<div class="email-verification-container">
+<div class="email-verification-container" (keydown.enter)="emailVerify()">
   <h3>{{ "VERIFY_EMAIL" | translate }}</h3>
   <p>{{ "CODE_SENT" | translate }} {{ email }}</p>
 

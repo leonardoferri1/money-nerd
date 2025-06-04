@@ -1,21 +1,22 @@
-<div
+<form
   class="login-register-container"
   *ngIf="!registering"
   [class.fade-out]="isLoginFadingOut"
   [formGroup]="loginForm"
+  (ngSubmit)="submitForm()"
 >
   <div class="login-screen-title">
     <h3>Money Nerd</h3>
   </div>
 
   <div class="full-width-div">
-    <button class="google-github-button" (click)="googleLogin()">
+    <button class="google-github-button" type="button" (click)="googleLogin()">
       <img src="img/google-logo.png" alt="Logo" class="logo-img" />
 
       <h3>{{ "GOOGLE_BUTTON" | translate }}</h3>
     </button>
 
-    <button class="google-github-button" (click)="githubLogin()">
+    <button class="google-github-button" type="button" (click)="githubLogin()">
       <img src="img/github-logo.png" alt="Logo" class="logo-img" />
 
       <h3>{{ "GITHUB_BUTTON" | translate }}</h3>
@@ -52,13 +53,19 @@
     ></text-input>
   </div>
 
-  <button class="login-register-button" (click)="submitForm()">
-    {{ "LOGIN_BUTTON" | translate }}
-  </button>
+  <div class="control-panel">
+    <button class="login-register-button" type="submit">
+      {{ "LOGIN_BUTTON" | translate }}
+    </button>
+
+    <button class="designless-button" type="button" (click)="passwordForgot()">
+      {{ "FORGOT_PASSWORD" | translate }}
+    </button>
+  </div>
 
   <div class="divider"></div>
 
-  <button class="register-button" (click)="triggerLoginFadeOut()">
+  <button class="register-button" type="button" (click)="triggerLoginFadeOut()">
     <div class="label-container">
       <p style="color: #b1b1b1">{{ "NO_ACCOUNT" | translate }}</p>
       <p style="color: #8db15e">{{ "FREE_REGISTER" | translate }}</p>
@@ -66,4 +73,4 @@
 
     <i class="fa fa-chevron-right" style="color: #b1b1b1"></i>
   </button>
-</div>
+</form>

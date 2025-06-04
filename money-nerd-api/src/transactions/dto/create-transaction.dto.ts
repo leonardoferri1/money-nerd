@@ -5,6 +5,7 @@ import {
   IsOptional,
   IsString,
   IsDateString,
+  IsBoolean,
 } from 'class-validator';
 import { TransactionType } from '../enums/transaction-type.enum';
 
@@ -24,6 +25,10 @@ export class CreateTransactionDto {
   @IsNumber()
   @IsNotEmpty()
   value: number;
+
+  @IsBoolean()
+  @IsOptional()
+  isCreditCard: boolean;
 
   @IsOptional()
   @IsString()

@@ -1,0 +1,64 @@
+@import "variables";
+
+.menu {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  width: 50px;
+  min-width: 50px;
+  max-width: 250px;
+  height: 100vh;
+  background: $background-main-lighter;
+  padding: 16px;
+  z-index: 9;
+  transition: 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.menu.open {
+  width: 250px;
+}
+
+.menu-content {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.toggle-button {
+  position: absolute;
+  top: 1rem;
+  right: -0.75rem;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  opacity: 90%;
+  background: $rare-background;
+  border: 0;
+  color: $grey-light;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 13;
+
+  &:hover {
+    background: $light-background;
+    transition: background-color 0.1s ease;
+  }
+
+  &:disabled,
+  &.disabled {
+    opacity: 65%;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: not-allowed;
+    box-shadow: none;
+    pointer-events: none;
+  }
+
+  i {
+    font-size: 11px;
+  }
+}
