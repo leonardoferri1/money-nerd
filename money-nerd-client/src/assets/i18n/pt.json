@@ -39,5 +39,10 @@
     "EMAIL_ALREADY_VERIFIED": "E-mail já confirmado.",
     "EMAIL_USED": "E-mail em uso.",
     "SAME_PASSWORD": "A sua nova senha é a mesma da anterior."
+  },
+  "ACTIONS": {
+    "INCOME": "Receita",
+    "OUTCOME": "Despesa",
+    "CATEGORY": "Categoria"
   }
 }

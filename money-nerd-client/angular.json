@@ -31,7 +31,11 @@
               "src/favicon.ico",
               "src/assets"
             ],
-            "styles": ["src/styles.scss", "src/styles/custom-theme.scss"],
+            "styles": [
+              "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+              "src/styles.scss",
+              "src/styles/custom-theme.scss"
+            ],
             "scripts": [],
             "stylePreprocessorOptions": {
               "includePaths": ["src/styles"]

@@ -13,9 +13,23 @@
 
   <div class="menu-container">
     <div class="menu-outter-content">
-      <button class="new-item-button">
-        <i class="fa-solid fa-plus"></i>
-      </button>
+      <div class="dropdown-wrapper">
+        <app-dropdown-menu
+          [opened]="showDropdown"
+          [items]="items"
+          [selectedItem]="selected"
+          (valueChange)="newItemButtonClick($event)"
+          (closeChange)="showDropdown = $event"
+        ></app-dropdown-menu>
+
+        <button
+          class="new-item-button"
+          (click)="toggleDropdown()"
+          [class.open]="showDropdown"
+        >
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
 
       <div class="menu-inner-content">
         <div>
@@ -25,7 +39,7 @@
             routerLink="/home"
             routerLinkActive="active"
           >
-            <i class="fa-solid fa-house"></i>
+            <i class="bi bi-house"></i>
           </a>
 
           <a
@@ -34,7 +48,7 @@
             routerLink="/home"
             routerLinkActive="active"
           >
-            <i class="fa-solid fa-dollar-sign"></i>
+            <i class="bi bi-house"></i>
             <p>Dashboard</p>
           </a>
         </div>
@@ -46,7 +60,7 @@
             routerLink="/transactions"
             routerLinkActive="active"
           >
-            <i class="fa-solid fa-dollar-sign"></i>
+            <i class="bi bi-currency-dollar"></i>
           </a>
 
           <a
@@ -55,7 +69,7 @@
             routerLink="/transactions"
             routerLinkActive="active"
           >
-            <i class="fa-solid fa-dollar-sign"></i>
+            <i class="bi bi-currency-dollar"></i>
             <p>
               {{ "TRANSACTIONS" | translate }}
             </p>

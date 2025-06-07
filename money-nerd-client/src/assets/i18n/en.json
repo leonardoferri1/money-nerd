@@ -39,5 +39,10 @@
     "EMAIL_ALREADY_VERIFIED": "E-mail is already verified.",
     "EMAIL_USED": "E-mail is already in use.",
     "SAME_PASSWORD": "Your new password is the same as the previous one."
+  },
+  "ACTIONS": {
+    "INCOME": "Income",
+    "OUTCOME": "Outcome",
+    "CATEGORY": "Category"
   }
 }

@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  Output,
+} from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
@@ -7,6 +14,7 @@ import { TranslationService } from '../../../services/translation.service';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
+import { DropdownMenuComponent } from '../dropdown-menu/menu/dropdown-menu.component';
 
 @Component({
   selector: 'app-menu',
@@ -20,6 +28,7 @@ import { TranslateModule } from '@ngx-translate/core';
     NgTemplateOutlet,
     NgClass,
     MatTooltipModule,
+    DropdownMenuComponent,
   ],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss',
@@ -27,8 +36,20 @@ import { TranslateModule } from '@ngx-translate/core';
 export class MenuComponent {
   currentRoute: string = '';
   currentLang: any;
+  showDropdown = false;
+  selected: string | null = null;
+  items = [
+    { label: 'ACTIONS.INCOME', icon: 'bi-graph-up-arrow', iconColor: 'green' },
+    { label: 'ACTIONS.OUTCOME', icon: 'bi-graph-down-arrow', iconColor: 'red' },
+    { label: 'ACTIONS.CATEGORY', icon: 'bi-tags', iconColor: 'yellow' },
+  ];
+  openNewItemMenu: boolean = false;
 
-  constructor(private translation: TranslationService, private router: Router) {
+  constructor(
+    private translation: TranslationService,
+    private router: Router,
+    private elementRef: ElementRef
+  ) {
     this.currentLang = this.translation.currentLang;
 
     this.router.events
@@ -59,5 +80,21 @@ export class MenuComponent {
 
   onNavCloseEvent(event: Event): void {
     this.onNavClose.emit(event);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    const clickedInside = this.elementRef.nativeElement.contains(event.target);
+    if (!clickedInside) {
+      this.showDropdown = false;
+    }
+  }
+
+  toggleDropdown() {
+    this.showDropdown = !this.showDropdown;
+  }
+
+  newItemButtonClick(item: string) {
+    console.log(item);
   }
 }
