@@ -20,10 +20,10 @@ export class Account {
   @Prop({ nullable: true })
   description?: string;
 
-  @Prop({ nullable: false, unique: true })
+  @Prop({ nullable: false })
   name?: string;
 
-  @Prop({ type: String, ref: User.name })
+  @Prop({ type: String, ref: User.name, required: true })
   user?: UserDocument | string;
 
   createdAt!: Date;
@@ -31,3 +31,5 @@ export class Account {
 }
 
 export const AccountSchema = SchemaFactory.createForClass(Account);
+
+AccountSchema.index({ name: 1, user: 1 }, { unique: true });

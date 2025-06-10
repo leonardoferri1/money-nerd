@@ -34,11 +34,14 @@ export class Transaction {
   @Prop()
   date: Date;
 
-  @Prop()
+  @Prop({ required: true })
   value: number;
 
   @Prop({ default: false })
   isCreditCard: boolean;
+
+  @Prop({ default: true })
+  wasPaid: boolean;
 
   @Prop({ type: String, ref: 'Category', nullable: true })
   category?: CategoryDocument | string;
@@ -46,7 +49,7 @@ export class Transaction {
   @Prop({ type: String, ref: 'Account', nullable: true })
   account?: AccountDocument | string;
 
-  @Prop({ type: String, ref: User.name })
+  @Prop({ type: String, ref: User.name, required: true })
   user?: UserDocument | string;
 
   createdAt!: Date;

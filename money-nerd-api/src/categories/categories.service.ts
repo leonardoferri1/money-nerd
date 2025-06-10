@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -7,6 +8,7 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { Category } from './entities/category.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { MongoError } from 'src/users/types/mongo-error';
 
 @Injectable()
 export class CategoriesService {
@@ -21,8 +23,16 @@ export class CategoriesService {
         ...createCategoryDto,
         user: userId,
       });
-    } catch (error) {
-      throw new InternalServerErrorException('Failed to create category', {
+    } catch (error: unknown) {
+      const err = error as MongoError;
+
+      if (err.code === 11000) {
+        throw new ConflictException(
+          'A category with this name already exists.',
+        );
+      }
+
+      throw new InternalServerErrorException('Failed to create new category', {
         cause: error,
       });
     }

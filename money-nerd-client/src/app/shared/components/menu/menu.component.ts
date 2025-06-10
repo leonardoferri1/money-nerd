@@ -10,11 +10,12 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslationService } from '../../../services/translation.service';
+import { TranslationService } from '../../services/translation.service';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
-import { DropdownMenuComponent } from '../dropdown-menu/menu/dropdown-menu.component';
+import { DropdownMenuComponent } from '../web-components/dropdown-menu/menu/dropdown-menu.component';
+import { CategoryModalComponent } from '../category-modal/category-modal.component';
 
 @Component({
   selector: 'app-menu',
@@ -29,6 +30,7 @@ import { DropdownMenuComponent } from '../dropdown-menu/menu/dropdown-menu.compo
     NgClass,
     MatTooltipModule,
     DropdownMenuComponent,
+    CategoryModalComponent,
   ],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss',
@@ -38,10 +40,21 @@ export class MenuComponent {
   currentLang: any;
   showDropdown = false;
   selected: string | null = null;
+  isCategoryModalOpen: boolean = false;
   items = [
-    { label: 'ACTIONS.INCOME', icon: 'bi-graph-up-arrow', iconColor: 'green' },
-    { label: 'ACTIONS.OUTCOME', icon: 'bi-graph-down-arrow', iconColor: 'red' },
-    { label: 'ACTIONS.CATEGORY', icon: 'bi-tags', iconColor: 'yellow' },
+    {
+      id: 1,
+      label: 'ACTIONS.INCOME',
+      icon: 'bi-graph-up-arrow',
+      iconColor: 'green',
+    },
+    {
+      id: 2,
+      label: 'ACTIONS.OUTCOME',
+      icon: 'bi-graph-down-arrow',
+      iconColor: 'red',
+    },
+    { id: 3, label: 'ACTIONS.CATEGORY', icon: 'bi-tags', iconColor: 'yellow' },
   ];
   openNewItemMenu: boolean = false;
 
@@ -60,7 +73,6 @@ export class MenuComponent {
   }
 
   @Input() opened = false;
-  @Input() tooltip = 'Fechar';
   @Output() openedChange = new EventEmitter<boolean>();
   @Output() onNavClose = new EventEmitter<Event>();
 
@@ -94,7 +106,11 @@ export class MenuComponent {
     this.showDropdown = !this.showDropdown;
   }
 
-  newItemButtonClick(item: string) {
-    console.log(item);
+  newItemButtonClick(item: any) {
+    if (item.id === 3) {
+      this.isCategoryModalOpen = true;
+    }
+
+    this.toggleDropdown();
   }
 }

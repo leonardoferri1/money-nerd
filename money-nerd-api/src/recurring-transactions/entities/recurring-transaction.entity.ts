@@ -1,9 +1,11 @@
-import { HydratedDocument } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { HydratedDocument } from 'mongoose';
 import crypto from 'crypto';
 import { User, UserDocument } from 'src/users/entities/user.entity';
+import { TransactionDocument } from 'src/transactions/entities/transaction.entity';
 
-export type CategoryDocument = HydratedDocument<Category>;
+export type RecurringTransactionDocument =
+  HydratedDocument<RecurringTransaction>;
 
 @Schema({
   timestamps: true,
@@ -13,18 +15,15 @@ export type CategoryDocument = HydratedDocument<Category>;
     },
   },
 })
-export class Category {
+export class RecurringTransaction {
   @Prop({ default: () => crypto.randomUUID() })
   _id: string;
 
   @Prop({ required: true })
   name: string;
 
-  @Prop({ default: 1 })
-  color: number;
-
-  @Prop()
-  icon: string;
+  @Prop({ type: String, ref: 'Transaction', nullable: true })
+  transaction?: TransactionDocument | string;
 
   @Prop({ type: String, ref: User.name, required: true })
   user?: UserDocument | string;
@@ -33,6 +32,7 @@ export class Category {
   updatedAt!: Date;
 }
 
-export const CategorySchema = SchemaFactory.createForClass(Category);
+export const RecurringTransactionSchema =
+  SchemaFactory.createForClass(RecurringTransaction);
 
-CategorySchema.index({ name: 1, user: 1 }, { unique: true });
+RecurringTransactionSchema.index({ name: 1, user: 1 }, { unique: true });

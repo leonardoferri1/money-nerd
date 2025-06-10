@@ -30,7 +30,15 @@ export class CreateTransactionDto {
   @IsOptional()
   isCreditCard: boolean;
 
+  @IsBoolean()
+  @IsOptional()
+  wasPaid: boolean;
+
   @IsOptional()
   @IsString()
   category: string;
+
+  @IsNotEmpty()
+  @IsString()
+  account: string;
 }

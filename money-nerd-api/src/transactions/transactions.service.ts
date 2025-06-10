@@ -26,9 +26,9 @@ export class TransactionsService {
 
       const transactions = await this.transactionSchema.insertMany(converted);
 
-      return this.transactionSchema
-        .find({ _id: { $in: transactions.map((t) => t._id) } })
-        .populate('category');
+      return this.transactionSchema.find({
+        _id: { $in: transactions.map((t) => t._id) },
+      });
     } catch (error) {
       throw new InternalServerErrorException('Failed to create transaction', {
         cause: error,
@@ -40,7 +40,7 @@ export class TransactionsService {
     try {
       return await this.transactionSchema
         .find({ user: userId })
-        .populate('category');
+        .populate('category', 'account');
     } catch (error) {
       throw new InternalServerErrorException('Failed to fetch transactions', {
         cause: error,
@@ -55,7 +55,8 @@ export class TransactionsService {
           _id: id,
           user: userId,
         })
-        .populate('category');
+        .populate('category', 'account');
+
       if (!transaction) {
         throw new NotFoundException('Transaction not found');
       }

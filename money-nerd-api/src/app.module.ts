@@ -9,6 +9,7 @@ import { TransactionsModule } from './transactions/transactions.module';
 import { CategoriesModule } from './categories/categories.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { AccountsModule } from './accounts/accounts.module';
+import { RecurringTransactionsModule } from './recurring-transactions/recurring-transactions.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { AccountsModule } from './accounts/accounts.module';
     TransactionsModule,
     CategoriesModule,
     AccountsModule,
+    RecurringTransactionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
