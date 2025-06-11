@@ -5,22 +5,24 @@
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+  z-index: 50;
 }
 
 .money-nerd-modal {
+  width: calc(100% - 2rem);
   position: fixed;
+  box-sizing: border-box;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0.9);
   opacity: 0;
-  min-width: 300px;
-  max-width: 90vw;
-  max-height: 90vh;
+  min-width: 280px;
+  max-width: 650px;
+  max-height: 550vh;
   background: $background-main-lighter;
   border-radius: 8px;
   padding: 1rem;
-  z-index: 1001;
+  z-index: 55;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
@@ -36,7 +38,13 @@
 
 .money-nerd-modal-header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+
+  h1 {
+    font-size: 20px;
+    color: $grey-light;
+  }
 }
 
 .money-nerd-modal-body {

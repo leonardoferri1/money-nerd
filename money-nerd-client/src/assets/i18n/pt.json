@@ -28,6 +28,10 @@
   "BACK_TO_LOGIN": "Voltar para o login",
   "CONTINUE": "Continuar",
   "TRANSACTIONS": "Transações",
+  "NEW_CATEGORY": "Nova Categoria",
+  "CONFIRM": "Confirmar",
+  "COLOR": "Cor",
+  "ICON": "Ícone",
   "VALIDATION": {
     "REQUIRED": "Necessário preencher todos os campos obrigatórios.",
     "PASSWORDS_DO_NOT_MATCH": "As senhas não coincidem.",

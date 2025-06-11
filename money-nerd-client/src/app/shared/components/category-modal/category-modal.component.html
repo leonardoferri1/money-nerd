@@ -2,14 +2,85 @@
 
 <div class="money-nerd-modal" [ngClass]="{ open: opened }">
   <div class="money-nerd-modal-header" *ngIf="showCloseButton">
+    <h1>
+      {{ "NEW_CATEGORY" | translate }}
+    </h1>
+
     <button class="default-icon-button" (click)="close()">
       <i class="bi bi-x-lg"></i>
     </button>
   </div>
 
-  <div class="mmoney-nerd-modal-body">
-    <div class="category-form"></div>
+  <div class="money-nerd-modal-body">
+    <div class="category-form">
+      <text-input [placeholder]="'REGISTER_NAME' | translate"></text-input>
+
+      <div class="custom-style-buttons-container">
+        <button class="color-select-button" (click)="changeColor()">
+          <p>{{ "COLOR" | translate }}</p>
+          <div
+            class="default-icon-button"
+            [ngStyle]="{ 'background-color': selectedColor }"
+          ></div>
+        </button>
+
+        <button class="color-select-button" (click)="changeIcon()">
+          <p>{{ "ICON" | translate }}</p>
+          <div class="grey-icon-button">
+            <i class="{{ selectedIcon }}"></i>
+          </div>
+        </button>
+      </div>
+    </div>
   </div>
 
-  <div class="money-nerd-modal-footer">teste</div>
+  <div class="money-nerd-modal-footer">
+    <button class="confirm-button" type="submit">
+      {{ "CONFIRM" | translate }}
+    </button>
+  </div>
+</div>
+
+<div
+  class="color-icon-modal-overlay"
+  *ngIf="colorModalOpen"
+  (click)="closeColorModal()"
+></div>
+
+<div
+  class="color-icon-modal-overlay"
+  *ngIf="iconModalOpen"
+  (click)="closeIconModal()"
+></div>
+
+<div
+  class="color-icon-modal"
+  [ngClass]="{ open: colorModalOpen }"
+  *ngIf="colorModalOpen"
+>
+  <div class="color-icon-options">
+    <button
+      *ngFor="let color of availableColors"
+      [ngStyle]="{ 'background-color': color }"
+      (click)="selectColor(color)"
+    >
+      <i class="bi bi-check" *ngIf="selectedColor === color"></i>
+    </button>
+  </div>
+</div>
+
+<div
+  class="color-icon-modal"
+  [ngClass]="{ open: iconModalOpen }"
+  *ngIf="iconModalOpen"
+>
+  <div class="color-icon-options">
+    <button
+      *ngFor="let icon of availableIcons"
+      [class.selected]="selectedIcon === icon"
+      (click)="selectIcon(icon)"
+    >
+      <i [ngClass]="icon"></i>
+    </button>
+  </div>
 </div>

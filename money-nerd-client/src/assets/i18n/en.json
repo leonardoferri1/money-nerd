@@ -28,6 +28,10 @@
   "BACK_TO_LOGIN": "Go back to login",
   "CONTINUE": "Continue",
   "TRANSACTIONS": "Transactions",
+  "NEW_CATEGORY": "New Category",
+  "CONFIRM": "Confirm",
+  "COLOR": "Color",
+  "ICON": "Icon",
   "VALIDATION": {
     "REQUIRED": "All required fields must be filled.",
     "PASSWORDS_DO_NOT_MATCH": "Passwords do not match.",
