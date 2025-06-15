@@ -20,8 +20,8 @@ export class Category {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ default: 1 })
-  color: number;
+  @Prop()
+  color: string;
 
   @Prop()
   icon: string;

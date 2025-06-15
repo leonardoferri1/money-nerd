@@ -29,9 +29,11 @@
   "CONTINUE": "Continue",
   "TRANSACTIONS": "Transactions",
   "NEW_CATEGORY": "New Category",
+  "NEW_INCOME": "New Income",
   "CONFIRM": "Confirm",
   "COLOR": "Color",
   "ICON": "Icon",
+  "CATEGORY_CREATED": "Category created.",
   "VALIDATION": {
     "REQUIRED": "All required fields must be filled.",
     "PASSWORDS_DO_NOT_MATCH": "Passwords do not match.",
@@ -42,7 +44,8 @@
     "EXPIRED_CODE": "Expired code.",
     "EMAIL_ALREADY_VERIFIED": "E-mail is already verified.",
     "EMAIL_USED": "E-mail is already in use.",
-    "SAME_PASSWORD": "Your new password is the same as the previous one."
+    "SAME_PASSWORD": "Your new password is the same as the previous one.",
+    "CATEGORY_NAME_USED": "Category name already in use."
   },
   "ACTIONS": {
     "INCOME": "Income",

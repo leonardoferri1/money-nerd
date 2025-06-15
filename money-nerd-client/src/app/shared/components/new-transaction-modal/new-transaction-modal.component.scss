@@ -1,0 +1,15 @@
+@import "variables";
+
+.category-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .custom-style-buttons-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+    gap: 1rem;
+    width: 100%;
+  }
+}

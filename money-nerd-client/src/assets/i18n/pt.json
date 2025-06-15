@@ -29,9 +29,11 @@
   "CONTINUE": "Continuar",
   "TRANSACTIONS": "Transações",
   "NEW_CATEGORY": "Nova Categoria",
+  "NEW_INCOME": "Nova Receita",
   "CONFIRM": "Confirmar",
   "COLOR": "Cor",
   "ICON": "Ícone",
+  "CATEGORY_CREATED": "Categoria criada.",
   "VALIDATION": {
     "REQUIRED": "Necessário preencher todos os campos obrigatórios.",
     "PASSWORDS_DO_NOT_MATCH": "As senhas não coincidem.",
@@ -42,7 +44,8 @@
     "EXPIRED_CODE": "Código expirado.",
     "EMAIL_ALREADY_VERIFIED": "E-mail já confirmado.",
     "EMAIL_USED": "E-mail em uso.",
-    "SAME_PASSWORD": "A sua nova senha é a mesma da anterior."
+    "SAME_PASSWORD": "A sua nova senha é a mesma da anterior.",
+    "CATEGORY_NAME_USED": "Nome de categoria já está em uso."
   },
   "ACTIONS": {
     "INCOME": "Receita",

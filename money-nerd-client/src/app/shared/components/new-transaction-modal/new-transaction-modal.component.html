@@ -1,0 +1,25 @@
+<div class="modal-overlay" *ngIf="opened" (click)="close()"></div>
+
+<div class="money-nerd-modal" [ngClass]="{ open: opened }">
+  <div class="money-nerd-modal-header" *ngIf="showCloseButton">
+    <h1>
+      {{ "NEW_INCOME" | translate }}
+    </h1>
+
+    <button class="default-icon-button" (click)="close()">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+
+  <div class="money-nerd-modal-body">
+    <div class="category-form">
+      <currency-input [prefix]="'R$ '"></currency-input>
+    </div>
+  </div>
+
+  <div class="money-nerd-modal-footer">
+    <button class="confirm-button" type="submit">
+      {{ "CONFIRM" | translate }}
+    </button>
+  </div>
+</div>

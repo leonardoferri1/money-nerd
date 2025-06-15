@@ -1,0 +1,17 @@
+<input
+  currencyMask
+  [options]="{
+    allowNegative: allowNegativeValue,
+    align: 'right',
+    prefix: prefix,
+    thousands: '.',
+    decimal: ',',
+    precision: 2,
+  }"
+  [(ngModel)]="value"
+  (ngModelChange)="onInputChange($event)"
+  [placeholder]="placeholder"
+  (focus)="onFocus()"
+  (blur)="onFocusOut()"
+  [readonly]="isReadonly"
+/>

@@ -71,4 +71,11 @@ a {
   &:hover {
     filter: brightness(110%);
   }
+
+  &:disabled,
+  &.disabled {
+    opacity: 65%;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
 }
