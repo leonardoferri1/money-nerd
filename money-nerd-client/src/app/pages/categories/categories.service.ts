@@ -16,4 +16,10 @@ export class CategoriesService {
       withCredentials: true,
     });
   }
+
+  getAllCategories(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/categories`, {
+      withCredentials: true,
+    });
+  }
 }

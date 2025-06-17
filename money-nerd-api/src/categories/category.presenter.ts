@@ -7,6 +7,8 @@ export class CategoryPresenter {
     return {
       _id: this.category._id,
       name: this.category.name,
+      color: this.category.color,
+      icon: this.category.icon,
     };
   }
 }

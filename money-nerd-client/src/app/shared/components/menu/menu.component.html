@@ -83,6 +83,8 @@
 <app-new-category-modal
   [(opened)]="isCategoryModalOpen"
 ></app-new-category-modal>
+
 <app-new-transaction-modal
-  [(opened)]="isIncomeModalOpen"
+  [(opened)]="isTransactionModalOpen"
+  [transactionType]="transactionModalType"
 ></app-new-transaction-modal>

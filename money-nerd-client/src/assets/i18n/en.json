@@ -34,6 +34,14 @@
   "COLOR": "Color",
   "ICON": "Icon",
   "CATEGORY_CREATED": "Category created.",
+  "PAID": "Paid",
+  "NOT_PAID": "Not paid",
+  "CREDIT_CARD": "Paid with credit card",
+  "NO_CREDIT_CARD": "Paid without credit card",
+  "RECURRING": "Recurring transaction",
+  "NOT_RECURRING": "One-time trnsaction",
+  "TODAY": "Today",
+  "DESCRIPTION": "Description",
   "VALIDATION": {
     "REQUIRED": "All required fields must be filled.",
     "PASSWORDS_DO_NOT_MATCH": "Passwords do not match.",
@@ -50,6 +58,7 @@
   "ACTIONS": {
     "INCOME": "Income",
     "OUTCOME": "Outcome",
-    "CATEGORY": "Category"
+    "CATEGORY": "Category",
+    "ACCOUNT": "Account"
   }
 }

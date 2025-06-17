@@ -14,8 +14,7 @@
   box-sizing: border-box;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0.9);
-  opacity: 0;
+  transform: translate(-50%, -50%);
   min-width: 280px;
   max-width: 650px;
   max-height: 550vh;
@@ -29,11 +28,6 @@
   gap: 1rem;
   transition: opacity 0.2s ease, transform 0.2s ease;
   overflow: hidden;
-}
-
-.money-nerd-modal.open {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
 }
 
 .money-nerd-modal-header {

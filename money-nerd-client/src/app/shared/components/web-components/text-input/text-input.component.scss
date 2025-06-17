@@ -1,3 +1,5 @@
+@import "variables";
+
 .input-wrapper {
   position: relative;
 
@@ -10,5 +12,17 @@
     top: 50%;
     right: 0.5rem;
     transform: translateY(-50%);
+  }
+}
+
+.green-theme {
+  &:focus {
+    border: 1px solid $light-green;
+  }
+}
+
+.red-theme {
+  &:focus {
+    border: 1px solid $input-error;
   }
 }

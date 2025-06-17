@@ -1,8 +1,13 @@
 <div class="modal-overlay" *ngIf="opened" (click)="close()"></div>
 
-<div class="money-nerd-modal" [ngClass]="{ open: opened }">
+<div
+  class="money-nerd-modal"
+  *ngIf="opened"
+  @modalAnimation
+  [ngClass]="{ open: opened }"
+>
   <div class="money-nerd-modal-header" *ngIf="showCloseButton">
-    <h1>
+    <h1 [ngStyle]="{ color: transactionThemeColor }">
       {{ "NEW_INCOME" | translate }}
     </h1>
 
@@ -12,13 +17,91 @@
   </div>
 
   <div class="money-nerd-modal-body">
-    <div class="category-form">
-      <currency-input [prefix]="'R$ '"></currency-input>
+    <div class="new-transaction-form">
+      <currency-input
+        [prefix]="'R$ '"
+        [theme]="transactionThemeClass"
+      ></currency-input>
+
+      <dropdown
+        [placeholder]="'ACTIONS.CATEGORY' | translate"
+        [options]="categories"
+        labelField="name"
+        valueField="id"
+      ></dropdown>
+
+      <dropdown [placeholder]="'ACTIONS.ACCOUNT' | translate"></dropdown>
+
+      <app-date-picker
+        [value]="selectedDate"
+        (valueChange)="selectedDate = $event"
+      ></app-date-picker>
+
+      <text-input
+        [placeholder]="'DESCRIPTION' | translate"
+        [theme]="transactionThemeClass"
+      ></text-input>
+
+      <div class="togle-switch-panel">
+        <div class="toggle-switch-container">
+          <p *ngIf="isPaid">
+            {{ "PAID" | translate }}
+          </p>
+
+          <p *ngIf="!isPaid">
+            {{ "NOT_PAID" | translate }}
+          </p>
+
+          <app-toggle-switch
+            [theme]="transactionThemeClass"
+            [checked]="isPaid"
+            (checkedChange)="isPaid = $event"
+          ></app-toggle-switch>
+        </div>
+
+        <div class="toggle-switch-container">
+          <p *ngIf="isCreditCard">
+            {{ "CREDIT_CARD" | translate }}
+          </p>
+
+          <p *ngIf="!isCreditCard">
+            {{ "NO_CREDIT_CARD" | translate }}
+          </p>
+
+          <app-toggle-switch
+            [theme]="transactionThemeClass"
+            [checked]="isCreditCard"
+            (checkedChange)="isCreditCard = $event"
+          ></app-toggle-switch>
+        </div>
+
+        <div class="toggle-switch-container">
+          <p *ngIf="isRecurring">
+            {{ "RECURRING" | translate }}
+          </p>
+
+          <p *ngIf="!isRecurring">
+            {{ "NOT_RECURRING" | translate }}
+          </p>
+
+          <app-toggle-switch
+            [theme]="transactionThemeClass"
+            [checked]="isRecurring"
+            (checkedChange)="isRecurring = $event"
+          ></app-toggle-switch>
+        </div>
+      </div>
     </div>
   </div>
 
   <div class="money-nerd-modal-footer">
-    <button class="confirm-button" type="submit">
+    <button
+      class="confirm-button"
+      type="submit"
+      [ngStyle]="{
+        background: transactionThemeColor
+      }"
+    >
       {{ "CONFIRM" | translate }}
     </button>
   </div>

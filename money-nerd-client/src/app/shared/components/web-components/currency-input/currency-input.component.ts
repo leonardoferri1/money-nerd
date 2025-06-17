@@ -29,9 +29,10 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
 })
 export class CurrencyInputComponent implements ControlValueAccessor {
   @Input() placeholder: string = '';
-  @Input() allowNegativeValue: boolean = true;
+  @Input() allowNegativeValue: boolean = false;
   @Input() prefix: string = '';
   @Input() isReadonly: boolean = false;
+  @Input() theme: string = '';
 
   @Output() valueChange = new EventEmitter<number>();
 

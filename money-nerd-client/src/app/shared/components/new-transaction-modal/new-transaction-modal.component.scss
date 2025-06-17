@@ -1,8 +1,9 @@
 @import "variables";
 
-.category-form {
+.new-transaction-form {
   display: flex;
   flex-direction: column;
+  gap: 1.5rem;
   width: 100%;
 
   .custom-style-buttons-container {
@@ -12,4 +13,19 @@
     gap: 1rem;
     width: 100%;
   }
+}
+
+.toggle-switch-container {
+  display: flex;
+  max-width: 100%;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  color: $grey-light;
+  overflow: hidden;
+}
+
+.togle-switch-panel {
+  display: flex;
+  flex-direction: column;
 }

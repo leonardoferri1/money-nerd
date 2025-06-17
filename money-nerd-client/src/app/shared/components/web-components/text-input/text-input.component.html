@@ -9,6 +9,7 @@
     (ngModelChange)="onInputChange($event)"
     (keypress)="onKeyPress($event)"
     [readonly]="isReadonly"
+    [class]="theme"
     [mask]="mask"
     [ngClass]="{ 'invalid-input': invalidValidator }"
   />

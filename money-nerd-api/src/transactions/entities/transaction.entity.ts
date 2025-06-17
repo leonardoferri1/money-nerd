@@ -43,6 +43,9 @@ export class Transaction {
   @Prop({ default: true })
   wasPaid: boolean;
 
+  @Prop({ default: false })
+  recurringTransaction: boolean;
+
   @Prop({ type: String, ref: 'Category', nullable: true })
   category?: CategoryDocument | string;
 

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import {
   Component,
   EventEmitter,
@@ -17,7 +17,7 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
   selector: 'text-input',
   templateUrl: './text-input.component.html',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxMaskDirective],
+  imports: [CommonModule, FormsModule, NgxMaskDirective, NgClass],
   styleUrls: ['./text-input.component.scss'],
   providers: [
     {
@@ -37,6 +37,7 @@ export class TextInputComponent implements ControlValueAccessor {
   @Input() type: string = 'text';
   @Input() invalidValidator: boolean = false;
   @Input() allowSpecial: boolean = false;
+  @Input() theme: string = '';
 
   @Output() valueChange = new EventEmitter<string | null>();
 

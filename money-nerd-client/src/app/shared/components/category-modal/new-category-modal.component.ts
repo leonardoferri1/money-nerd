@@ -12,6 +12,7 @@ import {
 } from '@angular/forms';
 import { SnackbarService } from '../snackbar/snackbar.service';
 import { CategoriesService } from '../../../pages/categories/categories.service';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-new-category-modal',
@@ -24,6 +25,23 @@ import { CategoriesService } from '../../../pages/categories/categories.service'
     NgStyle,
     NgFor,
     ReactiveFormsModule,
+  ],
+  animations: [
+    trigger('modalAnimation', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translate(-50%, -50%) scale(0.9)' }),
+        animate(
+          '150ms ease',
+          style({ opacity: 1, transform: 'translate(-50%, -50%) scale(1)' })
+        ),
+      ]),
+      transition(':leave', [
+        animate(
+          '150ms ease',
+          style({ opacity: 0, transform: 'translate(-50%, -50%) scale(0.9)' })
+        ),
+      ]),
+    ]),
   ],
   templateUrl: './new-category-modal.component.html',
   styleUrl: './new-category-modal.component.scss',

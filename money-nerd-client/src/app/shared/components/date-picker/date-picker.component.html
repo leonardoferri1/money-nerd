@@ -1,0 +1,54 @@
+<div
+  class="calendar-overlay"
+  (click)="showCalendar = false"
+  *ngIf="showCalendar"
+></div>
+
+<div class="date-picker-container">
+  <div class="date-picker-display" (click)="toggleCalendar()">
+    <div>
+      <i class="bi bi-calendar3"></i>
+      {{ value ? formatDate(value) : "Selecionar data" }}
+    </div>
+
+    <button>
+      {{ "TODAY" | translate }}
+    </button>
+  </div>
+
+  <div
+    class="calendar-popup"
+    @modalAnimation
+    *ngIf="showCalendar"
+    [ngClass]="{ open: showCalendar }"
+  >
+    <div class="calendar-header">
+      <button (click)="prevMonth()" class="default-icon-button">
+        <i class="bi bi-chevron-left" style="margin-right: 2px"></i>
+      </button>
+      <span>{{ currentMonth + 1 }}/{{ currentYear }}</span>
+      <button (click)="nextMonth()" class="default-icon-button">
+        <i class="bi bi-chevron-right" style="margin-left: 2px"></i>
+      </button>
+    </div>
+
+    <div class="calendar-columns">
+      <div
+        class="day-column"
+        *ngFor="let column of calendarColumns; let i = index"
+      >
+        <div class="day header">
+          {{ weekdays[i] }}
+        </div>
+        <div
+          class="day"
+          *ngFor="let day of column"
+          (click)="day && selectDate(day)"
+          [ngClass]="{ empty: !day }"
+        >
+          {{ day?.getDate() }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

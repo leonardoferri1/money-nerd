@@ -34,6 +34,10 @@ export class CreateTransactionDto {
   @IsOptional()
   wasPaid: boolean;
 
+  @IsBoolean()
+  @IsOptional()
+  recurringTransaction: boolean;
+
   @IsOptional()
   @IsString()
   category: string;

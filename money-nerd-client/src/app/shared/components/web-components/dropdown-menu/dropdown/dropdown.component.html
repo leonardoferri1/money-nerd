@@ -55,6 +55,12 @@
       [class.selected]="option === selectedValue"
       (click)="selectOption(option)"
     >
+      <i
+        *ngIf="option.icon"
+        class="{{ option.icon }}"
+        [ngStyle]="{ color: option.color }"
+      ></i>
+
       {{ option[labelField] }}
     </div>
   </div>

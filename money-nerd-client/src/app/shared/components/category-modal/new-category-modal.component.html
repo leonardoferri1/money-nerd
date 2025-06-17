@@ -1,6 +1,6 @@
 <div class="modal-overlay" *ngIf="opened" (click)="close()"></div>
 <form [formGroup]="categoryForm" (ngSubmit)="submit()">
-  <div class="money-nerd-modal" [ngClass]="{ open: opened }">
+  <div class="money-nerd-modal" *ngIf="opened" @modalAnimation>
     <div class="money-nerd-modal-header" *ngIf="showCloseButton">
       <h1>
         {{ "NEW_CATEGORY" | translate }}
@@ -75,6 +75,7 @@
   class="color-icon-modal"
   [ngClass]="{ open: colorModalOpen }"
   *ngIf="colorModalOpen"
+  @modalAnimation
 >
   <div class="color-icon-options">
     <button
@@ -92,6 +93,7 @@
   class="color-icon-modal"
   [ngClass]="{ open: iconModalOpen }"
   *ngIf="iconModalOpen"
+  @modalAnimation
 >
   <div class="color-icon-options">
     <button

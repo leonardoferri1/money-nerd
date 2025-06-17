@@ -34,6 +34,14 @@
   "COLOR": "Cor",
   "ICON": "Ícone",
   "CATEGORY_CREATED": "Categoria criada.",
+  "PAID": "Foi pago",
+  "NOT_PAID": "Não foi pago",
+  "CREDIT_CARD": "Pago no cartão de crédito",
+  "NO_CREDIT_CARD": "Pago sem uso do cartão de crédito",
+  "RECURRING": "Transação recorrente",
+  "NOT_RECURRING": "Transação pontual",
+  "TODAY": "Hoje",
+  "DESCRIPTION": "Descrição",
   "VALIDATION": {
     "REQUIRED": "Necessário preencher todos os campos obrigatórios.",
     "PASSWORDS_DO_NOT_MATCH": "As senhas não coincidem.",
@@ -50,6 +58,7 @@
   "ACTIONS": {
     "INCOME": "Receita",
     "OUTCOME": "Despesa",
-    "CATEGORY": "Categoria"
+    "CATEGORY": "Categoria",
+    "ACCOUNT": "Conta"
   }
 }

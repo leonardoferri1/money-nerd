@@ -43,7 +43,9 @@ export class MenuComponent {
   showDropdown = false;
   selected: string | null = null;
   isCategoryModalOpen: boolean = false;
-  isIncomeModalOpen: boolean = false;
+  isTransactionModalOpen: boolean = false;
+  transactionModalType: 1 | 2 = 1;
+
   items = [
     {
       id: 1,
@@ -111,7 +113,13 @@ export class MenuComponent {
 
   newItemButtonClick(item: any) {
     if (item.id === 1) {
-      this.isIncomeModalOpen = true;
+      this.isTransactionModalOpen = true;
+      this.transactionModalType = 1;
+    }
+
+    if (item.id === 2) {
+      this.isTransactionModalOpen = true;
+      this.transactionModalType = 2;
     }
 
     if (item.id === 3) {

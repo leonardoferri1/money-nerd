@@ -38,7 +38,7 @@ $background-selected: #f0f0f0;
   .custom-dropdown-input {
     flex: 1;
     padding: 8px;
-    font-size: 13px;
+    font-size: 0.9rem;
     color: #aca8a8;
     border: none;
     outline: none;
@@ -90,7 +90,6 @@ $background-selected: #f0f0f0;
   max-height: $dropdown-height;
   overflow-y: auto;
   background: rgb(44, 43, 41);
-
   border: 1px solid $light-background;
   border-radius: 2px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -122,6 +121,7 @@ $background-selected: #f0f0f0;
     display: flex;
     align-items: center;
     padding: 10px;
+    gap: 1rem;
     // border-bottom: 1px solid $light-grey;
     cursor: pointer;
     transition: background 0.1s;
@@ -137,6 +137,11 @@ $background-selected: #f0f0f0;
     &.selected {
       background: rgb(68, 67, 64);
       color: #aca8a8;
+    }
+
+    i {
+      margin-bottom: 3px;
+      font-size: 18px;
     }
   }
 }
