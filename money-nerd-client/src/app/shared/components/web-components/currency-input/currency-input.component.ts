@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import {
   Component,
   EventEmitter,
@@ -16,7 +16,7 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
 @Component({
   selector: 'currency-input',
   standalone: true,
-  imports: [CommonModule, CurrencyMaskModule, FormsModule],
+  imports: [CommonModule, CurrencyMaskModule, FormsModule, NgIf],
   templateUrl: './currency-input.component.html',
   styleUrls: ['./currency-input.component.scss'],
   providers: [
@@ -33,6 +33,7 @@ export class CurrencyInputComponent implements ControlValueAccessor {
   @Input() prefix: string = '';
   @Input() isReadonly: boolean = false;
   @Input() theme: string = '';
+  isValueInvalid: boolean = false;
 
   @Output() valueChange = new EventEmitter<number>();
 
@@ -53,6 +54,7 @@ export class CurrencyInputComponent implements ControlValueAccessor {
 
   onFocusOut() {
     if (this.value == null) {
+      this.isValueInvalid = true;
       this.value = 0;
     }
   }
@@ -66,6 +68,7 @@ export class CurrencyInputComponent implements ControlValueAccessor {
   }
 
   onInputChange(value: number): void {
+    this.isValueInvalid = false;
     this.value = value;
     this.onChange(value);
     this.valueChange.emit(value);

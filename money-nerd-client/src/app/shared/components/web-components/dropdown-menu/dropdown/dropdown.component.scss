@@ -21,9 +21,15 @@ $background-selected: #f0f0f0;
   padding-right: 5px;
   padding-left: 8px;
 
-  i {
-    color: $grey-base;
-    font-size: 13px;
+  .icons-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    i {
+      color: $grey-base;
+      font-size: 13px;
+    }
   }
 
   &.disabled {

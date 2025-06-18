@@ -1,108 +1,125 @@
 <div class="modal-overlay" *ngIf="opened" (click)="close()"></div>
 
-<div
-  class="money-nerd-modal"
-  *ngIf="opened"
-  @modalAnimation
-  [ngClass]="{ open: opened }"
->
-  <div class="money-nerd-modal-header" *ngIf="showCloseButton">
-    <h1 [ngStyle]="{ color: transactionThemeColor }">
-      {{ "NEW_INCOME" | translate }}
-    </h1>
+<form [formGroup]="transactionForm" (ngSubmit)="submit()">
+  <div
+    class="money-nerd-modal"
+    *ngIf="opened"
+    @modalAnimation
+    [ngClass]="{ open: opened }"
+  >
+    <div class="money-nerd-modal-header" *ngIf="showCloseButton">
+      <h1 [ngStyle]="{ color: transactionThemeColor }">
+        {{ "NEW_INCOME" | translate }}
+      </h1>
 
-    <button class="default-icon-button" (click)="close()">
-      <i class="bi bi-x-lg"></i>
-    </button>
-  </div>
+      <button class="default-icon-button" type="button" (click)="close()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
 
-  <div class="money-nerd-modal-body">
-    <div class="new-transaction-form">
-      <currency-input
-        [prefix]="'R$ '"
-        [theme]="transactionThemeClass"
-      ></currency-input>
+    <div class="money-nerd-modal-body">
+      <div class="new-transaction-form">
+        <currency-input
+          [prefix]="'CURRENCY' | translate"
+          [theme]="transactionThemeClass"
+          formControlName="value"
+        ></currency-input>
 
-      <dropdown
-        [placeholder]="'ACTIONS.CATEGORY' | translate"
-        [options]="categories"
-        labelField="name"
-        valueField="id"
-      ></dropdown>
+        <dropdown
+          [placeholder]="'ACTIONS.CATEGORY' | translate"
+          formControlName="category"
+          [options]="categories"
+          labelField="name"
+          valueField="id"
+          [icon]="'bi bi-tags'"
+        ></dropdown>
 
-      <dropdown [placeholder]="'ACTIONS.ACCOUNT' | translate"></dropdown>
+        <dropdown
+          [placeholder]="'ACTIONS.ACCOUNT' | translate"
+          formControlName="account"
+          labelField="name"
+          valueField="id"
+          [icon]="'bi bi-bank'"
+        ></dropdown>
 
-      <app-date-picker
-        [value]="selectedDate"
-        (valueChange)="selectedDate = $event"
-      ></app-date-picker>
+        <app-date-picker
+          [value]="transactionForm.get('date')?.value"
+          (valueChange)="transactionForm.get('date')?.setValue($event)"
+        ></app-date-picker>
 
-      <text-input
-        [placeholder]="'DESCRIPTION' | translate"
-        [theme]="transactionThemeClass"
-      ></text-input>
+        <text-input
+          [placeholder]="'DESCRIPTION' | translate"
+          formControlName="description"
+          [theme]="transactionThemeClass"
+        ></text-input>
 
-      <div class="togle-switch-panel">
-        <div class="toggle-switch-container">
-          <p *ngIf="isPaid">
-            {{ "PAID" | translate }}
-          </p>
+        <div class="togle-switch-panel">
+          <div class="toggle-switch-container">
+            <p *ngIf="transactionForm.get('wasPaid')?.value">
+              {{ "PAID" | translate }}
+            </p>
 
-          <p *ngIf="!isPaid">
-            {{ "NOT_PAID" | translate }}
-          </p>
+            <p *ngIf="!transactionForm.get('wasPaid')?.value">
+              {{ "NOT_PAID" | translate }}
+            </p>
 
-          <app-toggle-switch
-            [theme]="transactionThemeClass"
-            [checked]="isPaid"
-            (checkedChange)="isPaid = $event"
-          ></app-toggle-switch>
-        </div>
+            <app-toggle-switch
+              [theme]="transactionThemeClass"
+              [checked]="transactionForm.get('wasPaid')?.value"
+              (checkedChange)="transactionForm.get('wasPaid')?.setValue($event)"
+            ></app-toggle-switch>
+          </div>
 
-        <div class="toggle-switch-container">
-          <p *ngIf="isCreditCard">
-            {{ "CREDIT_CARD" | translate }}
-          </p>
+          <div class="toggle-switch-container">
+            <p *ngIf="transactionForm.get('isCreditCard')?.value">
+              {{ "CREDIT_CARD" | translate }}
+            </p>
 
-          <p *ngIf="!isCreditCard">
-            {{ "NO_CREDIT_CARD" | translate }}
-          </p>
+            <p *ngIf="!transactionForm.get('isCreditCard')?.value">
+              {{ "NO_CREDIT_CARD" | translate }}
+            </p>
 
-          <app-toggle-switch
-            [theme]="transactionThemeClass"
-            [checked]="isCreditCard"
-            (checkedChange)="isCreditCard = $event"
-          ></app-toggle-switch>
-        </div>
+            <app-toggle-switch
+              [theme]="transactionThemeClass"
+              [checked]="transactionForm.get('isCreditCard')?.value"
+              (checkedChange)="
+                transactionForm.get('isCreditCard')?.setValue($event)
+              "
+            ></app-toggle-switch>
+          </div>
 
-        <div class="toggle-switch-container">
-          <p *ngIf="isRecurring">
-            {{ "RECURRING" | translate }}
-          </p>
+          <div class="toggle-switch-container">
+            <p *ngIf="transactionForm.get('recurringTransaction')?.value">
+              {{ "RECURRING" | translate }}
+            </p>
 
-          <p *ngIf="!isRecurring">
-            {{ "NOT_RECURRING" | translate }}
-          </p>
+            <p *ngIf="!transactionForm.get('recurringTransaction')?.value">
+              {{ "NOT_RECURRING" | translate }}
+            </p>
 
-          <app-toggle-switch
-            [theme]="transactionThemeClass"
-            [checked]="isRecurring"
-            (checkedChange)="isRecurring = $event"
-          ></app-toggle-switch>
+            <app-toggle-switch
+              [theme]="transactionThemeClass"
+              [checked]="transactionForm.get('recurringTransaction')?.value"
+              (checkedChange)="
+                transactionForm.get('recurringTransaction')?.setValue($event)
+              "
+            ></app-toggle-switch>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="money-nerd-modal-footer">
-    <button
-      class="confirm-button"
-      type="submit"
-      [ngStyle]="{
-        background: transactionThemeColor
-      }"
-    >
-      {{ "CONFIRM" | translate }}
-    </button>
+    <div class="money-nerd-modal-footer">
+      <button
+        class="confirm-button"
+        type="submit"
+        [disabled]="transactionForm.invalid"
+        [ngStyle]="{
+          background: transactionThemeColor
+        }"
+      >
+        {{ "CONFIRM" | translate }}
+      </button>
+    </div>
   </div>
-</div>
+</form>

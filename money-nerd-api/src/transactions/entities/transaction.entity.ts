@@ -31,7 +31,7 @@ export class Transaction {
   @Prop({ nullable: true })
   description?: string;
 
-  @Prop()
+  @Prop({ required: true })
   date: Date;
 
   @Prop({ required: true })
@@ -46,10 +46,10 @@ export class Transaction {
   @Prop({ default: false })
   recurringTransaction: boolean;
 
-  @Prop({ type: String, ref: 'Category', nullable: true })
+  @Prop({ type: String, ref: 'Category', required: true })
   category?: CategoryDocument | string;
 
-  @Prop({ type: String, ref: 'Account', nullable: true })
+  @Prop({ type: String, ref: 'Account', required: true })
   account?: AccountDocument | string;
 
   @Prop({ type: String, ref: User.name, required: true })

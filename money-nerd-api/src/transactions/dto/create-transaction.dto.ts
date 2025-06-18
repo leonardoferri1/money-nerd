@@ -38,7 +38,7 @@ export class CreateTransactionDto {
   @IsOptional()
   recurringTransaction: boolean;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   category: string;
 

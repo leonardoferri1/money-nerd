@@ -4,13 +4,19 @@ import { TextInputComponent } from '../web-components/text-input/text-input.comp
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CurrencyInputComponent } from '../web-components/currency-input/currency-input.component';
 import { ToggleSwitchComponent } from '../web-components/toggle-switch/toggle-switch.component';
-import { DatePickerComponent } from '../date-picker/date-picker.component';
+import { DatePickerComponent } from '../web-components/date-picker/date-picker.component';
 import { DropdownComponent } from '../web-components/dropdown-menu/dropdown/dropdown.component';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { SnackbarService } from '../snackbar/snackbar.service';
-import { FormBuilder } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { CategoriesService } from '../../../pages/categories/categories.service';
 import { Category } from '../../interfaces/ICategory.type';
+import { TransactionsService } from '../../../pages/transactions/transactions.service';
 @Component({
   selector: 'app-new-transaction-modal',
   standalone: true,
@@ -24,6 +30,7 @@ import { Category } from '../../interfaces/ICategory.type';
     ToggleSwitchComponent,
     DatePickerComponent,
     DropdownComponent,
+    ReactiveFormsModule,
   ],
   animations: [
     trigger('modalAnimation', [
@@ -52,10 +59,7 @@ export class NewTransactionModalComponent implements OnInit {
   @Input() transactionType: 1 | 2 = 1;
 
   categories: Category[] = [];
-  selectedDate: Date | null = null;
-  isPaid: boolean = true;
-  isCreditCard: boolean = false;
-  isRecurring: boolean = false;
+  transactionForm: FormGroup;
 
   @Output() openedChange = new EventEmitter<boolean>();
   @Output() onClose = new EventEmitter<void>();
@@ -64,13 +68,20 @@ export class NewTransactionModalComponent implements OnInit {
     private snackBar: SnackbarService,
     private translate: TranslateService,
     private formBuilder: FormBuilder,
-    private categoriesService: CategoriesService
+    private categoriesService: CategoriesService,
+    private transactionsService: TransactionsService
   ) {
-    // this.categoryForm = this.formBuilder.group({
-    //   name: ['', Validators.required],
-    //   color: [this.selectedColor || '', Validators.required],
-    //   icon: [this.selectedIcon || '', Validators.required],
-    // });
+    this.transactionForm = this.formBuilder.group({
+      type: ['', Validators.required],
+      description: [''],
+      value: ['', Validators.required],
+      wasPaid: [true],
+      isCreditCard: [false],
+      recurringTransaction: [false],
+      date: ['', Validators.required],
+      account: ['', Validators.required],
+      category: ['', Validators.required],
+    });
   }
 
   get transactionThemeColor(): string {
@@ -95,9 +106,46 @@ export class NewTransactionModalComponent implements OnInit {
     this.categoriesService.getAllCategories().subscribe({
       next: (response) => {
         this.categories = response;
-        console.log(this.categories);
       },
       error: (error) => {},
     });
+  }
+
+  onInputChange() {}
+
+  submit() {
+    console.log(this.transactionForm.value);
+    return;
+    if (!this.transactionForm.value.name) {
+      // this.invalidName = true;
+      this.snackBar.openErrorSnackbar(
+        this.translate.instant('VALIDATION.REQUIRED')
+      );
+      return;
+    }
+
+    this.transactionsService
+      .createNewTransaction(this.transactionForm.value)
+      .subscribe({
+        next: (response) => {
+          this.snackBar.openSuccessSnackbar(
+            this.translate.instant('CATEGORY_CREATED')
+          );
+          this.close();
+          this.transactionForm.reset();
+        },
+        error: (error) => {
+          if (
+            error.status === 409 &&
+            error.error?.message === 'A category with this name already exists.'
+          ) {
+            this.snackBar.openErrorSnackbar(
+              this.translate.instant('VALIDATION.CATEGORY_NAME_USED')
+            );
+          } else {
+            this.snackBar.openErrorSnackbar(error.error?.message);
+          }
+        },
+      });
   }
 }

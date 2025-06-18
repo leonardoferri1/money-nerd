@@ -81,3 +81,20 @@ a {
     pointer-events: none;
   }
 }
+
+.small-dark-button {
+  border-radius: 6px;
+  border: 0;
+  color: $grey-light;
+  background-color: $background-main;
+  padding-top: 0.2rem;
+  padding-bottom: 0.3rem;
+  padding-left: 0.8rem;
+  padding-right: 0.8rem;
+  font-size: 14px;
+  font-weight: 600;
+
+  &:hover {
+    filter: brightness(110%);
+  }
+}

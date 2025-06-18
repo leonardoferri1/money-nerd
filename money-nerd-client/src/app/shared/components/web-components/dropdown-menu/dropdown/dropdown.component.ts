@@ -35,7 +35,7 @@ export class DropdownComponent implements ControlValueAccessor {
   @Input() _options: any[] = [];
   @Input() placeholder: string = '';
   @Input() multiSelect: boolean = false;
-
+  @Input() icon: string = '';
   @Input() selectedValue: any = null;
   @Input() labelField: string = '';
   @Input() valueField: string = '';

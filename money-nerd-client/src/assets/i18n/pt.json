@@ -29,6 +29,7 @@
   "CONTINUE": "Continuar",
   "TRANSACTIONS": "Transações",
   "NEW_CATEGORY": "Nova Categoria",
+  "NEW_ACCOUNT": "Nova Conta",
   "NEW_INCOME": "Nova Receita",
   "CONFIRM": "Confirmar",
   "COLOR": "Cor",
@@ -42,6 +43,7 @@
   "NOT_RECURRING": "Transação pontual",
   "TODAY": "Hoje",
   "DESCRIPTION": "Descrição",
+  "CURRENCY": "R$ ",
   "VALIDATION": {
     "REQUIRED": "Necessário preencher todos os campos obrigatórios.",
     "PASSWORDS_DO_NOT_MATCH": "As senhas não coincidem.",

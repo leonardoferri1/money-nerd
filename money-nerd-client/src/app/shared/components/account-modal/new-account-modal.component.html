@@ -1,0 +1,40 @@
+<div class="modal-overlay" *ngIf="opened" (click)="close()"></div>
+<form [formGroup]="accountForm" (ngSubmit)="submit()">
+  <div class="money-nerd-modal" *ngIf="opened" @modalAnimation>
+    <div class="money-nerd-modal-header" *ngIf="showCloseButton">
+      <h1>
+        {{ "NEW_ACCOUNT" | translate }}
+      </h1>
+
+      <button class="default-icon-button" (click)="close()" type="button">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="money-nerd-modal-body">
+      <div class="account-form">
+        <text-input
+          [placeholder]="'REGISTER_NAME' | translate"
+          [invalidValidator]="invalidName"
+          formControlName="name"
+          (valueChange)="onInputChange()"
+        ></text-input>
+
+        <text-input
+          [placeholder]="'DESCRIPTION' | translate"
+          formControlName="description"
+        ></text-input>
+      </div>
+    </div>
+
+    <div class="money-nerd-modal-footer">
+      <button
+        class="confirm-button"
+        type="submit"
+        [disabled]="accountForm.invalid"
+      >
+        {{ "CONFIRM" | translate }}
+      </button>
+    </div>
+  </div>
+</form>

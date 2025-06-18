@@ -4,7 +4,10 @@
     [class.disabled]="isReadonly"
     [class.invalid]="invalidValidator"
   >
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <div class="icons-wrapper">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <i class="{{ icon }}"></i>
+    </div>
 
     <input
       #inputField

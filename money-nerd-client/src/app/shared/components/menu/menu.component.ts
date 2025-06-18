@@ -17,6 +17,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { DropdownMenuComponent } from '../web-components/dropdown-menu/menu/dropdown-menu.component';
 import { NewCategoryModalComponent } from '../category-modal/new-category-modal.component';
 import { NewTransactionModalComponent } from '../new-transaction-modal/new-transaction-modal.component';
+import { NewAccountModalComponent } from '../account-modal/new-account-modal.component';
 
 @Component({
   selector: 'app-menu',
@@ -33,6 +34,7 @@ import { NewTransactionModalComponent } from '../new-transaction-modal/new-trans
     DropdownMenuComponent,
     NewCategoryModalComponent,
     NewTransactionModalComponent,
+    NewAccountModalComponent,
   ],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss',
@@ -43,6 +45,7 @@ export class MenuComponent {
   showDropdown = false;
   selected: string | null = null;
   isCategoryModalOpen: boolean = false;
+  isAccountModalOpen: boolean = false;
   isTransactionModalOpen: boolean = false;
   transactionModalType: 1 | 2 = 1;
 
@@ -60,6 +63,7 @@ export class MenuComponent {
       iconColor: 'red',
     },
     { id: 3, label: 'ACTIONS.CATEGORY', icon: 'bi-tags', iconColor: 'yellow' },
+    { id: 4, label: 'ACTIONS.ACCOUNT', icon: 'bi-bank', iconColor: 'purple' },
   ];
   openNewItemMenu: boolean = false;
 
@@ -124,6 +128,10 @@ export class MenuComponent {
 
     if (item.id === 3) {
       this.isCategoryModalOpen = true;
+    }
+
+    if (item.id === 4) {
+      this.isAccountModalOpen = true;
     }
 
     this.toggleDropdown();
