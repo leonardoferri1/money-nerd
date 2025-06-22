@@ -89,7 +89,7 @@ export class NewAccountModalComponent {
     this.accountsService.createNewAccount(this.accountForm.value).subscribe({
       next: (response) => {
         this.snackBar.openSuccessSnackbar(
-          this.translate.instant('CATEGORY_CREATED')
+          this.translate.instant('ACCOUNT_CREATED')
         );
         this.close();
         this.accountForm.reset();
@@ -97,7 +97,7 @@ export class NewAccountModalComponent {
       error: (error) => {
         if (
           error.status === 409 &&
-          error.error?.message === 'A account with this name already exists.'
+          error.error?.message === 'You already have an account with this name.'
         ) {
           this.snackBar.openErrorSnackbar(
             this.translate.instant('VALIDATION.CATEGORY_NAME_USED')

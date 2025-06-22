@@ -31,10 +31,12 @@
   "NEW_CATEGORY": "Nova Categoria",
   "NEW_ACCOUNT": "Nova Conta",
   "NEW_INCOME": "Nova Receita",
+  "NEW_OUTCOME": "Nova Despesa",
   "CONFIRM": "Confirmar",
   "COLOR": "Cor",
   "ICON": "Ícone",
   "CATEGORY_CREATED": "Categoria criada.",
+  "ACCOUNT_CREATED": "Conta criada.",
   "PAID": "Foi pago",
   "NOT_PAID": "Não foi pago",
   "CREDIT_CARD": "Pago no cartão de crédito",
@@ -62,5 +64,28 @@
     "OUTCOME": "Despesa",
     "CATEGORY": "Categoria",
     "ACCOUNT": "Conta"
+  },
+  "MONTHS_SHORT": {
+    "0": "Jan",
+    "1": "Fev",
+    "2": "Mar",
+    "3": "Abr",
+    "4": "Mai",
+    "5": "Jun",
+    "6": "Jul",
+    "7": "Ago",
+    "8": "Set",
+    "9": "Out",
+    "10": "Nov",
+    "11": "Dez"
+  },
+  "WEEKDAYS_SHORT": {
+    "0": "Do",
+    "1": "2ª",
+    "2": "3ª",
+    "3": "4ª",
+    "4": "5ª",
+    "5": "6ª",
+    "6": "Sá"
   }
 }

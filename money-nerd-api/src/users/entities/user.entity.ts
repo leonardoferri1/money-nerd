@@ -16,13 +16,13 @@ export class User {
   @Prop({ default: () => crypto.randomUUID() })
   _id: string;
 
-  @Prop()
+  @Prop({ maxlength: 25, required: true })
   name?: string;
 
-  @Prop({ unique: true, index: true })
+  @Prop({ unique: true, index: true, maxlength: 75, required: true })
   email: string;
 
-  @Prop({ maxlength: 300 })
+  @Prop({ maxlength: 50, minlength: 6, required: true })
   password: string;
 
   @Prop({ type: [String], default: [] })

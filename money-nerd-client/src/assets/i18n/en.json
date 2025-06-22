@@ -7,8 +7,6 @@
   "FREE_REGISTER": "Sign up for free",
   "HAS_ACCOUNT": "Already have an account?",
   "REGISTER_NAME": "Name",
-  "REGISTER_NAME": "Name",
-
   "CONFIRM_PASSWORD": "Confirm your password",
   "LOGIN_BUTTON": "Login",
   "GOOGLE_BUTTON": "Continue with Google",
@@ -32,11 +30,13 @@
   "TRANSACTIONS": "Transactions",
   "NEW_CATEGORY": "New Category",
   "NEW_ACCOUNT": "New Account",
-  "NEW_INCOME": "New Income",
+  "NEW_INCOME": "New Expense",
+  "NEW_OUTCOME": "New Outcome",
   "CONFIRM": "Confirm",
   "COLOR": "Color",
   "ICON": "Icon",
   "CATEGORY_CREATED": "Category created.",
+  "ACCOUNT_CREATED": "Account created.",
   "PAID": "Paid",
   "NOT_PAID": "Not paid",
   "CREDIT_CARD": "Paid with credit card",
@@ -61,8 +61,31 @@
   },
   "ACTIONS": {
     "INCOME": "Income",
-    "OUTCOME": "Outcome",
+    "OUTCOME": "Expense",
     "CATEGORY": "Category",
     "ACCOUNT": "Account"
+  },
+  "MONTHS_SHORT": {
+    "0": "Jan",
+    "1": "Feb",
+    "2": "Mar",
+    "3": "Apr",
+    "4": "May",
+    "5": "Jun",
+    "6": "Jul",
+    "7": "Aug",
+    "8": "Sep",
+    "9": "Oct",
+    "10": "Nov",
+    "11": "Dec"
+  },
+  "WEEKDAYS_SHORT": {
+    "0": "Sun",
+    "1": "Mon",
+    "2": "Tue",
+    "3": "Wed",
+    "4": "Thu",
+    "5": "Fri",
+    "6": "Sat"
   }
 }

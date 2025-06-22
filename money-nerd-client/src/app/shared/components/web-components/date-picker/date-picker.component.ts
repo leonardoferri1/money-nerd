@@ -4,17 +4,28 @@ import {
   EventEmitter,
   HostListener,
   Input,
+  OnInit,
   Output,
   ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule, NgClass } from '@angular/common';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { TranslateModule } from '@ngx-translate/core';
+import { DropdownComponent } from '../dropdown-menu/dropdown/dropdown.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { YearSelectComponent } from './year-select/year-select.component';
 
 @Component({
   selector: 'app-date-picker',
   standalone: true,
-  imports: [CommonModule, NgClass, TranslateModule],
+  imports: [
+    CommonModule,
+    NgClass,
+    TranslateModule,
+    DropdownComponent,
+    FormsModule,
+    YearSelectComponent,
+  ],
   templateUrl: './date-picker.component.html',
   animations: [
     trigger('modalAnimation', [
@@ -36,26 +47,35 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrls: ['./date-picker.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class DatePickerComponent {
+export class DatePickerComponent implements OnInit {
   @Input() value: Date | null = null;
+  @Input() theme: string = '';
   @Output() valueChange = new EventEmitter<Date>();
-
+  years: number[] = [];
   showCalendar = false;
   today = new Date();
   currentMonth = this.today.getMonth();
   currentYear = this.today.getFullYear();
   weekdays: string[] = ['Do', '2ª', '3ª', '4ª', '5ª', '6ª', 'Sá'];
+
   constructor(private elementRef: ElementRef) {}
+
+  ngOnInit() {
+    const currentYear = new Date().getFullYear();
+    const startYear = 2000;
+    for (let y = currentYear; y >= startYear; y--) {
+      this.years.push(y);
+    }
+  }
 
   get calendarColumns(): (Date | null)[][] {
     const columns: (Date | null)[][] = Array.from({ length: 7 }, () => []);
 
     const firstDay = new Date(this.currentYear, this.currentMonth, 1);
-    const startDay = firstDay.getDay(); // 0 (domingo) a 6 (sábado)
+    const startDay = firstDay.getDay();
 
     const days: (Date | null)[] = [];
 
-    // Espaços vazios antes do primeiro dia
     for (let i = 0; i < startDay; i++) {
       days.push(null);
     }
@@ -66,7 +86,6 @@ export class DatePickerComponent {
       date.setDate(date.getDate() + 1);
     }
 
-    // Distribui os dias por coluna (domingo a sábado)
     days.forEach((day, index) => {
       const columnIndex = index % 7;
       columns[columnIndex].push(day);

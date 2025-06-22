@@ -1,0 +1,42 @@
+<div class="custom-dropdown-container" (click)="$event.stopPropagation()">
+  <div
+    class="custom-dropdown-input-wrapper"
+    [class.disabled]="isReadonly"
+    [class.invalid]="invalid"
+    (click)="toggleDropdown($event)"
+  >
+    <div class="selected-value">
+      {{ selected || placeholder }}
+    </div>
+
+    <button
+      class="custom-dropdown-button"
+      type="button"
+      [disabled]="isReadonly"
+    >
+      <i
+        class="fa"
+        [ngClass]="{ 'fa-chevron-up': isOpen, 'fa-chevron-down': !isOpen }"
+      ></i>
+    </button>
+  </div>
+
+  <div
+    #dropdownMenu
+    class="custom-dropdown-styling"
+    [ngClass]="{
+      'dropdown-up': dropdownDirection === 'up',
+      'dropdown-down': dropdownDirection === 'down'
+    }"
+    *ngIf="isOpen"
+  >
+    <div
+      class="custom-dropdown-item"
+      *ngFor="let year of options"
+      [class.selected]="year === selected"
+      (click)="selectYear(year)"
+    >
+      {{ year }}
+    </div>
+  </div>
+</div>

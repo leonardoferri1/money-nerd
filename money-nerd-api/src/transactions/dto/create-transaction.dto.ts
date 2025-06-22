@@ -6,43 +6,46 @@ import {
   IsString,
   IsDateString,
   IsBoolean,
+  MaxLength,
+  IsUUID,
 } from 'class-validator';
 import { TransactionType } from '../enums/transaction-type.enum';
 
 export class CreateTransactionDto {
   @IsEnum(TransactionType)
   @IsNotEmpty()
-  type: TransactionType;
+  readonly type: TransactionType;
 
   @IsOptional()
   @IsString()
-  description?: string;
+  @MaxLength(75)
+  readonly description?: string;
 
   @IsDateString()
   @IsNotEmpty()
-  date: string;
+  readonly date: string;
 
   @IsNumber()
   @IsNotEmpty()
-  value: number;
+  readonly value: number;
 
   @IsBoolean()
   @IsOptional()
-  isCreditCard: boolean;
+  readonly isCreditCard: boolean;
 
   @IsBoolean()
   @IsOptional()
-  wasPaid: boolean;
+  readonly wasPaid: boolean;
 
   @IsBoolean()
   @IsOptional()
-  recurringTransaction: boolean;
+  readonly recurringTransaction: boolean;
 
   @IsNotEmpty()
-  @IsString()
-  category: string;
+  @IsUUID()
+  readonly category: string;
 
   @IsNotEmpty()
-  @IsString()
-  account: string;
+  @IsUUID()
+  readonly account: string;
 }

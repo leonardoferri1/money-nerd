@@ -17,6 +17,8 @@ import {
 import { CategoriesService } from '../../../pages/categories/categories.service';
 import { Category } from '../../interfaces/ICategory.type';
 import { TransactionsService } from '../../../pages/transactions/transactions.service';
+import { Account } from '../../interfaces/IAccount.type';
+import { AccountsService } from '../../services/accounts.service';
 @Component({
   selector: 'app-new-transaction-modal',
   standalone: true,
@@ -59,6 +61,8 @@ export class NewTransactionModalComponent implements OnInit {
   @Input() transactionType: 1 | 2 = 1;
 
   categories: Category[] = [];
+  accounts: Account[] = [];
+
   transactionForm: FormGroup;
 
   @Output() openedChange = new EventEmitter<boolean>();
@@ -69,10 +73,11 @@ export class NewTransactionModalComponent implements OnInit {
     private translate: TranslateService,
     private formBuilder: FormBuilder,
     private categoriesService: CategoriesService,
+    private accountsService: AccountsService,
     private transactionsService: TransactionsService
   ) {
     this.transactionForm = this.formBuilder.group({
-      type: ['', Validators.required],
+      type: [''],
       description: [''],
       value: ['', Validators.required],
       wasPaid: [true],
@@ -106,6 +111,16 @@ export class NewTransactionModalComponent implements OnInit {
     this.categoriesService.getAllCategories().subscribe({
       next: (response) => {
         this.categories = response;
+        this.getAccounts();
+      },
+      error: (error) => {},
+    });
+  }
+
+  getAccounts() {
+    this.accountsService.getAllAccounts().subscribe({
+      next: (response) => {
+        this.accounts = response;
       },
       error: (error) => {},
     });

@@ -1,11 +1,13 @@
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class CreateAccountDto {
   @IsOptional()
   @IsString()
-  description?: string;
+  @MaxLength(75)
+  readonly description?: string;
 
   @IsNotEmpty()
   @IsString()
-  name: string;
+  @MaxLength(25)
+  readonly name: string;
 }

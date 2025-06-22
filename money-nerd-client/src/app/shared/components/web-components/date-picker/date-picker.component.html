@@ -3,9 +3,8 @@
   (click)="showCalendar = false"
   *ngIf="showCalendar"
 ></div>
-
 <div class="date-picker-container">
-  <div class="date-picker-display" (click)="toggleCalendar()">
+  <div class="date-picker-display" [class]="theme" (click)="toggleCalendar()">
     <div>
       <i class="bi bi-calendar3"></i>
       {{ value ? formatDate(value) : "Selecionar data" }}
@@ -23,11 +22,26 @@
     [ngClass]="{ open: showCalendar }"
   >
     <div class="calendar-header">
-      <button (click)="prevMonth()" class="default-icon-button">
+      <app-year-select
+        [(ngModel)]="currentYear"
+        [options]="years"
+      ></app-year-select>
+    </div>
+
+    <div class="calendar-nav">
+      <button
+        (click)="prevMonth()"
+        class="default-icon-button"
+        [class]="theme + '-button'"
+      >
         <i class="bi bi-chevron-left" style="margin-right: 2px"></i>
       </button>
-      <span>{{ currentMonth + 1 }}/{{ currentYear }}</span>
-      <button (click)="nextMonth()" class="default-icon-button">
+      <span>{{ "MONTHS_SHORT." + currentMonth | translate }}</span>
+      <button
+        (click)="nextMonth()"
+        class="default-icon-button"
+        [class]="theme + '-button'"
+      >
         <i class="bi bi-chevron-right" style="margin-left: 2px"></i>
       </button>
     </div>
@@ -38,7 +52,7 @@
         *ngFor="let column of calendarColumns; let i = index"
       >
         <div class="day header">
-          {{ weekdays[i] }}
+          {{ "WEEKDAYS_SHORT." + i | translate }}
         </div>
         <div
           class="day"

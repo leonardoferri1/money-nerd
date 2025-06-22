@@ -35,9 +35,17 @@
   i {
     font-size: 17px;
   }
+}
 
+.green-theme {
   &:hover {
     border: 1px solid $light-green;
+  }
+}
+
+.red-theme {
+  &:hover {
+    border: 1px solid $input-error;
   }
 }
 
@@ -62,8 +70,7 @@
     max-width: 280px;
     height: 400px;
     background: $background-main-lighter;
-    border-radius: 8px;
-    padding: 1rem;
+    border-radius: 10px;
     z-index: 65;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     display: flex;
@@ -80,9 +87,18 @@
 
   .calendar-header {
     display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem 4rem 1.5rem 4rem;
+    background-color: $background-main;
+  }
+
+  .calendar-nav {
+    display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 14px;
+    padding: 0 1rem 0 1rem;
 
     button {
       display: flex;
@@ -90,7 +106,6 @@
       border-radius: 50%;
       width: 29px;
       height: 29px;
-      color: $light-green;
       font-size: 16px;
       border: 0;
       align-items: center;
@@ -109,10 +124,25 @@
         transition: background-color 0.1s ease;
       }
     }
+
+    .green-theme-button {
+      color: #9fcf61;
+    }
+
+    .red-theme-button {
+      color: $red-theme;
+    }
+
+    span {
+      font-size: 20px;
+      font-weight: 600;
+      color: $grey-light;
+    }
   }
 
   .calendar-columns {
     display: flex;
+    padding: 0 1rem 0 1rem;
     max-width: 100%;
   }
 

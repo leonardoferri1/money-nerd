@@ -31,25 +31,30 @@
           [options]="categories"
           labelField="name"
           valueField="id"
+          [filterIcon]="false"
           [icon]="'bi bi-tags'"
         ></dropdown>
 
         <dropdown
           [placeholder]="'ACTIONS.ACCOUNT' | translate"
           formControlName="account"
+          [options]="accounts"
           labelField="name"
           valueField="id"
+          [filterIcon]="false"
           [icon]="'bi bi-bank'"
         ></dropdown>
 
         <app-date-picker
           [value]="transactionForm.get('date')?.value"
           (valueChange)="transactionForm.get('date')?.setValue($event)"
+          [theme]="transactionThemeClass"
         ></app-date-picker>
 
         <text-input
           [placeholder]="'DESCRIPTION' | translate"
           formControlName="description"
+          [allowSpecial]="true"
           [theme]="transactionThemeClass"
         ></text-input>
 

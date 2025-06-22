@@ -7,7 +7,7 @@ export class AccountPresenter {
     return {
       _id: this.account._id,
       name: this.account.name,
-      description: this.account.name,
+      description: this.account.description,
     };
   }
 }

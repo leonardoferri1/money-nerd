@@ -5,7 +5,7 @@
     [class.invalid]="invalidValidator"
   >
     <div class="icons-wrapper">
-      <i class="fa-solid fa-magnifying-glass"></i>
+      <i class="fa-solid fa-magnifying-glass" *ngIf="filterIcon"></i>
       <i class="{{ icon }}"></i>
     </div>
 

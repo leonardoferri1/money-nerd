@@ -28,7 +28,7 @@ export class Transaction {
   })
   type: TransactionType;
 
-  @Prop({ nullable: true })
+  @Prop({ maxlength: 75 })
   description?: string;
 
   @Prop({ required: true })

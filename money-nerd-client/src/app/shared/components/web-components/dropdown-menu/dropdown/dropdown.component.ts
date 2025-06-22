@@ -39,8 +39,8 @@ export class DropdownComponent implements ControlValueAccessor {
   @Input() selectedValue: any = null;
   @Input() labelField: string = '';
   @Input() valueField: string = '';
-
   @Input() isReadonly: boolean = false;
+  @Input() filterIcon: boolean = true;
   @Input() dropdownDirection: 'up' | 'down' = 'down';
   @Input() invalidValidator: boolean = false;
   @Input() semResultado: string = 'Nenhum resultado encontrado.';

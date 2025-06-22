@@ -1,15 +1,16 @@
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class CreateCategoryDto {
   @IsNotEmpty()
   @IsString()
-  name?: string;
+  @MaxLength(25)
+  readonly name?: string;
 
   @IsOptional()
   @IsString()
-  color?: string;
+  readonly color?: string;
 
   @IsOptional()
   @IsString()
-  icon?: string;
+  readonly icon?: string;
 }

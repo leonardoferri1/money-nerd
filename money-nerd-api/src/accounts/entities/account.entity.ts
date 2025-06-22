@@ -15,19 +15,19 @@ export type AccountDocument = HydratedDocument<Account>;
 })
 export class Account {
   @Prop({ default: () => crypto.randomUUID() })
-  _id: string;
+  readonly _id: string;
 
-  @Prop({ nullable: true })
-  description?: string;
+  @Prop({ maxlength: 75 })
+  readonly description?: string;
 
-  @Prop({ nullable: false })
-  name?: string;
+  @Prop({ maxlength: 25, required: true })
+  readonly name?: string;
 
   @Prop({ type: String, ref: User.name, required: true })
-  user?: UserDocument | string;
+  readonly user?: UserDocument | string;
 
-  createdAt!: Date;
-  updatedAt!: Date;
+  readonly createdAt!: Date;
+  readonly updatedAt!: Date;
 }
 
 export const AccountSchema = SchemaFactory.createForClass(Account);

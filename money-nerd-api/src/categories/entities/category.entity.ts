@@ -17,7 +17,7 @@ export class Category {
   @Prop({ default: () => crypto.randomUUID() })
   _id: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, maxlength: 25 })
   name: string;
 
   @Prop()
