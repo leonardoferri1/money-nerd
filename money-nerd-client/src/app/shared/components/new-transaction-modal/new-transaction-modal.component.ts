@@ -19,6 +19,7 @@ import { Category } from '../../interfaces/ICategory.type';
 import { TransactionsService } from '../../../pages/transactions/transactions.service';
 import { Account } from '../../interfaces/IAccount.type';
 import { AccountsService } from '../../services/accounts.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-new-transaction-modal',
   standalone: true,
@@ -55,7 +56,14 @@ import { AccountsService } from '../../services/accounts.service';
   styleUrl: './new-transaction-modal.component.scss',
 })
 export class NewTransactionModalComponent implements OnInit {
-  @Input() opened = false;
+  private _opened = false;
+  @Input()
+  set opened(value: boolean) {
+    this._opened = value;
+    if (value) {
+      this.getCategories();
+    }
+  }
   @Input() type: 'edit' | 'create' = 'create';
   @Input() showCloseButton = true;
   @Input() transactionType: 1 | 2 = 1;
@@ -74,7 +82,8 @@ export class NewTransactionModalComponent implements OnInit {
     private formBuilder: FormBuilder,
     private categoriesService: CategoriesService,
     private accountsService: AccountsService,
-    private transactionsService: TransactionsService
+    private transactionsService: TransactionsService,
+    private router: Router
   ) {
     this.transactionForm = this.formBuilder.group({
       type: [''],
@@ -97,9 +106,11 @@ export class NewTransactionModalComponent implements OnInit {
     return this.transactionType === 1 ? 'green-theme' : 'red-theme';
   }
 
-  ngOnInit() {
-    this.getCategories();
+  get opened(): boolean {
+    return this._opened;
   }
+
+  ngOnInit() {}
 
   close(): void {
     this.opened = false;
@@ -111,6 +122,7 @@ export class NewTransactionModalComponent implements OnInit {
     this.categoriesService.getAllCategories().subscribe({
       next: (response) => {
         this.categories = response;
+        console.log(this.categories);
         this.getAccounts();
       },
       error: (error) => {},
@@ -128,38 +140,37 @@ export class NewTransactionModalComponent implements OnInit {
 
   onInputChange() {}
 
+  getIdOrValue(value: any) {
+    return value && typeof value === 'object' && 'id' in value
+      ? value.id
+      : value;
+  }
+
   submit() {
-    console.log(this.transactionForm.value);
-    return;
-    if (!this.transactionForm.value.name) {
-      // this.invalidName = true;
-      this.snackBar.openErrorSnackbar(
-        this.translate.instant('VALIDATION.REQUIRED')
-      );
-      return;
-    }
+    const submitTransaction = {
+      ...this.transactionForm.value,
+      account: this.getIdOrValue(this.transactionForm.value['account']),
+      category: this.getIdOrValue(this.transactionForm.value['category']),
+      type: this.transactionType.toString(),
+    };
 
     this.transactionsService
-      .createNewTransaction(this.transactionForm.value)
+      .createNewTransaction([submitTransaction])
       .subscribe({
-        next: (response) => {
+        next: () => {
           this.snackBar.openSuccessSnackbar(
-            this.translate.instant('CATEGORY_CREATED')
+            this.translate.instant('TRANSACTION_CREATED')
           );
           this.close();
           this.transactionForm.reset();
+
+          const currentUrl = this.router.url;
+          if (currentUrl.includes('/transactions')) {
+            window.location.reload();
+          }
         },
         error: (error) => {
-          if (
-            error.status === 409 &&
-            error.error?.message === 'A category with this name already exists.'
-          ) {
-            this.snackBar.openErrorSnackbar(
-              this.translate.instant('VALIDATION.CATEGORY_NAME_USED')
-            );
-          } else {
-            this.snackBar.openErrorSnackbar(error.error?.message);
-          }
+          this.snackBar.openErrorSnackbar(error.error?.message);
         },
       });
   }

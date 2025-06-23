@@ -1,0 +1,85 @@
+<div *ngIf="selectedCount != 0" class="selection-info-container">
+  <p>
+    {{ selectedCount }}
+    {{ selectedCount === 1 ? "item" : "itens" }} selecionado{{
+      selectedCount > 1 ? "s" : ""
+    }}
+  </p>
+</div>
+
+<table class="table-custom">
+  <thead>
+    <tr>
+      @if (showSelectionColumn) {
+      <th style="width: 3%">
+        <input
+          type="checkbox"
+          [checked]="isAllSelected()"
+          (change)="toggleSelectAll()"
+        />
+      </th>
+      } @for (col of columns; track col.field) {
+      <th
+        [ngClass]="'text-' + col.textAlignLabel"
+        [style]="'width: ' + col.width"
+      >
+        <p>{{ col.label | translate }}</p>
+      </th>
+      }
+
+      <th>
+        <p>{{ "CONTROL" | translate }}</p>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (item of items; track item[this.trackBy]) {
+    <tr>
+      @if (showSelectionColumn) {
+      <td>
+        <input
+          type="checkbox"
+          [checked]="isSelected(item._id)"
+          (change)="toggleSelection(item._id)"
+        />
+      </td>
+      } @for (col of columns; track col.field) {
+      <td
+        [ngClass]="getCellClass(item, col)"
+        [ngStyle]="getCellStyle(item, col)"
+      >
+        @if (col.field === 'category') {
+        <i
+          class="{{ item.category.icon }}"
+          [style.color]="item.category.color"
+          style="margin-right: 0.5rem"
+        ></i>
+        {{ item.category.name }}
+        } @else if (col.field === 'account') {
+        {{ item.account.name }}
+        } @else {
+        {{ formatCellValue(item, col) }}
+        }
+      </td>
+
+      }
+      <td style="width: 10%">
+        <button
+          matTooltip="{{ 'EDIT' | translate }}"
+          [matTooltipPosition]="'above'"
+          class="default-icon-button action-button"
+        >
+          <i class="bi bi-pen-fill"></i>
+        </button>
+        <button
+          matTooltip="{{ 'DELETE' | translate }}"
+          [matTooltipPosition]="'above'"
+          class="default-icon-button action-button"
+        >
+          <i class="bi bi-trash-fill"></i>
+        </button>
+      </td>
+    </tr>
+    }
+  </tbody>
+</table>

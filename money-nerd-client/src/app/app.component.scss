@@ -2,12 +2,15 @@
   position: relative;
   margin-top: 75px;
   transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
-  padding: 1rem;
-  width: calc(100% - 50px);
-  transform: translateX(50px);
+  padding: 1.5rem;
 
-  &.with-menu {
-    width: calc(100% - 250px);
-    transform: translateX(250px);
+  @media (min-width: 1101px) {
+    width: calc(100% - 75px);
+    transform: translateX(75px);
+
+    &.with-menu {
+      width: calc(100% - 200px);
+      transform: translateX(200px);
+    }
   }
 }

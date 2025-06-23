@@ -3,6 +3,7 @@ import { HomeService } from './home.service';
 import { Router } from '@angular/router';
 import { SnackbarService } from '../../shared/components/snackbar/snackbar.service';
 import { TranslateService } from '@ngx-translate/core';
+import { TransactionsService } from '../transactions/transactions.service';
 
 @Component({
   selector: 'app-home',
@@ -13,6 +14,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class HomeComponent implements OnInit {
   constructor(
+    private transactionsService: TransactionsService,
     private homeService: HomeService,
     private router: Router,
     private snackBar: SnackbarService,
@@ -29,7 +31,7 @@ export class HomeComponent implements OnInit {
   }
 
   async getAllTransactions() {
-    this.homeService.getTransactions().subscribe({
+    this.transactionsService.getAllTransactions().subscribe({
       next: (response) => {},
       error: (e) => {},
     });

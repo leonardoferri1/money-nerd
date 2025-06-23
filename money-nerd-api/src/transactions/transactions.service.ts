@@ -40,7 +40,8 @@ export class TransactionsService {
     try {
       return await this.transactionSchema
         .find({ user: userId })
-        .populate('category', 'account');
+        .populate('category')
+        .populate('account');
     } catch (error) {
       throw new InternalServerErrorException('Failed to fetch transactions', {
         cause: error,

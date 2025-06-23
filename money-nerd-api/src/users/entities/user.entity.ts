@@ -22,7 +22,7 @@ export class User {
   @Prop({ unique: true, index: true, maxlength: 75, required: true })
   email: string;
 
-  @Prop({ maxlength: 50, minlength: 6, required: true })
+  @Prop({ maxlength: 300, minlength: 6, required: true })
   password: string;
 
   @Prop({ type: [String], default: [] })

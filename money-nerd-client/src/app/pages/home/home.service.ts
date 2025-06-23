@@ -11,12 +11,6 @@ export class HomeService {
 
   constructor(private http: HttpClient) {}
 
-  getTransactions(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/transactions`, {
-      withCredentials: true,
-    });
-  }
-
   getUser(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/users/me`, {
       withCredentials: true,

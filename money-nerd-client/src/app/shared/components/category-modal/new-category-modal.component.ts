@@ -121,28 +121,32 @@ export class NewCategoryModalComponent {
       return;
     }
 
-    this.categoriesService
-      .createNewCategory(this.categoryForm.value)
-      .subscribe({
-        next: (response) => {
-          this.snackBar.openSuccessSnackbar(
-            this.translate.instant('CATEGORY_CREATED')
+    const submitCategory = {
+      ...this.categoryForm.value,
+      color: this.selectedColor,
+      icon: this.selectedIcon,
+    };
+
+    this.categoriesService.createNewCategory(submitCategory).subscribe({
+      next: (response) => {
+        this.snackBar.openSuccessSnackbar(
+          this.translate.instant('CATEGORY_CREATED')
+        );
+        this.close();
+        this.categoryForm.reset();
+      },
+      error: (error) => {
+        if (
+          error.status === 409 &&
+          error.error?.message === 'A category with this name already exists.'
+        ) {
+          this.snackBar.openErrorSnackbar(
+            this.translate.instant('VALIDATION.CATEGORY_NAME_USED')
           );
-          this.close();
-          this.categoryForm.reset();
-        },
-        error: (error) => {
-          if (
-            error.status === 409 &&
-            error.error?.message === 'A category with this name already exists.'
-          ) {
-            this.snackBar.openErrorSnackbar(
-              this.translate.instant('VALIDATION.CATEGORY_NAME_USED')
-            );
-          } else {
-            this.snackBar.openErrorSnackbar(error.error?.message);
-          }
-        },
-      });
+        } else {
+          this.snackBar.openErrorSnackbar(error.error?.message);
+        }
+      },
+    });
   }
 }

@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -30,7 +31,11 @@ export class NavbarComponent implements OnInit {
   ];
   currentRoute: string = '';
 
-  constructor(private translation: TranslationService, private router: Router) {
+  constructor(
+    private translation: TranslationService,
+    private router: Router,
+    private authService: AuthService
+  ) {
     this.currentLang = this.translation.currentLang;
 
     this.router.events
@@ -57,5 +62,9 @@ export class NavbarComponent implements OnInit {
       this.translation.use(lang);
       this.currentLang = lang;
     }
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }

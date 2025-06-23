@@ -28,6 +28,7 @@
   "BACK_TO_LOGIN": "Voltar para o login",
   "CONTINUE": "Continuar",
   "TRANSACTIONS": "Transações",
+  "CONTROL": "Controle",
   "NEW_CATEGORY": "Nova Categoria",
   "NEW_ACCOUNT": "Nova Conta",
   "NEW_INCOME": "Nova Receita",
@@ -36,7 +37,10 @@
   "COLOR": "Cor",
   "ICON": "Ícone",
   "CATEGORY_CREATED": "Categoria criada.",
+  "TRANSACTION_CREATED": "Transação criada.",
   "ACCOUNT_CREATED": "Conta criada.",
+  "EDIT": "Editar",
+  "DELETE": "Excluir",
   "PAID": "Foi pago",
   "NOT_PAID": "Não foi pago",
   "CREDIT_CARD": "Pago no cartão de crédito",
@@ -87,5 +91,12 @@
     "4": "5ª",
     "5": "6ª",
     "6": "Sá"
+  },
+  "COLUMNS": {
+    "DESCRIPTION": "Descrição",
+    "CATEGORY": "Categoria",
+    "ACCOUNT": "Conta",
+    "VALUE": "Valor",
+    "DATE": "Data"
   }
 }

@@ -1,0 +1,143 @@
+@import "variables";
+
+.table-custom {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  overflow: hidden;
+
+  thead {
+    background: none;
+    color: $grey-light;
+    background-color: $background-main-hover;
+    text-align: left;
+    position: sticky;
+    top: 0;
+  }
+
+  th {
+    font-weight: 600;
+
+    p {
+      margin: 0;
+      position: relative;
+
+      i {
+        position: absolute;
+        top: 50%;
+        padding: 0 0.25rem;
+        transform: translateY(-50%);
+        color: $grey-light;
+        font-size: 15px;
+        pointer-events: none;
+      }
+    }
+  }
+
+  td {
+    background: $background-main-lighter;
+    font-weight: 500;
+    color: $grey-light;
+    box-sizing: border-box;
+    border-bottom: 1px solid $background-main-hover;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  th {
+    padding: 12px 15px;
+    text-align: center;
+  }
+
+  td {
+    padding: 5px 15px;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  th:first-child {
+    text-align: start;
+  }
+
+  td:first-child {
+    text-align: start;
+  }
+
+  // tbody tr.selected {
+  //   background-color: blue !important;
+  //   color: white;
+
+  //   &:hover {
+  //     background-color: blue-hover !important;
+  //   }
+  // }
+
+  input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+
+  .action-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  tbody tr {
+    transition: background 0.05s ease;
+  }
+
+  .empty-table-container {
+    width: 1500px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  tbody tr:nth-of-type(even) {
+    background-color: white;
+  }
+
+  tbody tr:hover {
+    background-color: #f0f0f0;
+  }
+}
+
+.selection-info-container {
+  display: flex;
+  height: 65px;
+  width: 100% !important;
+  color: white;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  i {
+    font-size: 21px;
+  }
+
+  p {
+    font-size: 14px;
+    font-weight: 400;
+  }
+}
+
+.text-success {
+  color: $light-green !important;
+  font-weight: 600;
+}
+
+.text-danger {
+  color: $red-theme !important;
+  font-weight: 600;
+}
+
+.action-button {
+  display: inline-block;
+  vertical-align: middle;
+}

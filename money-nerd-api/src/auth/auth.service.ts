@@ -62,7 +62,7 @@ export class AuthService {
 
       await this.userSchema.updateOne(
         { _id: user._id },
-        { $push: { refreshTokens: refreshToken } },
+        { $set: { refreshTokens: [refreshToken] } },
       );
 
       return {
@@ -154,7 +154,7 @@ export class AuthService {
       await this.userSchema.updateOne(
         { _id: finalUser._id },
         {
-          $push: { refreshTokens: refreshToken },
+          $set: { refreshTokens: [refreshToken] },
         },
       );
 
@@ -206,7 +206,7 @@ export class AuthService {
       await this.userSchema.updateOne(
         { _id: finalUser?._id },
         {
-          $push: { refreshTokens: refreshToken },
+          $set: { refreshTokens: [refreshToken] },
         },
       );
 

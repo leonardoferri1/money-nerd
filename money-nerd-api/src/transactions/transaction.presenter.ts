@@ -12,6 +12,7 @@ export class TransactionPresenter {
       date: this.transaction.date,
       value: this.transaction.value,
       category: this.transaction.category,
+      account: this.transaction.account,
     };
   }
 }

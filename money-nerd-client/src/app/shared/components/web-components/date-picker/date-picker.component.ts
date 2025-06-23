@@ -56,7 +56,6 @@ export class DatePickerComponent implements OnInit {
   today = new Date();
   currentMonth = this.today.getMonth();
   currentYear = this.today.getFullYear();
-  weekdays: string[] = ['Do', '2ª', '3ª', '4ª', '5ª', '6ª', 'Sá'];
 
   constructor(private elementRef: ElementRef) {}
 
