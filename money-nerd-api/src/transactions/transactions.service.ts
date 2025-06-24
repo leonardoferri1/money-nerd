@@ -56,7 +56,8 @@ export class TransactionsService {
           _id: id,
           user: userId,
         })
-        .populate('category', 'account');
+        .populate('category')
+        .populate('account');
 
       if (!transaction) {
         throw new NotFoundException('Transaction not found');

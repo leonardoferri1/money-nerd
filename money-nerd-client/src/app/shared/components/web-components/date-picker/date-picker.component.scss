@@ -23,7 +23,7 @@
   padding-left: 1rem;
   padding-right: 1rem;
   background: rgb(44, 43, 41);
-  color: #807e7ee3;
+  color: $grey-base;
   cursor: pointer;
 
   div {
@@ -33,6 +33,8 @@
   }
 
   i {
+    color: $grey-base;
+
     font-size: 17px;
   }
 }

@@ -55,6 +55,7 @@
     "PASSWORDS_DO_NOT_MATCH": "As senhas não coincidem.",
     "VERIFY_FIRST": "Por favor confirme seu email antes.",
     "INCORRECT_PASSWORD": "Senha incorreta.",
+    "TRANSACTION_NOT_FOUND": "Transação não encontrada.",
     "USER_NOT_FOUND": "Usuário não encontrado.",
     "BAD_CODE": "Código inválido.",
     "EXPIRED_CODE": "Código expirado.",

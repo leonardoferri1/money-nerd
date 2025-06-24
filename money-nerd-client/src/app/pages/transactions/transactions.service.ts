@@ -22,4 +22,10 @@ export class TransactionsService {
       withCredentials: true,
     });
   }
+
+  getTransactionById(id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/transactions/${id}`, {
+      withCredentials: true,
+    });
+  }
 }

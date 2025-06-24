@@ -13,6 +13,9 @@ export class TransactionPresenter {
       value: this.transaction.value,
       category: this.transaction.category,
       account: this.transaction.account,
+      wasPaid: this.transaction.wasPaid,
+      recurringTransaction: this.transaction.recurringTransaction,
+      isCreditCard: this.transaction.isCreditCard,
     };
   }
 }

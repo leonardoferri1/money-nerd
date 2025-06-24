@@ -1,1 +1,6 @@
-<app-transactions-table [items]="transactions"></app-transactions-table>
+<div class="transactions-main-container">
+  <app-transactions-table
+    [items]="transactions"
+    (emitTransaction)="editTransaction($event)"
+  ></app-transactions-table>
+</div>

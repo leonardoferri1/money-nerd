@@ -18,7 +18,7 @@ $background-selected: #f0f0f0;
   overflow: hidden;
   background: rgb(44, 43, 41);
   max-height: 38px;
-  padding-right: 5px;
+  padding-left: 1rem !important;
   padding-left: 8px;
 
   .icons-wrapper {
@@ -28,7 +28,7 @@ $background-selected: #f0f0f0;
 
     i {
       color: $grey-base;
-      font-size: 13px;
+      font-size: 17px;
     }
   }
 

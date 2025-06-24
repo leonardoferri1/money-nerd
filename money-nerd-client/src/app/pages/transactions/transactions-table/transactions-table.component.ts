@@ -18,6 +18,7 @@ import { Column } from '../../../shared/interfaces/ITabela';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationService } from '../../../shared/services/translation.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { NewTransactionModalComponent } from '../../../shared/components/new-transaction-modal/new-transaction-modal.component';
 
 @Component({
   selector: 'app-transactions-table',
@@ -72,6 +73,7 @@ export class TransactionsTableComponent {
   @Input() customTemplate!: TemplateRef<any>;
 
   @Output() selectedItems = new EventEmitter<any[]>();
+  @Output() emitTransaction = new EventEmitter<any[]>();
 
   constructor(private translationService: TranslationService) {}
 
@@ -175,5 +177,9 @@ export class TransactionsTableComponent {
 
     this.selectedIds = [...this.selectedIds];
     this.selectedItems.emit(this.getSelectedItems());
+  }
+
+  editTransaction(transaction: any) {
+    this.emitTransaction.emit(transaction);
   }
 }

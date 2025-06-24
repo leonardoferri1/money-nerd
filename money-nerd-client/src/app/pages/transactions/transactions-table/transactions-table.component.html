@@ -68,6 +68,7 @@
           matTooltip="{{ 'EDIT' | translate }}"
           [matTooltipPosition]="'above'"
           class="default-icon-button action-button"
+          (click)="editTransaction(item)"
         >
           <i class="bi bi-pen-fill"></i>
         </button>

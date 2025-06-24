@@ -57,11 +57,17 @@ import { Router } from '@angular/router';
 })
 export class NewTransactionModalComponent implements OnInit {
   private _opened = false;
+  @Input() transactionId?: string;
   @Input()
   set opened(value: boolean) {
     this._opened = value;
     if (value) {
       this.getCategories();
+      setTimeout(() => {
+        if (this.type === 'edit' && this.transactionId) {
+          this.loadTransactionById(this.transactionId);
+        }
+      }, 0);
     }
   }
   @Input() type: 'edit' | 'create' = 'create';
@@ -114,6 +120,8 @@ export class NewTransactionModalComponent implements OnInit {
 
   close(): void {
     this.opened = false;
+    this.transactionForm.reset();
+    this.transactionId = undefined;
     this.openedChange.emit(this.opened);
     this.onClose.emit();
   }
@@ -122,7 +130,6 @@ export class NewTransactionModalComponent implements OnInit {
     this.categoriesService.getAllCategories().subscribe({
       next: (response) => {
         this.categories = response;
-        console.log(this.categories);
         this.getAccounts();
       },
       error: (error) => {},
@@ -141,8 +148,8 @@ export class NewTransactionModalComponent implements OnInit {
   onInputChange() {}
 
   getIdOrValue(value: any) {
-    return value && typeof value === 'object' && 'id' in value
-      ? value.id
+    return value && typeof value === 'object' && '_id' in value
+      ? value._id
       : value;
   }
 
@@ -154,24 +161,70 @@ export class NewTransactionModalComponent implements OnInit {
       type: this.transactionType.toString(),
     };
 
-    this.transactionsService
-      .createNewTransaction([submitTransaction])
-      .subscribe({
-        next: () => {
-          this.snackBar.openSuccessSnackbar(
-            this.translate.instant('TRANSACTION_CREATED')
-          );
-          this.close();
-          this.transactionForm.reset();
+    if (this.type === 'edit' && this.transactionId) {
+      console.log(submitTransaction);
+      // this.transactionsService
+      //   .updateTransaction(this.transactionId, submitTransaction)
+      //   .subscribe({
+      //     next: () => {
+      //       this.snackBar.openSuccessSnackbar(
+      //         this.translate.instant('TRANSACTION_UPDATED')
+      //       );
+      //       this.close();
+      //       this.transactionForm.reset();
+      //       window.location.reload();
+      //     },
+      //     error: (error) => {
+      //       this.snackBar.openErrorSnackbar(error.error?.message);
+      //     },
+      //   });
+    } else {
+      this.transactionsService
+        .createNewTransaction([submitTransaction])
+        .subscribe({
+          next: () => {
+            this.snackBar.openSuccessSnackbar(
+              this.translate.instant('TRANSACTION_CREATED')
+            );
+            this.close();
+            this.transactionForm.reset();
 
-          const currentUrl = this.router.url;
-          if (currentUrl.includes('/transactions')) {
-            window.location.reload();
-          }
-        },
-        error: (error) => {
-          this.snackBar.openErrorSnackbar(error.error?.message);
-        },
-      });
+            const currentUrl = this.router.url;
+            if (currentUrl.includes('/transactions')) {
+              window.location.reload();
+            }
+          },
+          error: (error) => {
+            this.snackBar.openErrorSnackbar(error.error?.message);
+          },
+        });
+    }
+  }
+
+  loadTransactionById(id: string): void {
+    this.transactionsService.getTransactionById(id).subscribe({
+      next: (transaction) => {
+        console.log(transaction);
+        this.transactionForm.patchValue({
+          type: transaction.type === 'Income' ? 1 : 2,
+          description: transaction.description,
+          value: transaction.value,
+          wasPaid: transaction.wasPaid,
+          isCreditCard: transaction.isCreditCard,
+          recurringTransaction: transaction.recurringTransaction,
+          date: new Date(transaction.date),
+          account: transaction.account._id,
+          category: transaction.category._id,
+        });
+
+        console.log(this.transactionForm);
+      },
+      error: (error) => {
+        this.snackBar.openErrorSnackbar(
+          this.translate.instant('VALIDATION.TRANSACTION_NOT_FOUND')
+        );
+        this.close();
+      },
+    });
   }
 }
