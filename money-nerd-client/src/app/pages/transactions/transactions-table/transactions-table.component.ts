@@ -73,7 +73,8 @@ export class TransactionsTableComponent {
   @Input() customTemplate!: TemplateRef<any>;
 
   @Output() selectedItems = new EventEmitter<any[]>();
-  @Output() emitTransaction = new EventEmitter<any[]>();
+  @Output() emitEditTransaction = new EventEmitter<any[]>();
+  @Output() emitDeleteTransaction = new EventEmitter<any[]>();
 
   constructor(private translationService: TranslationService) {}
 
@@ -180,6 +181,10 @@ export class TransactionsTableComponent {
   }
 
   editTransaction(transaction: any) {
-    this.emitTransaction.emit(transaction);
+    this.emitEditTransaction.emit(transaction);
+  }
+
+  deleteTransaction(transaction: any) {
+    this.emitDeleteTransaction.emit(transaction);
   }
 }

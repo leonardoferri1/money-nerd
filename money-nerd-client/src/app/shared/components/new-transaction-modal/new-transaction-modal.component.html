@@ -8,9 +8,27 @@
     [ngClass]="{ open: opened }"
   >
     <div class="money-nerd-modal-header" *ngIf="showCloseButton">
-      <h1 [ngStyle]="{ color: transactionThemeColor }">
-        {{ "NEW_INCOME" | translate }}
-      </h1>
+      <div style="display: flex; align-items: center; gap: 0.5rem">
+        <h1 [ngStyle]="{ color: transactionThemeColor }">
+          {{ "NEW_INCOME" | translate }}
+        </h1>
+
+        <div class="dropdown-wrapper">
+          <app-dropdown-menu
+            [opened]="showRecurringMenu"
+            [items]="recurringTransactions"
+            (valueChange)="isRecurringButtonClick($event)"
+            (closeChange)="showRecurringMenu = $event"
+          ></app-dropdown-menu>
+          <button
+            class="small-light-button"
+            type="button"
+            (click)="onToggleRecurringMenu($event)"
+          >
+            {{ "RECURRING" | translate }}
+          </button>
+        </div>
+      </div>
 
       <button class="default-icon-button" type="button" (click)="close()">
         <i class="bi bi-x-lg"></i>

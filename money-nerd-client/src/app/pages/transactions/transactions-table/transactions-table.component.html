@@ -76,6 +76,7 @@
           matTooltip="{{ 'DELETE' | translate }}"
           [matTooltipPosition]="'above'"
           class="default-icon-button action-button"
+          (click)="deleteTransaction(item)"
         >
           <i class="bi bi-trash-fill"></i>
         </button>

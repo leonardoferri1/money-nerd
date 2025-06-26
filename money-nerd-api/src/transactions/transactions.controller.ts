@@ -7,6 +7,7 @@ import {
   Delete,
   UseGuards,
   Req,
+  Patch,
 } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
@@ -15,6 +16,7 @@ import { TransactionPresenter } from './transaction.presenter';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { RequestWithUser } from 'src/auth/types/request-with-user';
 import { SkipThrottle } from '@nestjs/throttler';
+import { UpdateTransactionDto } from './dto/update-transaction.dto';
 @SkipThrottle()
 @UseGuards(AuthGuard)
 @Controller('transactions')
@@ -41,6 +43,16 @@ export class TransactionsController {
     );
   }
 
+  @Get('recurring')
+  async findRecurring(@Req() req: RequestWithUser) {
+    const transactions = await this.transactionsService.findRecurring(
+      req.user._id,
+    );
+    return transactions.map(
+      (transaction) => new TransactionPresenter(transaction),
+    );
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string, @Req() req: RequestWithUser) {
     const transaction = await this.transactionsService.findOne(
@@ -50,13 +62,19 @@ export class TransactionsController {
     return new TransactionPresenter(transaction);
   }
 
-  // @Patch(':id')
-  // update(
-  //   @Param('id') id: string,
-  //   @Body() updateTransactionDto: UpdateTransactionDto,
-  // ) {
-  //   return this.transactionsService.update(+id, updateTransactionDto);
-  // }
+  @Patch(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() dto: UpdateTransactionDto,
+    @Req() req: RequestWithUser,
+  ) {
+    const transaction = await this.transactionsService.update(
+      id,
+      dto,
+      req.user._id,
+    );
+    return new TransactionPresenter(transaction);
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string, @Req() req: RequestWithUser) {

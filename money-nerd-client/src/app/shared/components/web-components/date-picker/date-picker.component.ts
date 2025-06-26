@@ -103,6 +103,10 @@ export class DatePickerComponent implements OnInit {
     this.showCalendar = false;
   }
 
+  emitToday() {
+    this.selectDate(new Date());
+  }
+
   prevMonth() {
     if (this.currentMonth === 0) {
       this.currentMonth = 11;

@@ -8,6 +8,7 @@ import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Transaction } from './entities/transaction.entity';
 import { Model } from 'mongoose';
+import { UpdateTransactionDto } from './dto/update-transaction.dto';
 
 @Injectable()
 export class TransactionsService {
@@ -49,6 +50,25 @@ export class TransactionsService {
     }
   }
 
+  async findRecurring(userId: string) {
+    try {
+      return await this.transactionSchema
+        .find({
+          user: userId,
+          $or: [{ recurringTransaction: true }],
+        })
+        .populate('category')
+        .populate('account');
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Failed to fetch recurring transactions',
+        {
+          cause: error,
+        },
+      );
+    }
+  }
+
   async findOne(id: string, userId: string) {
     try {
       const transaction = await this.transactionSchema
@@ -69,9 +89,30 @@ export class TransactionsService {
     }
   }
 
-  // update(id: number, updateTransactionDto: UpdateTransactionDto) {
-  //   return `This action updates a #${id} transaction`;
-  // }
+  async update(
+    transactionId: string,
+    dto: UpdateTransactionDto,
+    userId: string,
+  ) {
+    console.log('Update Transaction:', transactionId, userId);
+    try {
+      const updated = await this.transactionSchema.findOneAndUpdate(
+        { _id: transactionId, user: userId },
+        { ...dto, ...(dto.date ? { date: new Date(dto.date) } : {}) },
+        { new: true },
+      );
+
+      if (!updated) {
+        throw new NotFoundException('Transaction not found.');
+      }
+
+      return updated;
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to update transaction', {
+        cause: error,
+      });
+    }
+  }
 
   async remove(id: string, userId: string) {
     try {

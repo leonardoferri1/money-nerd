@@ -20,6 +20,8 @@ import { TransactionsService } from '../../../pages/transactions/transactions.se
 import { Account } from '../../interfaces/IAccount.type';
 import { AccountsService } from '../../services/accounts.service';
 import { Router } from '@angular/router';
+import { DropdownMenuComponent } from '../web-components/dropdown-menu/dropdown-menu/dropdown-menu.component';
+import { TranslationService } from '../../services/translation.service';
 @Component({
   selector: 'app-new-transaction-modal',
   standalone: true,
@@ -34,6 +36,7 @@ import { Router } from '@angular/router';
     DatePickerComponent,
     DropdownComponent,
     ReactiveFormsModule,
+    DropdownMenuComponent,
   ],
   animations: [
     trigger('modalAnimation', [
@@ -73,9 +76,11 @@ export class NewTransactionModalComponent implements OnInit {
   @Input() type: 'edit' | 'create' = 'create';
   @Input() showCloseButton = true;
   @Input() transactionType: 1 | 2 = 1;
+  showRecurringMenu: boolean = false;
 
   categories: Category[] = [];
   accounts: Account[] = [];
+  recurringTransactions: any[] = [];
 
   transactionForm: FormGroup;
 
@@ -89,7 +94,8 @@ export class NewTransactionModalComponent implements OnInit {
     private categoriesService: CategoriesService,
     private accountsService: AccountsService,
     private transactionsService: TransactionsService,
-    private router: Router
+    private router: Router,
+    private translationService: TranslationService
   ) {
     this.transactionForm = this.formBuilder.group({
       type: [''],
@@ -126,13 +132,44 @@ export class NewTransactionModalComponent implements OnInit {
     this.onClose.emit();
   }
 
+  formatCurrency(value: number): string {
+    const locale = this.translationService.currentLang === 'pt' ? 'pt' : 'en';
+    const currencyCode = locale === 'pt' ? 'BRL' : 'USD';
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency: currencyCode,
+      minimumFractionDigits: 2,
+    }).format(value);
+  }
+
   getCategories() {
     this.categoriesService.getAllCategories().subscribe({
       next: (response) => {
         this.categories = response;
-        this.getAccounts();
+        this.getRecurringTransactions();
       },
       error: (error) => {},
+    });
+  }
+
+  getRecurringTransactions() {
+    this.transactionsService.getRecurringTransactions().subscribe({
+      next: (response: any[]) => {
+        this.recurringTransactions = response.map((transaction) => ({
+          ...transaction,
+          label: this.formatCurrency(transaction.value),
+          icon: transaction.category?.icon,
+          color:
+            transaction.type === 'Income'
+              ? 'text-success'
+              : transaction.type === 'Outcome'
+              ? 'text-danger'
+              : '',
+        }));
+
+        this.getAccounts();
+      },
+      error: (error: any) => {},
     });
   }
 
@@ -158,26 +195,25 @@ export class NewTransactionModalComponent implements OnInit {
       ...this.transactionForm.value,
       account: this.getIdOrValue(this.transactionForm.value['account']),
       category: this.getIdOrValue(this.transactionForm.value['category']),
-      type: this.transactionType.toString(),
+      type: this.transactionType,
     };
 
     if (this.type === 'edit' && this.transactionId) {
-      console.log(submitTransaction);
-      // this.transactionsService
-      //   .updateTransaction(this.transactionId, submitTransaction)
-      //   .subscribe({
-      //     next: () => {
-      //       this.snackBar.openSuccessSnackbar(
-      //         this.translate.instant('TRANSACTION_UPDATED')
-      //       );
-      //       this.close();
-      //       this.transactionForm.reset();
-      //       window.location.reload();
-      //     },
-      //     error: (error) => {
-      //       this.snackBar.openErrorSnackbar(error.error?.message);
-      //     },
-      //   });
+      this.transactionsService
+        .updateTransaction(this.transactionId, submitTransaction)
+        .subscribe({
+          next: () => {
+            this.snackBar.openSuccessSnackbar(
+              this.translate.instant('TRANSACTION_UPDATED')
+            );
+            this.close();
+            this.transactionForm.reset();
+            window.location.reload();
+          },
+          error: (error) => {
+            this.snackBar.openErrorSnackbar(error.error?.message);
+          },
+        });
     } else {
       this.transactionsService
         .createNewTransaction([submitTransaction])
@@ -204,7 +240,6 @@ export class NewTransactionModalComponent implements OnInit {
   loadTransactionById(id: string): void {
     this.transactionsService.getTransactionById(id).subscribe({
       next: (transaction) => {
-        console.log(transaction);
         this.transactionForm.patchValue({
           type: transaction.type === 'Income' ? 1 : 2,
           description: transaction.description,
@@ -226,5 +261,27 @@ export class NewTransactionModalComponent implements OnInit {
         this.close();
       },
     });
+  }
+
+  isRecurringButtonClick(item: any) {
+    (this.transactionType = item.type === 'Income' ? 1 : 2),
+      this.transactionForm.patchValue({
+        type: item.type === 'Income' ? 1 : 2,
+        description: item.description,
+        value: item.value,
+        date: new Date(item.date),
+        account: item.account._id,
+        category: item.category._id,
+      });
+    this.toggleRecurringMenu();
+  }
+
+  onToggleRecurringMenu(event: MouseEvent) {
+    event.stopPropagation();
+    this.toggleRecurringMenu();
+  }
+
+  toggleRecurringMenu() {
+    this.showRecurringMenu = !this.showRecurringMenu;
   }
 }

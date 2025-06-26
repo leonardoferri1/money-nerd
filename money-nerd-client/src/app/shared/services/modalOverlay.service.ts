@@ -11,7 +11,7 @@ export class ModalOverlayService {
   openModal<T extends object>(
     component: Type<T>,
     data?: Partial<T>
-  ): OverlayRef {
+  ): { overlayRef: OverlayRef; instance: T } {
     this.close();
 
     this.overlayRef = this.overlay.create({
@@ -39,7 +39,10 @@ export class ModalOverlayService {
       });
     }
 
-    return this.overlayRef;
+    return {
+      overlayRef: this.overlayRef,
+      instance: componentRef.instance as T,
+    };
   }
 
   close() {

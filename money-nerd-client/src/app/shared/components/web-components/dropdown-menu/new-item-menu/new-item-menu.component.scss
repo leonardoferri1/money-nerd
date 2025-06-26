@@ -5,6 +5,7 @@
     position: absolute;
     left: 0;
     min-width: 200px;
+    max-height: 300px;
     overflow-y: auto;
     background: rgb(44, 43, 41);
     border: 1px solid $light-background;
@@ -22,7 +23,7 @@
       padding-left: 1rem;
       cursor: pointer;
       transition: background 0.1s;
-      min-height: 2rem;
+      min-height: 1.5rem;
       color: #aca8a8;
       font-size: 13px;
       font-weight: 500;
@@ -63,7 +64,7 @@
     width: 100vw;
     height: 100vh;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 19;
+    z-index: 80;
   }
 
   .custom-dropdown-styling {
@@ -78,7 +79,7 @@
     box-shadow: none;
     padding: 0;
     opacity: 0;
-    z-index: 21;
+    z-index: 81;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;

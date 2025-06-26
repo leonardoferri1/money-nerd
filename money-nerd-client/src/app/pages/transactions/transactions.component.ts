@@ -6,6 +6,7 @@ import { TransactionsTableComponent } from './transactions-table/transactions-ta
 import { Column } from '../../shared/interfaces/ITabela';
 import { NewTransactionModalComponent } from '../../shared/components/new-transaction-modal/new-transaction-modal.component';
 import { ModalOverlayService } from '../../shared/services/modalOverlay.service';
+import { ConfirmationModalComponent } from '../../shared/components/confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'app-transactions',
@@ -57,6 +58,30 @@ export class TransactionsComponent implements OnInit {
       transactionId: id,
       type: 'edit',
       opened: true,
+    });
+  }
+
+  deleteTransaction(transaction: any) {
+    const { overlayRef, instance } = this.modalOverlayService.openModal(
+      ConfirmationModalComponent,
+      {
+        title: 'CONFIRM_TRANSACTION_DELETE',
+        showCloseButton: true,
+        opened: true,
+      }
+    );
+
+    instance.confirmed?.subscribe?.(() => {
+      overlayRef.dispose();
+      this.transactionsService
+        .deleteTransaction(transaction._id)
+        .subscribe(() => {
+          window.location.reload();
+        });
+    });
+
+    instance.cancelled?.subscribe?.(() => {
+      overlayRef.dispose();
     });
   }
 }

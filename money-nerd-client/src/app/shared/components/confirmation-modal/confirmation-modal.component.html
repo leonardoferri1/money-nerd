@@ -1,0 +1,29 @@
+<div class="modal-overlay" *ngIf="opened" (click)="close()"></div>
+
+<div
+  class="money-nerd-modal"
+  *ngIf="opened"
+  @modalAnimation
+  [ngClass]="{ open: opened }"
+>
+  <div class="money-nerd-modal-header" *ngIf="showCloseButton">
+    <h1>
+      {{ title | translate }}
+    </h1>
+
+    <button class="default-icon-button" (click)="close()" type="button">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+
+  <div class="money-nerd-modal-body">
+    <div class="control-panel">
+      <button class="cancel-button" (click)="close()">
+        {{ "CANCEL" | translate }}
+      </button>
+      <button class="confirm-button" (click)="submit()">
+        {{ "CONFIRM" | translate }}
+      </button>
+    </div>
+  </div>
+</div>

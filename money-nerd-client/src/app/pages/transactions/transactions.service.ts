@@ -17,8 +17,26 @@ export class TransactionsService {
     });
   }
 
+  updateTransaction(id: string, payload: any): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/transactions/${id}`, payload, {
+      withCredentials: true,
+    });
+  }
+
+  getRecurringTransactions(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/transactions/recurring`, {
+      withCredentials: true,
+    });
+  }
+
   getAllTransactions(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/transactions`, {
+      withCredentials: true,
+    });
+  }
+
+  deleteTransaction(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/transactions/${id}`, {
       withCredentials: true,
     });
   }

@@ -14,17 +14,17 @@
   <div class="menu-container">
     <div class="menu-outter-content">
       <div class="dropdown-wrapper">
-        <app-dropdown-menu
+        <app-new-item-menu
           [opened]="showDropdown"
           [items]="items"
           [selectedItem]="selected"
           (valueChange)="newItemButtonClick($event)"
           (closeChange)="showDropdown = $event"
-        ></app-dropdown-menu>
+        ></app-new-item-menu>
 
         <button
           class="new-item-button"
-          (click)="toggleDropdown()"
+          (click)="onToggleDropdown($event)"
           [class.open]="showDropdown"
         >
           <i class="fa-solid fa-plus"></i>

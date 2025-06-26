@@ -1,0 +1,71 @@
+@import "variables";
+
+$highlight-scrollbar-color: #4d4d4d;
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 24;
+}
+
+.text-success {
+  color: $light-green !important;
+}
+
+.text-danger {
+  color: $red-theme !important;
+}
+
+.custom-dropdown-styling {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 200px;
+  // max-height: 300px; <-- ESSE CARA ESTÁ BORRANDO O TEXTO
+  overflow-y: auto;
+  background: rgb(44, 43, 41);
+  border: 1px solid $light-background;
+  border-radius: 0.3rem;
+  z-index: 25;
+  animation: fadeIn 0.2s ease forwards;
+
+  &::-webkit-scrollbar {
+    width: 7px;
+    background-color: $grey-base;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $grey-base;
+    border-radius: 0;
+  }
+
+  &:hover::-webkit-scrollbar-thumb {
+    background-color: $highlight-scrollbar-color;
+  }
+
+  .custom-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    padding-left: 1rem;
+    cursor: pointer;
+    transition: background 0.1s;
+    font-weight: 600;
+    font-size: 13px;
+
+    &:hover {
+      background: $background-main-hover;
+    }
+
+    i {
+      color: #aca8a8;
+    }
+  }
+}

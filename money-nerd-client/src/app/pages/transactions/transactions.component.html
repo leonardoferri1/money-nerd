@@ -1,6 +1,7 @@
 <div class="transactions-main-container">
   <app-transactions-table
     [items]="transactions"
-    (emitTransaction)="editTransaction($event)"
+    (emitEditTransaction)="editTransaction($event)"
+    (emitDeleteTransaction)="deleteTransaction($event)"
   ></app-transactions-table>
 </div>

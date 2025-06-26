@@ -14,7 +14,7 @@ import { TranslationService } from '../../services/translation.service';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
-import { DropdownMenuComponent } from '../web-components/dropdown-menu/menu/dropdown-menu.component';
+import { NewItemMenuComponent } from '../web-components/dropdown-menu/new-item-menu/new-item-menu.component';
 import { NewCategoryModalComponent } from '../category-modal/new-category-modal.component';
 import { NewTransactionModalComponent } from '../new-transaction-modal/new-transaction-modal.component';
 import { NewAccountModalComponent } from '../account-modal/new-account-modal.component';
@@ -31,7 +31,7 @@ import { NewAccountModalComponent } from '../account-modal/new-account-modal.com
     NgTemplateOutlet,
     NgClass,
     MatTooltipModule,
-    DropdownMenuComponent,
+    NewItemMenuComponent,
     NewCategoryModalComponent,
     NewTransactionModalComponent,
     NewAccountModalComponent,
@@ -67,11 +67,7 @@ export class MenuComponent {
   ];
   openNewItemMenu: boolean = false;
 
-  constructor(
-    private translation: TranslationService,
-    private router: Router,
-    private elementRef: ElementRef
-  ) {
+  constructor(private translation: TranslationService, private router: Router) {
     this.currentLang = this.translation.currentLang;
 
     this.router.events
@@ -103,12 +99,9 @@ export class MenuComponent {
     this.onNavClose.emit(event);
   }
 
-  @HostListener('document:click', ['$event'])
-  onClickOutside(event: MouseEvent) {
-    const clickedInside = this.elementRef.nativeElement.contains(event.target);
-    if (!clickedInside) {
-      this.showDropdown = false;
-    }
+  onToggleDropdown(event: MouseEvent) {
+    event.stopPropagation();
+    this.toggleDropdown();
   }
 
   toggleDropdown() {
