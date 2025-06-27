@@ -1,7 +1,56 @@
 <div class="transactions-main-container">
+  <div class="summary" *ngIf="summary">
+    <div class="incomes-panel">
+      <h1>
+        {{ "MONTH" | translate }}: {{ formatCurrency(summary.incomeMonth) }}
+      </h1>
+      <h2>
+        {{ "YEAR" | translate }}: {{ formatCurrency(summary.incomeYear) }}
+      </h2>
+      <h3>{{ "TOTAL" | translate }}: {{ formatCurrency(summary.income) }}</h3>
+    </div>
+    <div class="expenses-panel">
+      <h1>
+        {{ "MONTH" | translate }}: {{ formatCurrency(summary.expenseMonth) }}
+      </h1>
+      <h2>
+        {{ "YEAR" | translate }}: {{ formatCurrency(summary.expenseYear) }}
+      </h2>
+      <h3>{{ "TOTAL" | translate }}: {{ formatCurrency(summary.expense) }}</h3>
+    </div>
+    <div class="total-panel">
+      <h1>
+        {{ "MONTH" | translate }}: {{ formatCurrency(summary.totalMonth) }}
+      </h1>
+      <h2>{{ "YEAR" | translate }}: {{ formatCurrency(summary.totalYear) }}</h2>
+      <h3>{{ "TOTAL" | translate }}: {{ formatCurrency(summary.total) }}</h3>
+    </div>
+  </div>
+  <div class="year-selector">
+    <button (click)="selectYear(currentYear - 1)">{{ currentYear - 1 }}</button>
+    <button disabled class="selected">{{ currentYear }}</button>
+    <button (click)="selectYear(currentYear + 1)">{{ currentYear + 1 }}</button>
+  </div>
+
+  <div class="month-selector">
+    <button
+      *ngFor="let month of months; index as i"
+      [class.selected]="selectedMonth === i"
+      (click)="selectMonth(i)"
+    >
+      <span>{{ "MONTHS." + month | translate }}</span>
+    </button>
+  </div>
+
+  <button class="default-icon-button" (click)="openFilterMenu()">
+    <i class="bi bi-funnel"></i>
+  </button>
+
   <app-transactions-table
     [items]="transactions"
     (emitEditTransaction)="editTransaction($event)"
     (emitDeleteTransaction)="deleteTransaction($event)"
   ></app-transactions-table>
 </div>
+
+<app-side-menu [(opened)]="showFilterMenu"></app-side-menu>

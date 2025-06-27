@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { TransactionFilters } from './transaction-filters.model';
 
 @Injectable({
   providedIn: 'root',
@@ -31,6 +32,23 @@ export class TransactionsService {
 
   getAllTransactions(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/transactions`, {
+      withCredentials: true,
+    });
+  }
+
+  getTransactions(filters?: TransactionFilters): Observable<any> {
+    let params = new HttpParams();
+
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== null && value !== undefined && value !== '') {
+          params = params.set(key, value.toString());
+        }
+      });
+    }
+
+    return this.http.get<any>(`${this.apiUrl}/transactions`, {
+      params,
       withCredentials: true,
     });
   }

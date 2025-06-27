@@ -54,6 +54,10 @@
   "TODAY": "Hoje",
   "DESCRIPTION": "Descrição",
   "CURRENCY": "R$ ",
+  "SELECT_DATE": "Selecione a Data",
+  "YEAR": "Ano",
+  "MONTH": "Mês",
+  "TOTAL": "Total",
   "VALIDATION": {
     "REQUIRED": "Necessário preencher todos os campos obrigatórios.",
     "PASSWORDS_DO_NOT_MATCH": "As senhas não coincidem.",
@@ -87,6 +91,20 @@
     "9": "Out",
     "10": "Nov",
     "11": "Dez"
+  },
+  "MONTHS": {
+    "January": "Janeiro",
+    "February": "Fevereiro ",
+    "March": "Março",
+    "April": "Abril",
+    "May": "Maio",
+    "June": "Junho",
+    "July": "Julho",
+    "August": "Agosto",
+    "September": "Setembro",
+    "October": "Outubro",
+    "November": "Novembro",
+    "December": "Dezembro"
   },
   "WEEKDAYS_SHORT": {
     "0": "Do",

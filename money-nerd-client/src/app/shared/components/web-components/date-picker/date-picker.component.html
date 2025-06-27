@@ -7,7 +7,7 @@
   <div class="date-picker-display" [class]="theme" (click)="toggleCalendar()">
     <div>
       <i class="bi bi-calendar3"></i>
-      {{ value ? formatDate(value) : "Selecionar data" }}
+      {{ value ? formatDate(value) : ("SELECT_DATE" | translate) }}
     </div>
 
     <button

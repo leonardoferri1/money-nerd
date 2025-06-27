@@ -8,6 +8,7 @@ import {
   UseGuards,
   Req,
   Patch,
+  Query,
 } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
@@ -17,6 +18,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { RequestWithUser } from 'src/auth/types/request-with-user';
 import { SkipThrottle } from '@nestjs/throttler';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
+import { FilterTransactionsDto } from './dto/filter-transactions.dto';
 @SkipThrottle()
 @UseGuards(AuthGuard)
 @Controller('transactions')
@@ -36,11 +38,23 @@ export class TransactionsController {
   }
 
   @Get()
-  async findAll(@Req() req: RequestWithUser) {
-    const transactions = await this.transactionsService.findAll(req.user._id);
-    return transactions.map(
+  async findAll(
+    @Req() req: RequestWithUser,
+    @Query() query: FilterTransactionsDto,
+  ) {
+    const { transactions, summary } = await this.transactionsService.findAll(
+      req.user._id,
+      query,
+    );
+
+    const presentedTransactions = transactions.map(
       (transaction) => new TransactionPresenter(transaction),
     );
+
+    return {
+      transactions: presentedTransactions,
+      summary,
+    };
   }
 
   @Get('recurring')
