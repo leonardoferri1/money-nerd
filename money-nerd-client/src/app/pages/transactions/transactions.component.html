@@ -42,9 +42,14 @@
     </button>
   </div>
 
-  <button class="default-icon-button" (click)="openFilterMenu()">
-    <i class="bi bi-funnel"></i>
-  </button>
+  <div class="transactions-display-control-panel">
+    <button class="default-icon-button" (click)="openFilterMenu()">
+      <i class="bi bi-funnel"></i>
+    </button>
+    <button class="default-icon-button">
+      <i class="bi bi-grid"></i>
+    </button>
+  </div>
 
   <app-transactions-table
     [items]="transactions"
@@ -53,4 +58,52 @@
   ></app-transactions-table>
 </div>
 
-<app-side-menu [(opened)]="showFilterMenu"></app-side-menu>
+<app-side-menu [(opened)]="showFilterMenu">
+  <form [formGroup]="transactionFilterForm" class="form-container">
+    <div style="display: flex; gap: 0.5rem">
+      <div class="filter-camp">
+        <h3>{{ "MIN_VALUE" | translate }}:</h3>
+        <currency-input
+          [prefix]="'CURRENCY' | translate"
+          [isMandatory]="false"
+          formControlName="minValue"
+        ></currency-input>
+      </div>
+
+      <div class="filter-camp">
+        <h3>{{ "MAX_VALUE" | translate }}:</h3>
+        <currency-input
+          [prefix]="'CURRENCY' | translate"
+          [isMandatory]="false"
+          formControlName="maxValue"
+        ></currency-input>
+      </div>
+    </div>
+
+    <dropdown
+      [placeholder]="'ACTIONS.CATEGORY' | translate"
+      formControlName="category"
+      [options]="categories"
+      labelField="name"
+      valueField="_id"
+      [filterIcon]="false"
+      [icon]="'bi bi-tags'"
+    ></dropdown>
+
+    <dropdown
+      [placeholder]="'ACTIONS.ACCOUNT' | translate"
+      formControlName="account"
+      [options]="accounts"
+      labelField="name"
+      valueField="_id"
+      [filterIcon]="false"
+      [icon]="'bi bi-bank'"
+    ></dropdown>
+
+    <text-input
+      [placeholder]="'DESCRIPTION' | translate"
+      formControlName="description"
+      [allowSpecial]="true"
+    ></text-input>
+  </form>
+</app-side-menu>

@@ -58,6 +58,8 @@
   "YEAR": "Ano",
   "MONTH": "Mês",
   "TOTAL": "Total",
+  "MIN_VALUE": "Valor Min.",
+  "MAX_VALUE": "Valor Max.",
   "VALIDATION": {
     "REQUIRED": "Necessário preencher todos os campos obrigatórios.",
     "PASSWORDS_DO_NOT_MATCH": "As senhas não coincidem.",

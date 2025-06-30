@@ -34,7 +34,7 @@ export class CurrencyInputComponent implements ControlValueAccessor {
   @Input() isReadonly: boolean = false;
   @Input() theme: string = '';
   isValueInvalid: boolean = false;
-
+  @Input() isMandatory: boolean = true;
   @Output() valueChange = new EventEmitter<number>();
 
   value: number | null = 0;

@@ -18,7 +18,7 @@
     [readonly]="isReadonly"
   />
 
-  <p class="mandatory-sign" *ngIf="isValueInvalid">
+  <p class="mandatory-sign" *ngIf="isValueInvalid && isMandatory">
     Deve ter um valor maior que 0
   </p>
 </div>

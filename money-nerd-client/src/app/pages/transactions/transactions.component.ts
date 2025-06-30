@@ -12,6 +12,14 @@ import { TransactionFilters } from './transaction-filters.model';
 import { NgFor, NgIf } from '@angular/common';
 import { Months } from '../../shared/interfaces/Months.type';
 import { TranslationService } from '../../shared/services/translation.service';
+import { CurrencyInputComponent } from '../../shared/components/web-components/currency-input/currency-input.component';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { TextInputComponent } from '../../shared/components/web-components/text-input/text-input.component';
+import { DropdownComponent } from '../../shared/components/web-components/dropdown-menu/dropdown/dropdown.component';
+import { Category } from '../../shared/interfaces/ICategory.type';
+import { Account } from '../../shared/interfaces/IAccount.type';
+import { CategoriesService } from '../categories/categories.service';
+import { AccountsService } from '../../shared/services/accounts.service';
 
 @Component({
   selector: 'app-transactions',
@@ -22,6 +30,10 @@ import { TranslationService } from '../../shared/services/translation.service';
     NgFor,
     NgIf,
     TranslateModule,
+    CurrencyInputComponent,
+    ReactiveFormsModule,
+    TextInputComponent,
+    DropdownComponent,
   ],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.scss',
@@ -33,18 +45,35 @@ export class TransactionsComponent implements OnInit {
   transactionEditId!: string;
   transactionEditType!: 1 | 2;
   showFilterMenu: boolean = false;
+  categories: Category[] = [];
+  accounts: Account[] = [];
 
   currentYear: number = new Date().getFullYear();
   selectedMonth: number = new Date().getMonth();
   months = Months;
 
+  transactionFilterForm: FormGroup;
+
   constructor(
     private transactionsService: TransactionsService,
     private snackBar: SnackbarService,
     private translate: TranslateService,
+    private formBuilder: FormBuilder,
+    private categoriesService: CategoriesService,
+    private accountsService: AccountsService,
     private modalOverlayService: ModalOverlayService,
     private translationService: TranslationService
-  ) {}
+  ) {
+    this.transactionFilterForm = this.formBuilder.group({
+      type: [''],
+      description: [''],
+      maxValue: [''],
+      minValue: [''],
+      isCreditCard: [''],
+      account: [''],
+      category: [''],
+    });
+  }
 
   ngOnInit() {
     this.kickstart();
@@ -52,6 +81,25 @@ export class TransactionsComponent implements OnInit {
 
   async kickstart() {
     await this.getTransactions(this.selectedMonth);
+  }
+
+  getCategories() {
+    this.categoriesService.getAllCategories().subscribe({
+      next: (response) => {
+        this.categories = response;
+        this.getAccounts();
+      },
+      error: (error) => {},
+    });
+  }
+
+  getAccounts() {
+    this.accountsService.getAllAccounts().subscribe({
+      next: (response) => {
+        this.accounts = response;
+      },
+      error: (error) => {},
+    });
   }
 
   selectYear(year: number) {
@@ -100,6 +148,8 @@ export class TransactionsComponent implements OnInit {
         this.transactions = response.transactions.sort((a: any, b: any) => {
           return new Date(b.date).getTime() - new Date(a.date).getTime();
         });
+
+        this.getCategories();
       },
       error: (e) => {
         console.error(e);
