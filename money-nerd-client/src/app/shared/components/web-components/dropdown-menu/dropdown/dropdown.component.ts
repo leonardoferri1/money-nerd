@@ -170,8 +170,12 @@ export class DropdownComponent implements ControlValueAccessor {
   writeValue(value: any): void {
     this.internalFormValue = value;
 
-    // Always try to resolve from options, now or later.
-    this.tryResolveSelectedValue();
+    if (value === null || value === undefined) {
+      this.selectedValue = null;
+      this.searchQuery = '';
+    } else {
+      this.tryResolveSelectedValue();
+    }
   }
 
   registerOnChange(fn: (value: any) => void): void {

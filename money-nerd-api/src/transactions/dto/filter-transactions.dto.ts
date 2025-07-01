@@ -35,6 +35,10 @@ export class FilterTransactionsDto {
 
   @IsOptional()
   @IsString()
+  description?: string;
+
+  @IsOptional()
+  @IsString()
   account?: string;
 
   @IsOptional()

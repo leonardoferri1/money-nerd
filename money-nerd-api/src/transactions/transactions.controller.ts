@@ -9,16 +9,18 @@ import {
   Req,
   Patch,
   Query,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
-// import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { TransactionPresenter } from './transaction.presenter';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { RequestWithUser } from 'src/auth/types/request-with-user';
 import { SkipThrottle } from '@nestjs/throttler';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { FilterTransactionsDto } from './dto/filter-transactions.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 @SkipThrottle()
 @UseGuards(AuthGuard)
 @Controller('transactions')
@@ -35,6 +37,13 @@ export class TransactionsController {
       req.user._id,
     );
     return transactions.map((t) => new TransactionPresenter(t));
+  }
+
+  @Post('importar')
+  @UseInterceptors(FileInterceptor('arquivo'))
+  async importarExtrato(@UploadedFile() file: Express.Multer.File) {
+    const transactions = await this.transactionsService.processFile(file);
+    return transactions;
   }
 
   @Get()

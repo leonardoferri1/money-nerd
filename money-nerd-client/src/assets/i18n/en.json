@@ -36,6 +36,7 @@
   "PROCEED": "Proceed",
   "CONFIRM_TRANSACTION_DELETE": "Do you wish to delete the transaction?",
   "CONFIRM": "Confirm",
+  "CLEAN": "Clean",
   "CANCEL": "Cancel",
   "COLOR": "Color",
   "ICON": "Icon",

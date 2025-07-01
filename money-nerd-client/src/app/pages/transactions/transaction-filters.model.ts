@@ -4,6 +4,7 @@ export interface TransactionFilters {
   isCreditCard?: boolean;
   recurringTransaction?: boolean;
   account?: string;
+  description?: string;
   category?: string;
   startDate?: string;
   endDate?: string;

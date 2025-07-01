@@ -6,10 +6,12 @@ import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Transaction, TransactionSchema } from './entities/transaction.entity';
 import { UsersModule } from 'src/users/users.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
     UsersModule,
+    MulterModule.register(),
     MongooseModule.forFeature([
       {
         name: Transaction.name,

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -14,6 +15,12 @@ import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { FilterTransactionsDto } from './dto/filter-transactions.dto';
 import { FilterQuery } from 'mongoose';
 import { TransactionType } from './enums/transaction-type.enum';
+import { ParsedTransaction } from './interfaces/parsed-transaction.type';
+import pdfParse from 'pdf-parse';
+import csvParser from 'csv-parser';
+import * as fs from 'fs';
+import * as os from 'os';
+import * as path from 'path';
 
 @Injectable()
 export class TransactionsService {
@@ -56,6 +63,10 @@ export class TransactionsService {
 
       if (filters.isCreditCard !== undefined) {
         query.isCreditCard = filters.isCreditCard === 'true';
+      }
+
+      if (filters.description) {
+        query.description = { $regex: filters.description, $options: 'i' };
       }
 
       if (filters.account) {
@@ -215,5 +226,166 @@ export class TransactionsService {
       if (error instanceof NotFoundException) throw error;
       throw new InternalServerErrorException('Failed to delete transaction');
     }
+  }
+
+  async processFile(
+    uploadedFile: Express.Multer.File,
+  ): Promise<ParsedTransaction[]> {
+    try {
+      const ext = path.extname(uploadedFile.originalname).toLowerCase();
+
+      if (ext === '.pdf') {
+        return await this.processPdf(uploadedFile.buffer);
+      } else if (ext === '.csv') {
+        return await this.processCsv(uploadedFile.buffer);
+      } else {
+        throw new BadRequestException('Unsupported file format');
+      }
+    } catch (error) {
+      throw new BadRequestException(
+        'Error processing file. Check format and content',
+        {
+          cause: error,
+        },
+      );
+    }
+  }
+
+  private async processPdf(buffer: Buffer): Promise<ParsedTransaction[]> {
+    try {
+      const data = await pdfParse(buffer);
+      const texto = data.text;
+      const linhas = texto.split('\n');
+      const transactions: ParsedTransaction[] = [];
+
+      let dataAtual = '';
+
+      for (const linha of linhas) {
+        const matchItaú = linha.match(
+          /^(\d{2}\/\d{2}\/\d{4}) (.+?) (-?\d+,\d{2})$/,
+        );
+        if (matchItaú) {
+          const [, dataStr, descricao, valorStr] = matchItaú;
+          const valor = this.parseValue(valorStr);
+
+          transactions.push({
+            date: this.parseDate(dataStr),
+            value: Math.abs(valor),
+            type: valor >= 0 ? TransactionType.Income : TransactionType.Outcome,
+            description: descricao.trim(),
+          });
+          continue;
+        }
+
+        const dataMatch = linha.match(/^(\d{1,2} de \w+ de \d{4})/);
+        if (dataMatch) {
+          dataAtual = this.converterExtenseDate(dataMatch[1]);
+          continue;
+        }
+
+        const matchInter = linha.match(/^(.*?): "(.*?)" (-?R\$ [\d.,]+)/);
+        if (dataAtual && matchInter) {
+          const [, , descricao, valorStr] = matchInter;
+          const valor = this.parseValue(valorStr.replace('R$', ''));
+
+          transactions.push({
+            date: this.parseDate(dataAtual),
+            value: Math.abs(valor),
+            type: valor >= 0 ? TransactionType.Income : TransactionType.Outcome,
+            description: descricao.trim(),
+          });
+        }
+      }
+
+      return transactions;
+    } catch (error) {
+      throw new BadRequestException('Unable to process uploaded PDF', {
+        cause: error,
+      });
+    }
+  }
+
+  private async processCsv(buffer: Buffer): Promise<ParsedTransaction[]> {
+    const transactions: ParsedTransaction[] = [];
+
+    try {
+      const tmpFile = path.join(os.tmpdir(), `extrato-${Date.now()}.csv`);
+      fs.writeFileSync(tmpFile, buffer);
+
+      return await new Promise<ParsedTransaction[]>((resolve, reject) => {
+        fs.createReadStream(tmpFile)
+          .pipe(csvParser())
+          .on('data', (row: Record<string, string>) => {
+            try {
+              const dataStr = (row['Data Lançamento'] || row['Data]'])?.trim();
+              const valorStr = row['Valor'];
+              const descricao = row['Descrição']?.trim();
+
+              if (dataStr && valorStr) {
+                const valor = this.parseValue(valorStr);
+                transactions.push({
+                  date: this.parseDate(dataStr),
+                  value: Math.abs(valor),
+                  type:
+                    valor >= 0
+                      ? TransactionType.Income
+                      : TransactionType.Outcome,
+                  description: descricao || undefined,
+                });
+              }
+            } catch (innerError) {
+              console.warn('Error processing CSV line:', innerError);
+            }
+          })
+          .on('end', () => {
+            fs.unlinkSync(tmpFile);
+            resolve(transactions);
+          })
+          .on('error', (err: Error) => {
+            fs.unlinkSync(tmpFile);
+            reject(err);
+          });
+      });
+    } catch (error) {
+      throw new BadRequestException('Unable to process uploaded CSV', {
+        cause: error,
+      });
+    }
+  }
+
+  private parseValue(valueStr: string): number {
+    return parseFloat(valueStr.replace('.', '').replace(',', '.'));
+  }
+
+  private parseDate(dateStr: string): Date {
+    const partes = dateStr.split('/');
+    if (partes.length === 3) {
+      return new Date(+partes[2], +partes[1] - 1, +partes[0]);
+    }
+    return new Date(dateStr);
+  }
+
+  private converterExtenseDate(date: string): string {
+    const meses: Record<string, string> = {
+      janeiro: '01',
+      fevereiro: '02',
+      março: '03',
+      abril: '04',
+      maio: '05',
+      junho: '06',
+      julho: '07',
+      agosto: '08',
+      setembro: '09',
+      outubro: '10',
+      novembro: '11',
+      dezembro: '12',
+    };
+
+    const match = date.match(/^(\d{1,2}) de (\w+) de (\d{4})$/i);
+    if (!match) return date;
+
+    const [, dia, mesExt, ano] = match;
+    const mes = meses[mesExt.toLowerCase()] ?? '01';
+    return `${dia.padStart(2, '0')}/${mes}/${ano}`;
   }
 }

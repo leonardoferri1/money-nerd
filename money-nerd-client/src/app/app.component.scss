@@ -1,16 +1,20 @@
 .main-container {
-  position: relative;
   margin-top: 75px;
-  transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
   padding: 1.5rem;
+  transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
 
   @media (min-width: 1101px) {
+    margin-left: 75px;
     width: calc(100% - 75px);
-    transform: translateX(75px);
 
     &.with-menu {
+      margin-left: 200px;
       width: calc(100% - 200px);
-      transform: translateX(200px);
     }
+  }
+
+  @media (max-width: 1100px) {
+    margin-bottom: 75px;
+    height: calc(100% - 75px);
   }
 }

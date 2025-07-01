@@ -1,0 +1,89 @@
+@import "variables";
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.day-card {
+  display: flex;
+  flex-direction: column;
+  background: $background-main-lighter;
+  border-radius: 12px;
+
+  .day-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    h3 {
+      align-self: center;
+      color: $grey-light;
+      font-size: 17px;
+      font-weight: 600;
+    }
+  }
+
+  .transactions {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+    height: 100%;
+    justify-content: end;
+
+    align-items: center;
+
+    .transaction-item {
+      display: flex;
+      justify-content: center;
+      padding: 0.4rem 0;
+      gap: 0.5rem;
+
+      .left {
+        display: flex;
+        align-items: center;
+      }
+
+      .right {
+        font-weight: 400;
+
+        &.income {
+          color: $light-green;
+        }
+
+        &.expense {
+          color: $red-theme;
+        }
+      }
+    }
+  }
+
+  .totals {
+    border-top: 1px solid $background-main-hover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 800;
+
+    .income {
+      color: $light-green;
+    }
+
+    .expense {
+      color: $red-theme;
+    }
+  }
+
+  .actions {
+    margin-top: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+
+    .action-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+  }
+}

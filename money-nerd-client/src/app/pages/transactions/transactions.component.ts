@@ -20,6 +20,7 @@ import { Category } from '../../shared/interfaces/ICategory.type';
 import { Account } from '../../shared/interfaces/IAccount.type';
 import { CategoriesService } from '../categories/categories.service';
 import { AccountsService } from '../../shared/services/accounts.service';
+import { TransactionsGridComponent } from './transactions-grid/transactions-grid.component';
 
 @Component({
   selector: 'app-transactions',
@@ -34,11 +35,13 @@ import { AccountsService } from '../../shared/services/accounts.service';
     ReactiveFormsModule,
     TextInputComponent,
     DropdownComponent,
+    TransactionsGridComponent,
   ],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.scss',
 })
 export class TransactionsComponent implements OnInit {
+  transactionListType: 'table' | 'grid' = 'table';
   transactions: any[] = [];
   summary: any;
   editTransactionModal: boolean = false;
@@ -80,7 +83,7 @@ export class TransactionsComponent implements OnInit {
   }
 
   async kickstart() {
-    await this.getTransactions(this.selectedMonth);
+    await this.getTransactions();
   }
 
   getCategories() {
@@ -105,7 +108,7 @@ export class TransactionsComponent implements OnInit {
   selectYear(year: number) {
     this.currentYear = year;
     if (this.selectedMonth !== null) {
-      this.getTransactions(this.selectedMonth);
+      this.getTransactions();
     }
   }
 
@@ -121,14 +124,18 @@ export class TransactionsComponent implements OnInit {
 
   selectMonth(index: number) {
     this.selectedMonth = index;
-    this.getTransactions(index);
+    this.getTransactions();
   }
 
-  async getTransactions(monthIndex: number) {
-    const startDate = new Date(this.currentYear, monthIndex, 1);
+  cleanFilters() {
+    this.transactionFilterForm.reset();
+  }
+
+  async getTransactions() {
+    const startDate = new Date(this.currentYear, this.selectedMonth, 1);
     const endDate = new Date(
       this.currentYear,
-      monthIndex + 1,
+      this.selectedMonth + 1,
       0,
       23,
       59,
@@ -139,11 +146,19 @@ export class TransactionsComponent implements OnInit {
     const filters: TransactionFilters = {
       startDate: startDate.toISOString(),
       endDate: endDate.toISOString(),
+      description: this.transactionFilterForm.value.description,
+      category: this.transactionFilterForm.value.category
+        ? this.transactionFilterForm.value.category._id
+        : '',
+      account: this.transactionFilterForm.value.account
+        ? this.transactionFilterForm.value.account._id
+        : '',
+      minValue: this.transactionFilterForm.value.minValue,
+      maxValue: this.transactionFilterForm.value.maxValue,
     };
 
     this.transactionsService.getTransactions(filters).subscribe({
       next: (response) => {
-        console.log(response);
         this.summary = response.summary;
         this.transactions = response.transactions.sort((a: any, b: any) => {
           return new Date(b.date).getTime() - new Date(a.date).getTime();
@@ -195,5 +210,9 @@ export class TransactionsComponent implements OnInit {
 
   openFilterMenu() {
     this.showFilterMenu = true;
+  }
+
+  switchTransactionsViewMode(view: 'table' | 'grid') {
+    this.transactionListType = view;
   }
 }
