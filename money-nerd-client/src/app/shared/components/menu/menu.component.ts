@@ -18,6 +18,7 @@ import { NewItemMenuComponent } from '../web-components/dropdown-menu/new-item-m
 import { NewCategoryModalComponent } from '../category-modal/new-category-modal.component';
 import { NewTransactionModalComponent } from '../new-transaction-modal/new-transaction-modal.component';
 import { NewAccountModalComponent } from '../account-modal/new-account-modal.component';
+import { ManyTransactionsModalComponent } from '../many-transactions-modal/many-transactions-modal.component';
 
 @Component({
   selector: 'app-menu',
@@ -35,6 +36,7 @@ import { NewAccountModalComponent } from '../account-modal/new-account-modal.com
     NewCategoryModalComponent,
     NewTransactionModalComponent,
     NewAccountModalComponent,
+    ManyTransactionsModalComponent,
   ],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss',
@@ -47,6 +49,7 @@ export class MenuComponent {
   isCategoryModalOpen: boolean = false;
   isAccountModalOpen: boolean = false;
   isTransactionModalOpen: boolean = false;
+  isTransactionsModalOpen: boolean = false;
   transactionModalType: 1 | 2 = 1;
 
   items = [
@@ -64,6 +67,12 @@ export class MenuComponent {
     },
     { id: 3, label: 'ACTIONS.CATEGORY', icon: 'bi-tags', iconColor: 'yellow' },
     { id: 4, label: 'ACTIONS.ACCOUNT', icon: 'bi-bank', iconColor: 'purple' },
+    {
+      id: 5,
+      label: 'ACTIONS.TRANSACTIONS',
+      icon: 'bi bi-list-columns',
+      iconColor: 'blue',
+    },
   ];
   openNewItemMenu: boolean = false;
 
@@ -125,6 +134,10 @@ export class MenuComponent {
 
     if (item.id === 4) {
       this.isAccountModalOpen = true;
+    }
+
+    if (item.id === 5) {
+      this.isTransactionsModalOpen = true;
     }
 
     this.toggleDropdown();

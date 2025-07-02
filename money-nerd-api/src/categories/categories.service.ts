@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   InternalServerErrorException,
@@ -9,12 +10,15 @@ import { Category } from './entities/category.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { MongoError } from 'src/users/types/mongo-error';
+import { Transaction } from 'src/transactions/entities/transaction.entity';
 
 @Injectable()
 export class CategoriesService {
   constructor(
     @InjectModel(Category.name)
     private categorySchema: Model<Category>,
+    @InjectModel(Transaction.name)
+    private readonly transactionSchema: Model<Transaction>,
   ) {}
 
   async create(createCategoryDto: CreateCategoryDto, userId: string) {
@@ -70,17 +74,32 @@ export class CategoriesService {
 
   async remove(id: string, userId: string) {
     try {
+      const isUsed = await this.transactionSchema.exists({ category: id });
+
+      if (isUsed) {
+        throw new BadRequestException(
+          'It is not possible to delete the category as it is being used by an existing transaction.',
+        );
+      }
+
       const result = await this.categorySchema.deleteOne({
         _id: id,
         user: userId,
       });
+
       if (result.deletedCount === 0) {
-        throw new NotFoundException('Category not found or already deleted');
+        throw new NotFoundException('Category not found or already deleted.');
       }
+
       return { deleted: true };
     } catch (error) {
-      if (error instanceof NotFoundException) throw error;
-      throw new InternalServerErrorException('Failed to delete category');
+      if (
+        error instanceof NotFoundException ||
+        error instanceof BadRequestException
+      ) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Error on deleting category.');
     }
   }
 }

@@ -1,0 +1,106 @@
+<div class="modal-overlay" *ngIf="opened" (click)="close()"></div>
+
+<div
+  class="money-nerd-modal"
+  style="min-height: 300px"
+  *ngIf="opened"
+  @modalAnimation
+  [ngClass]="{ open: opened }"
+>
+  <div class="money-nerd-modal-header" *ngIf="showCloseButton">
+    <div style="display: flex; align-items: center; gap: 0.5rem">
+      <h1
+        [ngStyle]="{ color: transactionThemeColor }"
+        *ngIf="transactions.length == 0 && !account"
+      >
+        {{ "SELECT_ACCOUNT" | translate }}
+      </h1>
+      <h1 [ngStyle]="{ color: transactionThemeColor }" *ngIf="account">
+        {{ "MANY_TRANSACTIONS" | translate }}
+      </h1>
+    </div>
+
+    <button class="default-icon-button" type="button" (click)="close()">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+
+  <div class="money-nerd-modal-body">
+    <dropdown
+      *ngIf="transactions.length == 0 && !account"
+      [placeholder]="'ACTIONS.ACCOUNT' | translate"
+      [(ngModel)]="account"
+      [options]="accounts"
+      labelField="name"
+      valueField="_id"
+      [filterIcon]="false"
+      [icon]="'bi bi-bank'"
+    ></dropdown>
+
+    <div
+      *ngIf="account && transactions.length == 0"
+      class="upload-box"
+      (drop)="onFileDrop($event)"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      [class.dragging]="isDragging"
+      (click)="fileInput.click()"
+    >
+      <i class="bi bi-cloud-arrow-up"></i>
+
+      <h3>
+        {{ "SUPPORTED" | translate }}
+      </h3>
+      <p>
+        {{ "DRAG_DROP" | translate }}
+      </p>
+      <input
+        type="file"
+        #fileInput
+        (change)="onFileSelected($event)"
+        accept=".csv,.pdf"
+        hidden
+      />
+    </div>
+
+    <div *ngIf="transactions.length > 0">
+      <div
+        class="new-transactions-view"
+        *ngFor="let transaction of transactions; let i = index"
+      >
+        <div style="display: flex; gap: 0.3rem; align-items: center">
+          <h3>{{ formatDate(transaction.date) }}</h3>
+          -
+          <p>{{ transaction.description }}</p>
+        </div>
+
+        <div style="display: flex; gap: 0.3rem; align-items: center">
+          <h1
+            [ngClass]="{
+              income: transaction.type === 1,
+              expense: transaction.type === 2
+            }"
+          >
+            {{ formatCurrency(transaction.value) }}
+          </h1>
+          <button (click)="removeTransaction(i)" class="default-icon-button">
+            <i class="bi bi-trash-fill"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="money-nerd-modal-footer">
+    <button
+      *ngIf="transactions.length > 0"
+      class="confirm-button"
+      (click)="submit()"
+      [ngStyle]="{
+        background: transactionThemeColor
+      }"
+    >
+      {{ "CONFIRM" | translate }}
+    </button>
+  </div>
+</div>

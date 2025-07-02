@@ -6,6 +6,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Category, CategorySchema } from './entities/category.entity';
 import { UsersModule } from 'src/users/users.module';
+import {
+  Transaction,
+  TransactionSchema,
+} from 'src/transactions/entities/transaction.entity';
 
 @Module({
   imports: [
@@ -14,6 +18,10 @@ import { UsersModule } from 'src/users/users.module';
       {
         name: Category.name,
         schema: CategorySchema,
+      },
+      {
+        name: Transaction.name,
+        schema: TransactionSchema,
       },
     ]),
     JwtModule.registerAsync({

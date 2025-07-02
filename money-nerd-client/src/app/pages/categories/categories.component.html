@@ -1,1 +1,23 @@
-<p>categories works!</p>
+<div class="categories-grid" *ngFor="let category of categories; let i = index">
+  <div style="display: flex; gap: 0.3rem; align-items: center">
+    <h3>{{ category.name }}</h3>
+  </div>
+
+  <div style="display: flex; gap: 0.3rem; align-items: center">
+    <div class="icon-display">
+      <i class="{{ category.icon }}"></i>
+    </div>
+
+    <div
+      class="color-display"
+      [ngStyle]="{ 'background-color': category.color }"
+    ></div>
+    <button
+      (click)="deleteCategory(category._id)"
+      class="default-icon-button"
+      *ngIf="category.name != 'Generic'"
+    >
+      <i class="bi bi-trash-fill"></i>
+    </button>
+  </div>
+</div>

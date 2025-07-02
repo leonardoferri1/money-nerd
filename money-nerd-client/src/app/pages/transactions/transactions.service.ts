@@ -18,6 +18,16 @@ export class TransactionsService {
     });
   }
 
+  importStatement(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}/transactions/importar`,
+      payload,
+      {
+        withCredentials: true,
+      }
+    );
+  }
+
   updateTransaction(id: string, payload: any): Observable<any> {
     return this.http.patch<any>(`${this.apiUrl}/transactions/${id}`, payload, {
       withCredentials: true,

@@ -41,4 +41,5 @@ export const IconSelect: string[] = [
   'bi bi-rocket',
   'bi bi-scooter',
   'bi bi-thermometer-half',
+  'bi bi-cash',
 ];

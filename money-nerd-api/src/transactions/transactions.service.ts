@@ -18,9 +18,8 @@ import { TransactionType } from './enums/transaction-type.enum';
 import { ParsedTransaction } from './interfaces/parsed-transaction.type';
 import pdfParse from 'pdf-parse';
 import csvParser from 'csv-parser';
-import * as fs from 'fs';
-import * as os from 'os';
 import * as path from 'path';
+import { Readable } from 'stream';
 
 @Injectable()
 export class TransactionsService {
@@ -192,7 +191,6 @@ export class TransactionsService {
     dto: UpdateTransactionDto,
     userId: string,
   ) {
-    console.log('Update Transaction:', transactionId, userId);
     try {
       const updated = await this.transactionSchema.findOneAndUpdate(
         { _id: transactionId, user: userId },
@@ -233,94 +231,119 @@ export class TransactionsService {
   ): Promise<ParsedTransaction[]> {
     try {
       const ext = path.extname(uploadedFile.originalname).toLowerCase();
+      const fileName = uploadedFile.originalname.toLowerCase();
 
       if (ext === '.pdf') {
-        return await this.processPdf(uploadedFile.buffer);
+        if (fileName.includes('itau')) {
+          return await this.processItauPdf(uploadedFile.buffer);
+        } else {
+          return await this.processInterPdf(uploadedFile.buffer);
+        }
       } else if (ext === '.csv') {
-        return await this.processCsv(uploadedFile.buffer);
+        return await this.processInterCsv(uploadedFile.buffer);
       } else {
         throw new BadRequestException('Unsupported file format');
       }
     } catch (error) {
-      throw new BadRequestException(
-        'Error processing file. Check format and content',
-        {
-          cause: error,
-        },
-      );
+      throw new BadRequestException('Error processing file.', { cause: error });
     }
   }
 
-  private async processPdf(buffer: Buffer): Promise<ParsedTransaction[]> {
-    try {
-      const data = await pdfParse(buffer);
-      const texto = data.text;
-      const linhas = texto.split('\n');
-      const transactions: ParsedTransaction[] = [];
+  private async processItauPdf(buffer: Buffer): Promise<ParsedTransaction[]> {
+    const data = await pdfParse(buffer);
+    const linhas = data.text
+      .split('\n')
+      .map((l) => l.trim())
+      .filter(Boolean);
+    const transactions: ParsedTransaction[] = [];
 
-      let dataAtual = '';
+    for (const linha of linhas) {
+      const match = linha.match(
+        /^(\d{2}\/\d{2}\/\d{4})(.*?)(-?\d{1,3}(?:\.\d{3})*,\d{2})$/,
+      );
+      if (match) {
+        const [, dataStr, descricao, valorStr] = match;
+        const valor = this.parseValue(valorStr);
+        transactions.push({
+          date: this.parseDate(dataStr),
+          value: Math.abs(valor),
+          type: valor >= 0 ? TransactionType.Income : TransactionType.Outcome,
+          description: descricao.replace(/\d{2}\/\d{2}/g, '').trim(),
+        });
+      }
+    }
 
-      for (const linha of linhas) {
-        const matchItaú = linha.match(
-          /^(\d{2}\/\d{2}\/\d{4}) (.+?) (-?\d+,\d{2})$/,
-        );
-        if (matchItaú) {
-          const [, dataStr, descricao, valorStr] = matchItaú;
-          const valor = this.parseValue(valorStr);
+    return transactions;
+  }
 
-          transactions.push({
-            date: this.parseDate(dataStr),
-            value: Math.abs(valor),
-            type: valor >= 0 ? TransactionType.Income : TransactionType.Outcome,
-            description: descricao.trim(),
-          });
-          continue;
-        }
+  private async processInterPdf(buffer: Buffer): Promise<ParsedTransaction[]> {
+    const data = await pdfParse(buffer);
+    const linhas = data.text
+      .split('\n')
+      .map((l) => l.trim())
+      .filter(Boolean);
+    const transactions: ParsedTransaction[] = [];
 
-        const dataMatch = linha.match(/^(\d{1,2} de \w+ de \d{4})/);
-        if (dataMatch) {
-          dataAtual = this.converterExtenseDate(dataMatch[1]);
-          continue;
-        }
+    let dataAtual: string | null = null;
 
-        const matchInter = linha.match(/^(.*?): "(.*?)" (-?R\$ [\d.,]+)/);
-        if (dataAtual && matchInter) {
-          const [, , descricao, valorStr] = matchInter;
-          const valor = this.parseValue(valorStr.replace('R$', ''));
-
-          transactions.push({
-            date: this.parseDate(dataAtual),
-            value: Math.abs(valor),
-            type: valor >= 0 ? TransactionType.Income : TransactionType.Outcome,
-            description: descricao.trim(),
-          });
-        }
+    for (let linha of linhas) {
+      linha = linha.replace(/-R\$ ([\d.,]+)R\$ .*/, '-$1');
+      const dataMatch = linha.match(/^(\d{1,2} de \w+ de \d{4})/i);
+      if (dataMatch) {
+        dataAtual = this.converterExtenseDate(dataMatch[1]);
+        continue;
       }
 
-      return transactions;
-    } catch (error) {
-      throw new BadRequestException('Unable to process uploaded PDF', {
-        cause: error,
-      });
+      const match = linha.match(/^[^:]+:\s+"(.*?)"\s*(-?R?\$?\s*[\d.,]+)/);
+
+      if (dataAtual && match) {
+        const [, descricao, valorStrRaw] = match;
+        const valorStr = valorStrRaw.replace(/[R$\s]/g, '');
+        const valor = this.parseValue(valorStr);
+
+        transactions.push({
+          date: this.parseDate(dataAtual),
+          value: Math.abs(valor),
+          type: valor >= 0 ? TransactionType.Income : TransactionType.Outcome,
+          description: descricao.trim(),
+        });
+      }
     }
+
+    return transactions;
   }
 
-  private async processCsv(buffer: Buffer): Promise<ParsedTransaction[]> {
+  private async processInterCsv(buffer: Buffer): Promise<ParsedTransaction[]> {
     const transactions: ParsedTransaction[] = [];
 
     try {
-      const tmpFile = path.join(os.tmpdir(), `extrato-${Date.now()}.csv`);
-      fs.writeFileSync(tmpFile, buffer);
+      const raw = buffer.toString('utf-8');
+
+      const lines = raw.split('\n');
+      const startIndex = lines.findIndex(
+        (line) => line.includes('Data Lançamento') || line.includes('Data'),
+      );
+
+      if (startIndex === -1) {
+        throw new BadRequestException('Cabeçalho do CSV não encontrado.');
+      }
+
+      const csvLines = lines.slice(startIndex);
+      const csvData = csvLines.join('\n');
 
       return await new Promise<ParsedTransaction[]>((resolve, reject) => {
-        fs.createReadStream(tmpFile)
-          .pipe(csvParser())
+        Readable.from([csvData])
+          .pipe(
+            csvParser({
+              separator: ';',
+              mapHeaders: ({ header }) => header.trim(),
+            }),
+          )
           .on('data', (row: Record<string, string>) => {
             try {
               const dataStr = (row['Data Lançamento'] || row['Data]'])?.trim();
-              const valorStr = row['Valor'];
+              const valorStr = row['Valor']?.trim();
               const descricao = row['Descrição']?.trim();
-
               if (dataStr && valorStr) {
                 const valor = this.parseValue(valorStr);
                 transactions.push({
@@ -333,18 +356,12 @@ export class TransactionsService {
                   description: descricao || undefined,
                 });
               }
-            } catch (innerError) {
-              console.warn('Error processing CSV line:', innerError);
+            } catch (err) {
+              console.warn('Error processing CSV line:', err);
             }
           })
-          .on('end', () => {
-            fs.unlinkSync(tmpFile);
-            resolve(transactions);
-          })
-          .on('error', (err: Error) => {
-            fs.unlinkSync(tmpFile);
-            reject(err);
-          });
+          .on('end', () => resolve(transactions))
+          .on('error', (err) => reject(err));
       });
     } catch (error) {
       throw new BadRequestException('Unable to process uploaded CSV', {
@@ -353,19 +370,16 @@ export class TransactionsService {
     }
   }
 
-  private parseValue(valueStr: string): number {
-    return parseFloat(valueStr.replace('.', '').replace(',', '.'));
+  private parseValue(value: string): number {
+    return parseFloat(value.replace(/\./g, '').replace(',', '.'));
   }
 
-  private parseDate(dateStr: string): Date {
-    const partes = dateStr.split('/');
-    if (partes.length === 3) {
-      return new Date(+partes[2], +partes[1] - 1, +partes[0]);
-    }
-    return new Date(dateStr);
+  private parseDate(dataStr: string): Date {
+    const [dia, mes, ano] = dataStr.split('/');
+    return new Date(Number(ano), Number(mes) - 1, Number(dia));
   }
 
-  private converterExtenseDate(date: string): string {
+  private converterExtenseDate(dataExtenso: string): string {
     const meses: Record<string, string> = {
       janeiro: '01',
       fevereiro: '02',
@@ -380,12 +394,10 @@ export class TransactionsService {
       novembro: '11',
       dezembro: '12',
     };
-
-    const match = date.match(/^(\d{1,2}) de (\w+) de (\d{4})$/i);
-    if (!match) return date;
-
-    const [, dia, mesExt, ano] = match;
-    const mes = meses[mesExt.toLowerCase()] ?? '01';
-    return `${dia.padStart(2, '0')}/${mes}/${ano}`;
+    const match = dataExtenso.match(/(\d{1,2}) de (\w+) de (\d{4})/i);
+    if (!match) throw new Error('Data inválida: ' + dataExtenso);
+    const [, dia, mes, ano] = match;
+    const mesNum = meses[mes.toLowerCase()];
+    return `${dia.padStart(2, '0')}/${mesNum}/${ano}`;
   }
 }

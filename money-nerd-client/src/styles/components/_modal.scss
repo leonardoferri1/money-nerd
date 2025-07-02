@@ -1,3 +1,6 @@
+$highlight-scrollbar-color: #4d4d4d;
+$scrollbar-back-color: #d8d8d8;
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -17,7 +20,7 @@
   transform: translate(-50%, -50%);
   min-width: 280px;
   max-width: 650px;
-  max-height: 550vh;
+  max-height: 750px;
   background: $background-main-lighter;
   border-radius: 8px;
   padding: 1rem;
@@ -44,6 +47,20 @@
 .money-nerd-modal-body {
   overflow-y: auto;
   flex-grow: 1;
+
+  &::-webkit-scrollbar {
+    width: 7px;
+    background-color: $scrollbar-back-color;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $grey-base;
+    border-radius: 0;
+  }
+
+  &:hover::-webkit-scrollbar-thumb {
+    background-color: $highlight-scrollbar-color;
+  }
 }
 
 .money-nerd-modal-footer {

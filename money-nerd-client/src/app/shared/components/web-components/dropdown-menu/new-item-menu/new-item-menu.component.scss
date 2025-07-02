@@ -52,6 +52,10 @@
       .purple {
         color: $purple-vivid;
       }
+
+      .blue {
+        color: $blue-vivid;
+      }
     }
   }
 }
@@ -118,6 +122,14 @@
 
       .red {
         color: $input-error;
+      }
+
+      .purple {
+        color: $purple-vivid;
+      }
+
+      .blue {
+        color: $blue-vivid;
       }
 
       &:hover {

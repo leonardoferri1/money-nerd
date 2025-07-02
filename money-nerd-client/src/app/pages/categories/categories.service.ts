@@ -22,4 +22,10 @@ export class CategoriesService {
       withCredentials: true,
     });
   }
+
+  deleteCategory(id: any): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/categories/${id}`, {
+      withCredentials: true,
+    });
+  }
 }

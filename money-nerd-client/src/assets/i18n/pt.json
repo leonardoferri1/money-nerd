@@ -28,6 +28,8 @@
   "BACK_TO_LOGIN": "Voltar para o login",
   "CONTINUE": "Continuar",
   "TRANSACTIONS": "Transações",
+  "CATEGORIES": "Categorias",
+  "ACCOUNTS": "Contas",
   "CONTROL": "Controle",
   "NEW_CATEGORY": "Nova Categoria",
   "NEW_ACCOUNT": "Nova Conta",
@@ -43,6 +45,7 @@
   "CATEGORY_CREATED": "Categoria criada.",
   "TRANSACTION_CREATED": "Transação criada.",
   "TRANSACTION_UPDATED": "Transação atualizada.",
+  "CATEGORY_DELETED": "Categoria excluída.",
   "ACCOUNT_CREATED": "Conta criada.",
   "EDIT": "Editar",
   "DELETE": "Excluir",
@@ -61,6 +64,10 @@
   "TOTAL": "Total",
   "MIN_VALUE": "Valor Min.",
   "MAX_VALUE": "Valor Max.",
+  "DRAG_DROP": "Arraste e solte seu arquivo aqui ou clique para selecionar.",
+  "SUPPORTED": ".pdf (Banco Inter, Banco Itau) - .csv (Banco Inter)",
+  "MANY_TRANSACTIONS": "Registre várias novas transações de uma vez",
+  "SELECT_ACCOUNT": "Selecione uma conta bancária",
   "VALIDATION": {
     "REQUIRED": "Necessário preencher todos os campos obrigatórios.",
     "PASSWORDS_DO_NOT_MATCH": "As senhas não coincidem.",
@@ -73,13 +80,15 @@
     "EMAIL_ALREADY_VERIFIED": "E-mail já confirmado.",
     "EMAIL_USED": "E-mail em uso.",
     "SAME_PASSWORD": "A sua nova senha é a mesma da anterior.",
-    "CATEGORY_NAME_USED": "Nome de categoria já está em uso."
+    "CATEGORY_NAME_USED": "Nome de categoria já está em uso.",
+    "CATEGORY_USED_IN_TRANSACTION": "Categoria está em uso por uma transação existente."
   },
   "ACTIONS": {
     "INCOME": "Receita",
     "OUTCOME": "Despesa",
     "CATEGORY": "Categoria",
-    "ACCOUNT": "Conta"
+    "ACCOUNT": "Conta",
+    "TRANSACTIONS": "Transações"
   },
   "MONTHS_SHORT": {
     "0": "Jan",

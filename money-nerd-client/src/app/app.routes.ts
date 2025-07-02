@@ -4,6 +4,8 @@ import { EmailVerificationComponent } from './pages/email-verification/email-ver
 import { AuthComponent } from './pages/auth/auth.component';
 import { PasswordRecoveryComponent } from './pages/password-recovery/password-recovery.component';
 import { TransactionsComponent } from './pages/transactions/transactions.component';
+import { AccountsComponent } from './pages/accounts/accounts.component';
+import { CategoriesComponent } from './pages/categories/categories.component';
 
 export const routes: Routes = [
   {
@@ -22,6 +24,14 @@ export const routes: Routes = [
   {
     path: 'transactions',
     loadComponent: () => TransactionsComponent,
+  },
+  {
+    path: 'categories',
+    loadComponent: () => CategoriesComponent,
+  },
+  {
+    path: 'accounts',
+    loadComponent: () => AccountsComponent,
   },
   {
     path: 'password-recovery',
