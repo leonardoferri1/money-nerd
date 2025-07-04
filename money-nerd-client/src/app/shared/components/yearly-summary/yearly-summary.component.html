@@ -1,0 +1,23 @@
+<div class="chart-container">
+  <div class="chart-bar-group" *ngFor="let item of summaryData">
+    <div class="bars">
+      <div
+        class="bar income-bar"
+        [ngStyle]="{
+          height: isMobile() ? '20px' : getBarHeight(item.incomes),
+          width: isMobile() ? getBarWidth(item.incomes) : '20px'
+        }"
+      ></div>
+      <div
+        class="bar expense-bar"
+        [ngStyle]="{
+          height: isMobile() ? '20px' : getBarHeight(item.expenses),
+          width: isMobile() ? getBarWidth(item.expenses) : '20px'
+        }"
+      ></div>
+    </div>
+    <div class="month-label">
+      {{ "MONTHS_SHORT." + item.month | translate }}
+    </div>
+  </div>
+</div>

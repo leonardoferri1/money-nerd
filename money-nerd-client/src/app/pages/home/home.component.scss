@@ -1,4 +1,14 @@
-.teste {
-  width: 100% !important;
-  padding: 1rem;
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-auto-rows: 300px;
+  gap: 1rem;
+
+  .grid-item {
+    grid-row: span 1;
+    display: flex;
+    grid-column: span 2;
+
+    background-color: black;
+  }
 }

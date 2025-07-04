@@ -21,6 +21,7 @@ import { SkipThrottle } from '@nestjs/throttler';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { FilterTransactionsDto } from './dto/filter-transactions.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { GetYearlySummaryDto } from './dto/get-yearly-summary.dto';
 @SkipThrottle()
 @UseGuards(AuthGuard)
 @Controller('transactions')
@@ -64,6 +65,19 @@ export class TransactionsController {
       transactions: presentedTransactions,
       summary,
     };
+  }
+
+  @Get('summary')
+  async getYearlySummary(
+    @Query() query: GetYearlySummaryDto,
+    @Req() req: RequestWithUser,
+  ) {
+    const result = await this.transactionsService.getYearlySummary(
+      req.user._id,
+      query.year,
+      query.accountId,
+    );
+    return result;
   }
 
   @Get('recurring')

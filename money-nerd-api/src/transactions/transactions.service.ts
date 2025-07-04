@@ -20,6 +20,7 @@ import pdfParse from 'pdf-parse';
 import csvParser from 'csv-parser';
 import * as path from 'path';
 import { Readable } from 'stream';
+import { MonthlySummary } from './interfaces/monthly-summary.type';
 
 @Injectable()
 export class TransactionsService {
@@ -399,5 +400,88 @@ export class TransactionsService {
     const [, dia, mes, ano] = match;
     const mesNum = meses[mes.toLowerCase()];
     return `${dia.padStart(2, '0')}/${mesNum}/${ano}`;
+  }
+
+  async getYearlySummary(
+    userId: string,
+    year: number,
+    accountId?: string,
+  ): Promise<MonthlySummary[]> {
+    const match: Record<string, unknown> = {
+      user: userId,
+      date: {
+        $gte: new Date(`${year}-01-01`),
+        $lte: new Date(`${year}-12-31T23:59:59.999Z`),
+      },
+    };
+
+    if (accountId) {
+      match.account = accountId;
+    }
+
+    const result: MonthlySummary[] = await this.transactionSchema
+      .aggregate<MonthlySummary>([
+        { $match: match },
+        {
+          $group: {
+            _id: {
+              month: { $month: '$date' },
+              type: '$type',
+            },
+            total: { $sum: '$value' },
+          },
+        },
+        {
+          $group: {
+            _id: '$_id.month',
+            totals: {
+              $push: {
+                type: '$_id.type',
+                total: '$total',
+              },
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            month: '$_id',
+            incomes: {
+              $sum: {
+                $map: {
+                  input: {
+                    $filter: {
+                      input: '$totals',
+                      as: 't',
+                      cond: { $eq: ['$$t.type', 1] },
+                    },
+                  },
+                  as: 'income',
+                  in: '$$income.total',
+                },
+              },
+            },
+            expenses: {
+              $sum: {
+                $map: {
+                  input: {
+                    $filter: {
+                      input: '$totals',
+                      as: 't',
+                      cond: { $eq: ['$$t.type', 2] },
+                    },
+                  },
+                  as: 'expense',
+                  in: '$$expense.total',
+                },
+              },
+            },
+          },
+        },
+        { $sort: { month: 1 } },
+      ])
+      .exec();
+
+    return result;
   }
 }
