@@ -13,6 +13,7 @@ import {
 import { SnackbarService } from '../snackbar/snackbar.service';
 import { CategoriesService } from '../../../pages/categories/categories.service';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-category-modal',
@@ -67,6 +68,7 @@ export class NewCategoryModalComponent {
     private snackBar: SnackbarService,
     private translate: TranslateService,
     private formBuilder: FormBuilder,
+    private router: Router,
     private categoriesService: CategoriesService
   ) {
     this.categoryForm = this.formBuilder.group({
@@ -134,6 +136,11 @@ export class NewCategoryModalComponent {
         );
         this.close();
         this.categoryForm.reset();
+
+        const currentUrl = this.router.url;
+        if (currentUrl.includes('/categories')) {
+          window.location.reload();
+        }
       },
       error: (error) => {
         if (

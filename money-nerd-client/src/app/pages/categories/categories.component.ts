@@ -45,7 +45,7 @@ export class CategoriesComponent implements OnInit {
     const { overlayRef, instance } = this.modalOverlayService.openModal(
       ConfirmationModalComponent,
       {
-        title: 'CONFIRM_TRANSACTION_DELETE',
+        title: 'CONFIRM_CATEGORY_DELETE',
         showCloseButton: true,
         opened: true,
       }

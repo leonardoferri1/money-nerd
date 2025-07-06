@@ -3,6 +3,8 @@
     <div class="bars">
       <div
         class="bar income-bar"
+        matTooltip="{{ formatCurrency(item.incomes) }}"
+        [matTooltipPosition]="'above'"
         [ngStyle]="{
           height: isMobile() ? '20px' : getBarHeight(item.incomes),
           width: isMobile() ? getBarWidth(item.incomes) : '20px'
@@ -10,6 +12,8 @@
       ></div>
       <div
         class="bar expense-bar"
+        matTooltip="{{ formatCurrency(item.expenses) }}"
+        [matTooltipPosition]="'above'"
         [ngStyle]="{
           height: isMobile() ? '20px' : getBarHeight(item.expenses),
           width: isMobile() ? getBarWidth(item.expenses) : '20px'
@@ -17,7 +21,7 @@
       ></div>
     </div>
     <div class="month-label">
-      {{ "MONTHS_SHORT." + item.month | translate }}
+      {{ "MONTHS_SHORT." + (item.month - 1) | translate }}
     </div>
   </div>
 </div>

@@ -11,6 +11,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { MongoError } from 'src/users/types/mongo-error';
 import { Transaction } from 'src/transactions/entities/transaction.entity';
+import { TransactionType } from 'src/transactions/enums/transaction-type.enum';
+import { ExpenseCategorySummary } from './interfaces/category-summary.type';
 
 @Injectable()
 export class CategoriesService {
@@ -52,6 +54,62 @@ export class CategoriesService {
     }
   }
 
+  async getExpenseSummary(
+    userId: string,
+    month?: number,
+    year?: number,
+  ): Promise<ExpenseCategorySummary[]> {
+    try {
+      const match: Record<string, unknown> = {
+        user: userId,
+        type: TransactionType.Outcome,
+      };
+
+      if (year) {
+        match.date = {
+          $gte: new Date(year, (month ?? 1) - 1, 1),
+          $lt: month ? new Date(year, month, 1) : new Date(year + 1, 0, 1),
+        };
+      }
+
+      const summary =
+        await this.transactionSchema.aggregate<ExpenseCategorySummary>([
+          { $match: match },
+          {
+            $group: {
+              _id: '$category',
+              total: { $sum: '$value' },
+            },
+          },
+          {
+            $lookup: {
+              from: 'categories',
+              localField: '_id',
+              foreignField: '_id',
+              as: 'category',
+            },
+          },
+          { $unwind: '$category' },
+          {
+            $project: {
+              categoryId: '$_id',
+              name: '$category.name',
+              color: '$category.color',
+              icon: '$category.icon',
+              total: 1,
+              _id: 0,
+            },
+          },
+        ]);
+
+      return summary;
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to fetch summary', {
+        cause: error,
+      });
+    }
+  }
+
   async findOne(id: string, userId: string) {
     try {
       const category = await this.categorySchema.findOne({
@@ -67,10 +125,6 @@ export class CategoriesService {
       throw new InternalServerErrorException('Failed to fetch the category');
     }
   }
-
-  // update(id: number, updateCategoryDto: UpdateCategoryDto) {
-  //   return `This action updates a #${id} category`;
-  // }
 
   async remove(id: string, userId: string) {
     try {

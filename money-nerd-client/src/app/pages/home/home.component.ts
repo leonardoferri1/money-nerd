@@ -3,27 +3,35 @@ import { HomeService } from './home.service';
 import { Router } from '@angular/router';
 import { SnackbarService } from '../../shared/components/snackbar/snackbar.service';
 import { TranslateService } from '@ngx-translate/core';
-import { TransactionsService } from '../transactions/transactions.service';
 import { YearlySummaryComponent } from '../../shared/components/yearly-summary/yearly-summary.component';
+import { ExpenseCategorySummary } from '../../shared/components/category-summary/category-summary.type';
+import { CategorySummaryComponent } from '../../shared/components/category-summary/category-summary.component';
+import { YearSelectComponent } from '../../shared/components/web-components/date-picker/year-select/year-select.component';
+import { FormsModule } from '@angular/forms';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   standalone: true,
-  imports: [YearlySummaryComponent],
+  imports: [
+    YearlySummaryComponent,
+    CategorySummaryComponent,
+    YearSelectComponent,
+    FormsModule,
+    NgIf,
+  ],
 })
 export class HomeComponent implements OnInit {
   summaryYear: any;
   summaryAccount: string = '';
-  summaryData = [
-    { month: 0, incomes: 3000, expenses: 1200 },
-    { month: 1, incomes: 2500, expenses: 1800 },
-    { month: 2, incomes: 3100, expenses: 1600 },
-    // ...
-  ];
+  summaryData: any[] = [];
+  categorySummary: ExpenseCategorySummary[] = [];
+  years: number[] = [];
+  yearlySummaryYear = new Date().getFullYear();
+
   constructor(
-    private transactionsService: TransactionsService,
     private homeService: HomeService,
     private router: Router,
     private snackBar: SnackbarService,
@@ -32,20 +40,40 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.kickstart();
+
+    const currentYear = new Date().getFullYear();
+    const startYear = 2000;
+    for (let y = currentYear; y >= startYear; y--) {
+      this.years.push(y);
+    }
   }
 
   async kickstart() {
-    await this.getAllTransactions();
+    await this.getAllTransactions(new Date().getFullYear());
     await this.getLoggedInUser();
+    await this.getCategoriesSummary();
   }
 
-  async getAllTransactions() {
-    // this.transactionsService.getYearlySummary().subscribe({
-    //   next: (response) => {
-    //     console.log(response);
-    //   },
-    //   error: (e) => {},
-    // });
+  async getAllTransactions(year: number) {
+    let payload = {
+      year: year,
+    };
+
+    this.homeService.getYearlySummary(payload).subscribe({
+      next: (response) => {
+        this.summaryData = response;
+      },
+      error: (e) => {},
+    });
+  }
+
+  async getCategoriesSummary() {
+    this.homeService.getExpenseSummary().subscribe({
+      next: (response) => {
+        this.categorySummary = response;
+      },
+      error: (e) => {},
+    });
   }
 
   async getLoggedInUser() {

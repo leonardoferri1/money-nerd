@@ -1,5 +1,24 @@
 <div class="card-grid">
-  <div class="grid-item">
-    <app-yearly-summary [summaryData]="summaryData"></app-yearly-summary>
+  <div class="grid-item monthly-expenses-graph-grid">
+    <div class="year-selector">
+      <app-year-select
+        [(ngModel)]="yearlySummaryYear"
+        [options]="years"
+        (selectedChange)="getAllTransactions($event)"
+      ></app-year-select>
+    </div>
+
+    <ng-container *ngIf="summaryData?.length; else emptyState">
+      <app-yearly-summary [summaryData]="summaryData"></app-yearly-summary>
+    </ng-container>
+
+    <ng-template #emptyState>
+      <div class="empty-message">
+        <p>To do</p>
+      </div>
+    </ng-template>
+  </div>
+  <div class="grid-item category-graph-grid">
+    <app-category-summary [categories]="categorySummary"></app-category-summary>
   </div>
 </div>

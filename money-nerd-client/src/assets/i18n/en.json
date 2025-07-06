@@ -37,6 +37,7 @@
   "NEW_OUTCOME": "New Outcome",
   "PROCEED": "Proceed",
   "CONFIRM_TRANSACTION_DELETE": "Do you wish to delete the transaction?",
+  "CONFIRM_CATEGORY_DELETE": "Do you wish to delete the category?",
   "CONFIRM": "Confirm",
   "CLEAN": "Clean",
   "CANCEL": "Cancel",

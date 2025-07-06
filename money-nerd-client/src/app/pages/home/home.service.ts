@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { ExpenseCategorySummary } from '../../shared/components/category-summary/category-summary.type';
 
 @Injectable({
   providedIn: 'root',
@@ -29,5 +30,27 @@ export class HomeService {
       withCredentials: true,
       params,
     });
+  }
+
+  getExpenseSummary(
+    year?: number,
+    month?: number
+  ): Observable<ExpenseCategorySummary[]> {
+    let params = new HttpParams();
+
+    if (year) {
+      params = params.set('year', year.toString());
+    }
+    if (month) {
+      params = params.set('month', month.toString());
+    }
+
+    return this.http.get<ExpenseCategorySummary[]>(
+      `${this.apiUrl}/categories/summary`,
+      {
+        withCredentials: true,
+        params,
+      }
+    );
   }
 }

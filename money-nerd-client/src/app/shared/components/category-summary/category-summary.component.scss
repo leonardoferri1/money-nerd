@@ -1,0 +1,67 @@
+@import "variables";
+
+.pie-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  width: 100%;
+  color: $grey-base;
+}
+
+.pie-chart {
+  width: 250px;
+  height: 250px;
+  transform: rotate(-90deg);
+}
+
+.pie-bg {
+  fill: none;
+  stroke: #eee;
+  stroke-width: 3.8;
+}
+
+.pie-slice {
+  fill: none;
+  stroke-width: 3.8;
+  stroke-linecap: butt;
+  transition: stroke-dasharray 0.3s ease, stroke-dashoffset 0.3s ease;
+}
+
+.pie-slice.income {
+  stroke: $light-green;
+}
+
+.pie-slice.expense {
+  stroke: $red-theme;
+}
+
+.legend {
+  margin-top: 1rem;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.legend-color.income {
+  background-color: $light-green;
+}
+
+.legend-color.expense {
+  background-color: $red-theme;
+}

@@ -37,6 +37,7 @@
   "NEW_OUTCOME": "Nova Despesa",
   "PROCEED": "Proceder",
   "CONFIRM_TRANSACTION_DELETE": "Deseja realmente excluir a transação?",
+  "CONFIRM_CATEGORY_DELETE": "Deseja realmente excluir a categoria?",
   "CONFIRM": "Confirmar",
   "CLEAN": "Limpar",
   "CANCEL": "Cancel",
