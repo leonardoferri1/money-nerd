@@ -10,38 +10,65 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-year-select',
+  selector: 'app-month-select',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => YearSelectComponent),
+      useExisting: forwardRef(() => MonthSelectComponent),
       multi: true,
     },
   ],
-  templateUrl: './year-select.component.html',
-  styleUrl: './year-select.component.scss',
+  templateUrl: './month-select.component.html',
+  styleUrl: './month-select.component.scss',
 })
-export class YearSelectComponent implements ControlValueAccessor {
-  @Input() options: number[] = [];
-  @Input() selected: number | null = null;
+export class MonthSelectComponent implements ControlValueAccessor {
+  @Input() options: (string | number)[] = [];
+  @Input() selected: string | number | null = null;
+  @Input() placeholder: string = 'Selecionar mês';
   @Input() dropdownDirection: 'up' | 'down' = 'down';
   @Input() isReadonly: boolean = false;
   @Input() invalid: boolean = false;
 
-  onChange: any = () => {};
-  onTouched: any = () => {};
-
-  @Output() selectedChange = new EventEmitter<number>();
+  @Output() selectedChange = new EventEmitter<string | number>();
 
   @ViewChild('dropdownMenu') dropdownMenu!: ElementRef;
 
   isOpen = false;
+  onChange: any = () => {};
+  onTouched: any = () => {};
 
-  constructor(private elementRef: ElementRef) {}
+  readonly monthKeys = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  constructor(
+    private elementRef: ElementRef,
+    private translate: TranslateService
+  ) {}
+
+  getTranslatedMonth(value: string | number | null): string {
+    if (value === null || value === undefined || isNaN(+value)) {
+      return '';
+    }
+    const monthKey = this.monthKeys[+value];
+    return this.translate.instant(`MONTHS.${monthKey}`);
+  }
 
   writeValue(value: any): void {
     this.selected = value;
@@ -57,7 +84,6 @@ export class YearSelectComponent implements ControlValueAccessor {
 
   toggleDropdown(event: Event) {
     if (this.isReadonly) return;
-
     event.stopPropagation();
     this.isOpen = !this.isOpen;
 
@@ -76,12 +102,12 @@ export class YearSelectComponent implements ControlValueAccessor {
     });
   }
 
-  selectYear(year: number) {
-    this.selected = year;
+  selectMonth(month: string | number) {
+    this.selected = month;
     this.isOpen = false;
-    this.onChange(year);
+    this.onChange(month);
     this.onTouched();
-    this.selectedChange.emit(year);
+    this.selectedChange.emit(month);
   }
 
   @HostListener('document:click', ['$event'])

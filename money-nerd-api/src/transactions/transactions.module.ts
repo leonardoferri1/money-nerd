@@ -7,6 +7,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Transaction, TransactionSchema } from './entities/transaction.entity';
 import { UsersModule } from 'src/users/users.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { TransactionsSummaryService } from './transactions-summary.service';
+import { TransactionsFileHandlerService } from './transactions-file-handler.service';
 
 @Module({
   imports: [
@@ -32,6 +34,10 @@ import { MulterModule } from '@nestjs/platform-express';
     }),
   ],
   controllers: [TransactionsController],
-  providers: [TransactionsService],
+  providers: [
+    TransactionsService,
+    TransactionsSummaryService,
+    TransactionsFileHandlerService,
+  ],
 })
 export class TransactionsModule {}

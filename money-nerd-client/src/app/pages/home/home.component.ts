@@ -9,6 +9,7 @@ import { CategorySummaryComponent } from '../../shared/components/category-summa
 import { YearSelectComponent } from '../../shared/components/web-components/date-picker/year-select/year-select.component';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
+import { MonthSelectComponent } from '../../shared/components/web-components/date-picker/month-select/month-select.component';
 
 @Component({
   selector: 'app-home',
@@ -19,6 +20,7 @@ import { NgIf } from '@angular/common';
     YearlySummaryComponent,
     CategorySummaryComponent,
     YearSelectComponent,
+    MonthSelectComponent,
     FormsModule,
     NgIf,
   ],
@@ -30,6 +32,8 @@ export class HomeComponent implements OnInit {
   categorySummary: ExpenseCategorySummary[] = [];
   years: number[] = [];
   yearlySummaryYear = new Date().getFullYear();
+  categorySummaryYear = new Date().getFullYear();
+  categorySummaryMonth = new Date().getMonth();
 
   constructor(
     private homeService: HomeService,
@@ -49,12 +53,13 @@ export class HomeComponent implements OnInit {
   }
 
   async kickstart() {
-    await this.getAllTransactions(new Date().getFullYear());
+    await this.getYearlySummary(new Date().getFullYear());
     await this.getLoggedInUser();
     await this.getCategoriesSummary();
+    await this.getGrowthSummary(new Date().getFullYear());
   }
 
-  async getAllTransactions(year: number) {
+  async getYearlySummary(year: number) {
     let payload = {
       year: year,
     };
@@ -67,13 +72,31 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  async getCategoriesSummary() {
-    this.homeService.getExpenseSummary().subscribe({
+  async getGrowthSummary(year: number) {
+    let payload = {
+      year: year,
+    };
+
+    this.homeService.getGrowthSummary(payload).subscribe({
       next: (response) => {
-        this.categorySummary = response;
+        console.log(response);
       },
       error: (e) => {},
     });
+  }
+
+  async getCategoriesSummary() {
+    this.homeService
+      .getExpenseSummary(
+        this.categorySummaryYear,
+        this.categorySummaryMonth + 1
+      )
+      .subscribe({
+        next: (response) => {
+          this.categorySummary = response;
+        },
+        error: (e) => {},
+      });
   }
 
   async getLoggedInUser() {

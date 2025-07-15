@@ -1,24 +1,52 @@
 <div class="card-grid">
   <div class="grid-item monthly-expenses-graph-grid">
-    <div class="year-selector">
+    <div class="grid-header">
       <app-year-select
         [(ngModel)]="yearlySummaryYear"
         [options]="years"
-        (selectedChange)="getAllTransactions($event)"
+        (selectedChange)="getYearlySummary($event)"
       ></app-year-select>
     </div>
 
-    <ng-container *ngIf="summaryData?.length; else emptyState">
-      <app-yearly-summary [summaryData]="summaryData"></app-yearly-summary>
-    </ng-container>
+    <div class="grid-body">
+      <ng-container *ngIf="summaryData?.length; else emptyState">
+        <app-yearly-summary [summaryData]="summaryData"></app-yearly-summary>
+      </ng-container>
 
-    <ng-template #emptyState>
-      <div class="empty-message">
-        <p>To do</p>
-      </div>
-    </ng-template>
+      <ng-template #emptyState>
+        <div class="empty-message">
+          <p>To do</p>
+        </div>
+      </ng-template>
+    </div>
   </div>
   <div class="grid-item category-graph-grid">
-    <app-category-summary [categories]="categorySummary"></app-category-summary>
+    <div class="grid-header">
+      <app-month-select
+        [(ngModel)]="categorySummaryMonth"
+        [options]="[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
+        (selectedChange)="getCategoriesSummary()"
+      ></app-month-select>
+
+      <app-year-select
+        [(ngModel)]="categorySummaryYear"
+        [options]="years"
+        (selectedChange)="getCategoriesSummary()"
+      ></app-year-select>
+    </div>
+
+    <div class="grid-body">
+      <ng-container *ngIf="categorySummary?.length; else emptyState">
+        <app-category-summary
+          [categories]="categorySummary"
+        ></app-category-summary>
+      </ng-container>
+
+      <ng-template #emptyState>
+        <div class="empty-message">
+          <p>To do</p>
+        </div>
+      </ng-template>
+    </div>
   </div>
 </div>

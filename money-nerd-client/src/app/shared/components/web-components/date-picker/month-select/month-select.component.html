@@ -6,7 +6,7 @@
     (click)="toggleDropdown($event)"
   >
     <div class="selected-value">
-      {{ selected }}
+      {{ getTranslatedMonth(selected) }}
     </div>
 
     <button
@@ -32,11 +32,11 @@
   >
     <div
       class="custom-dropdown-item"
-      *ngFor="let year of options"
-      [class.selected]="year === selected"
-      (click)="selectYear(year)"
+      *ngFor="let month of options"
+      [class.selected]="month === selected"
+      (click)="selectMonth(month)"
     >
-      {{ year }}
+      {{ getTranslatedMonth(month) }}
     </div>
   </div>
 </div>

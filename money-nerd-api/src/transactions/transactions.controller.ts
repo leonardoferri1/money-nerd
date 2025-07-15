@@ -22,11 +22,18 @@ import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { FilterTransactionsDto } from './dto/filter-transactions.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { GetYearlySummaryDto } from './dto/get-yearly-summary.dto';
+import { TransactionsSummaryService } from './transactions-summary.service';
+import { TransactionsFileHandlerService } from './transactions-file-handler.service';
+import { WealthGrowthSummaryDto } from './dto/monthly-balance.dto';
 @SkipThrottle()
 @UseGuards(AuthGuard)
 @Controller('transactions')
 export class TransactionsController {
-  constructor(private readonly transactionsService: TransactionsService) {}
+  constructor(
+    private readonly transactionsService: TransactionsService,
+    private readonly transactionsSummaryService: TransactionsSummaryService,
+    private readonly transactionsFileHandlerService: TransactionsFileHandlerService,
+  ) {}
 
   @Post()
   async create(
@@ -43,7 +50,8 @@ export class TransactionsController {
   @Post('importar')
   @UseInterceptors(FileInterceptor('arquivo'))
   async importarExtrato(@UploadedFile() file: Express.Multer.File) {
-    const transactions = await this.transactionsService.processFile(file);
+    const transactions =
+      await this.transactionsFileHandlerService.processFile(file);
     return transactions;
   }
 
@@ -67,17 +75,29 @@ export class TransactionsController {
     };
   }
 
-  @Get('summary')
+  @Get('yearly-summary')
   async getYearlySummary(
     @Query() query: GetYearlySummaryDto,
     @Req() req: RequestWithUser,
   ) {
-    const result = await this.transactionsService.getYearlySummary(
+    const result = await this.transactionsSummaryService.getYearlySummary(
       req.user._id,
       query.year,
       query.accountId,
     );
     return result;
+  }
+
+  @Get('wealth-growth-summary')
+  async getWealthGrowth(
+    @Query() query: GetYearlySummaryDto,
+    @Req() req: RequestWithUser,
+  ): Promise<WealthGrowthSummaryDto> {
+    return this.transactionsSummaryService.getWealthGrowth(
+      req.user._id,
+      query.year,
+      query.accountId,
+    );
   }
 
   @Get('recurring')

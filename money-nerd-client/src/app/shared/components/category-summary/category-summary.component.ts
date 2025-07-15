@@ -25,7 +25,7 @@ export class CategorySummaryComponent implements OnChanges {
     if (!this.categories?.length) return;
 
     this.total = this.categories.reduce((sum, cat) => sum + cat.total, 0);
-    let currentOffset = 25; // Começa do topo (12h)
+    let currentOffset = 25;
 
     this.processedCategories = this.categories.map((cat) => {
       const percentage = (cat.total / this.total) * 100;

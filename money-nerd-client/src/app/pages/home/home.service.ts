@@ -22,14 +22,27 @@ export class HomeService {
     year: number;
     accountId?: string;
   }): Observable<any> {
-    const params = new HttpParams()
-      .set('year', payload.year.toString())
-      .set('accountId', payload.accountId ?? '');
+    const params = new HttpParams().set('year', payload.year.toString());
 
-    return this.http.get<any>(`${this.apiUrl}/transactions/summary`, {
+    return this.http.get<any>(`${this.apiUrl}/transactions/yearly-summary`, {
       withCredentials: true,
       params,
     });
+  }
+
+  getGrowthSummary(payload: {
+    year: number;
+    accountId?: string;
+  }): Observable<any> {
+    const params = new HttpParams().set('year', payload.year.toString());
+
+    return this.http.get<any>(
+      `${this.apiUrl}/transactions/wealth-growth-summary`,
+      {
+        withCredentials: true,
+        params,
+      }
+    );
   }
 
   getExpenseSummary(
