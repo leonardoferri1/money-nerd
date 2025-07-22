@@ -5,15 +5,18 @@ import { TranslationService } from '../services/translation.service';
 import { DropdownComponent } from '../components/web-components/dropdown-menu/dropdown/dropdown.component';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, RouterModule } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
+import { ModalOverlayService } from '../services/modalOverlay.service';
+import { ConfirmationModalComponent } from '../components/confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
   imports: [
     CommonModule,
+    RouterModule,
     MatMenuModule,
     DropdownComponent,
     FormsModule,
@@ -34,7 +37,8 @@ export class NavbarComponent implements OnInit {
   constructor(
     private translation: TranslationService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private modalOverlayService: ModalOverlayService
   ) {
     this.currentLang = this.translation.currentLang;
 
@@ -65,6 +69,22 @@ export class NavbarComponent implements OnInit {
   }
 
   logout() {
-    this.authService.logout();
+    const { overlayRef, instance } = this.modalOverlayService.openModal(
+      ConfirmationModalComponent,
+      {
+        title: 'CONFIRM_LOGOUT',
+        showCloseButton: true,
+        opened: true,
+      }
+    );
+
+    instance.confirmed?.subscribe?.(() => {
+      overlayRef.dispose();
+      this.authService.logout();
+    });
+
+    instance.cancelled?.subscribe?.(() => {
+      overlayRef.dispose();
+    });
   }
 }

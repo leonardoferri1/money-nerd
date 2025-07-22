@@ -1,0 +1,27 @@
+<div class="new-transactions-view">
+  <div style="display: flex; gap: 0.3rem; align-items: center">
+    <h3>{{ formatDate(transaction.date) }}</h3>
+    -
+    <p *ngIf="screenWidth > descriptionTransactionMedia">
+      {{ transaction.description }}
+    </p>
+  </div>
+
+  <div style="display: flex; gap: 0.3rem; align-items: center">
+    <h1
+      [ngClass]="{
+        income: transaction.type === 1 || transaction.type === 'Income',
+        expense: transaction.type === 2 || transaction.type === 'Outcome'
+      }"
+    >
+      {{ formatCurrency(transaction.value) }}
+    </h1>
+    <button (click)="onEdit()" class="default-icon-button">
+      <i class="bi bi-pencil-fill"></i>
+    </button>
+
+    <button (click)="onRemove()" class="default-icon-button">
+      <i class="bi bi-trash-fill"></i>
+    </button>
+  </div>
+</div>

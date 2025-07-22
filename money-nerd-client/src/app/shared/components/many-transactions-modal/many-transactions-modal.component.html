@@ -64,30 +64,12 @@
     </div>
 
     <div *ngIf="transactions.length > 0">
-      <div
-        class="new-transactions-view"
+      <transactions-list
         *ngFor="let transaction of transactions; let i = index"
-      >
-        <div style="display: flex; gap: 0.3rem; align-items: center">
-          <h3>{{ formatDate(transaction.date) }}</h3>
-          -
-          <p>{{ transaction.description }}</p>
-        </div>
-
-        <div style="display: flex; gap: 0.3rem; align-items: center">
-          <h1
-            [ngClass]="{
-              income: transaction.type === 1,
-              expense: transaction.type === 2
-            }"
-          >
-            {{ formatCurrency(transaction.value) }}
-          </h1>
-          <button (click)="removeTransaction(i)" class="default-icon-button">
-            <i class="bi bi-trash-fill"></i>
-          </button>
-        </div>
-      </div>
+        [transaction]="transaction"
+        [index]="i"
+        (remove)="removeTransaction($event)"
+      ></transactions-list>
     </div>
   </div>
 

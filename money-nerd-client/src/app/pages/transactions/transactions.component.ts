@@ -21,6 +21,10 @@ import { Account } from '../../shared/interfaces/IAccount.type';
 import { CategoriesService } from '../categories/categories.service';
 import { AccountsService } from '../../shared/services/accounts.service';
 import { TransactionsGridComponent } from './transactions-grid/transactions-grid.component';
+import { MasksService } from '../../shared/services/masks.service';
+import { TransactionsListComponent } from '../../shared/components/web-components/transactions-list/transactions-list.component';
+import { ScreenService } from '../../shared/services/screen-service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-transactions',
@@ -36,6 +40,7 @@ import { TransactionsGridComponent } from './transactions-grid/transactions-grid
     TextInputComponent,
     DropdownComponent,
     TransactionsGridComponent,
+    TransactionsListComponent,
   ],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.scss',
@@ -57,15 +62,18 @@ export class TransactionsComponent implements OnInit {
 
   transactionFilterForm: FormGroup;
 
+  screenWidth: number = 0;
+  private subscription = new Subscription();
+  tableTransactionMedia = 800;
+
   constructor(
     private transactionsService: TransactionsService,
-    private snackBar: SnackbarService,
-    private translate: TranslateService,
     private formBuilder: FormBuilder,
     private categoriesService: CategoriesService,
     private accountsService: AccountsService,
     private modalOverlayService: ModalOverlayService,
-    private translationService: TranslationService
+    private masksService: MasksService,
+    private screenService: ScreenService
   ) {
     this.transactionFilterForm = this.formBuilder.group({
       type: [''],
@@ -80,6 +88,17 @@ export class TransactionsComponent implements OnInit {
 
   ngOnInit() {
     this.kickstart();
+
+    this.screenWidth = this.screenService.currentWidth;
+    this.subscription.add(
+      this.screenService.screenWidth$.subscribe((width) => {
+        this.screenWidth = width;
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   async kickstart() {
@@ -112,14 +131,8 @@ export class TransactionsComponent implements OnInit {
     }
   }
 
-  formatCurrency(value: number): string {
-    const locale = this.translationService.currentLang === 'pt' ? 'pt' : 'en';
-    const currencyCode = locale === 'pt' ? 'BRL' : 'USD';
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: currencyCode,
-      minimumFractionDigits: 2,
-    }).format(value);
+  formatCurrency(value: number) {
+    return this.masksService.formatCurrencyPerLanguage(value);
   }
 
   selectMonth(index: number) {

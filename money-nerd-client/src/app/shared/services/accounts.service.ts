@@ -22,4 +22,10 @@ export class AccountsService {
       withCredentials: true,
     });
   }
+
+  getAccountsDetails(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/accounts/account-transactions`, {
+      withCredentials: true,
+    });
+  }
 }

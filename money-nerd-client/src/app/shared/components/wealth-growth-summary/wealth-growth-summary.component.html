@@ -1,0 +1,14 @@
+<div class="chart-container">
+  <div class="chart-bar-group" *ngFor="let item of monthly">
+    <div
+      class="bar"
+      [ngClass]="getBarColor(item.balance)"
+      matTooltip="{{ formatCurrency(item.balance) }}"
+      [matTooltipPosition]="'above'"
+      [ngStyle]="getBarStyle(item.balance)"
+    ></div>
+    <div class="month-label">
+      {{ "MONTHS_SHORT." + (item.month - 1) | translate }}
+    </div>
+  </div>
+</div>

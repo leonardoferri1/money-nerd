@@ -39,5 +39,6 @@ import { TransactionsFileHandlerService } from './transactions-file-handler.serv
     TransactionsSummaryService,
     TransactionsFileHandlerService,
   ],
+  exports: [TransactionsService],
 })
 export class TransactionsModule {}

@@ -1,14 +1,14 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { TranslationService } from '../../services/translation.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgFor, NgIf, NgStyle } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { ExpenseCategorySummary } from './category-summary.type';
+import { MasksService } from '../../services/masks.service';
 
 @Component({
   selector: 'app-category-summary',
   standalone: true,
-  imports: [NgIf, NgStyle, NgFor, TranslateModule, MatTooltipModule],
+  imports: [NgIf, NgFor, TranslateModule, MatTooltipModule],
   templateUrl: './category-summary.component.html',
   styleUrl: './category-summary.component.scss',
 })
@@ -19,7 +19,7 @@ export class CategorySummaryComponent implements OnChanges {
   processedCategories: any[] = [];
 
   readonly CIRCUMFERENCE = 100;
-  constructor(private translate: TranslationService) {}
+  constructor(private masksService: MasksService) {}
 
   ngOnChanges(): void {
     if (!this.categories?.length) return;
@@ -39,14 +39,8 @@ export class CategorySummaryComponent implements OnChanges {
     });
   }
 
-  formatCurrency(value: number): string {
-    const locale = this.translate.currentLang === 'pt' ? 'pt' : 'en';
-    const currencyCode = locale === 'pt' ? 'BRL' : 'USD';
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: currencyCode,
-      minimumFractionDigits: 2,
-    }).format(value);
+  formatCurrency(value: number) {
+    return this.masksService.formatCurrencyPerLanguage(value);
   }
 
   isMobile(): boolean {

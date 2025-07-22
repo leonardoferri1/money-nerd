@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HomeService } from './home.service';
 import { Router } from '@angular/router';
 import { SnackbarService } from '../../shared/components/snackbar/snackbar.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { YearlySummaryComponent } from '../../shared/components/yearly-summary/yearly-summary.component';
 import { ExpenseCategorySummary } from '../../shared/components/category-summary/category-summary.type';
 import { CategorySummaryComponent } from '../../shared/components/category-summary/category-summary.component';
@@ -10,6 +10,8 @@ import { YearSelectComponent } from '../../shared/components/web-components/date
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { MonthSelectComponent } from '../../shared/components/web-components/date-picker/month-select/month-select.component';
+import { WealthGrowthSummaryComponent } from '../../shared/components/wealth-growth-summary/wealth-growth-summary.component';
+import { MasksService } from '../../shared/services/masks.service';
 
 @Component({
   selector: 'app-home',
@@ -23,23 +25,30 @@ import { MonthSelectComponent } from '../../shared/components/web-components/dat
     MonthSelectComponent,
     FormsModule,
     NgIf,
+    WealthGrowthSummaryComponent,
+    TranslateModule,
   ],
 })
 export class HomeComponent implements OnInit {
   summaryYear: any;
   summaryAccount: string = '';
-  summaryData: any[] = [];
+  yearlySummaryData: any[] = [];
+  wealthSummaryData: any[] = [];
   categorySummary: ExpenseCategorySummary[] = [];
   years: number[] = [];
   yearlySummaryYear = new Date().getFullYear();
   categorySummaryYear = new Date().getFullYear();
   categorySummaryMonth = new Date().getMonth();
+  generalIncomes!: number;
+  generalExpenses!: number;
+  generalBalance!: number;
 
   constructor(
     private homeService: HomeService,
     private router: Router,
     private snackBar: SnackbarService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private masksService: MasksService
   ) {}
 
   ngOnInit() {
@@ -66,7 +75,7 @@ export class HomeComponent implements OnInit {
 
     this.homeService.getYearlySummary(payload).subscribe({
       next: (response) => {
-        this.summaryData = response;
+        this.yearlySummaryData = response;
       },
       error: (e) => {},
     });
@@ -79,7 +88,10 @@ export class HomeComponent implements OnInit {
 
     this.homeService.getGrowthSummary(payload).subscribe({
       next: (response) => {
-        console.log(response);
+        this.generalIncomes = response.totalIncomes;
+        this.generalExpenses = response.totalExpenses;
+        this.generalBalance = response.finalBalance;
+        this.wealthSummaryData = response.monthly;
       },
       error: (e) => {},
     });
@@ -116,5 +128,9 @@ export class HomeComponent implements OnInit {
         this.router.navigate(['/login']);
       },
     });
+  }
+
+  formatCurrency(value: number) {
+    return this.masksService.formatCurrencyPerLanguage(value);
   }
 }

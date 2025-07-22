@@ -141,6 +141,16 @@ export class TransactionsService {
     }
   }
 
+  async findAllByUserId(userId: string): Promise<TransactionDocument[]> {
+    try {
+      return await this.transactionSchema.find({ user: userId });
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to fetch transactions', {
+        cause: error,
+      });
+    }
+  }
+
   async findRecurring(userId: string) {
     try {
       return await this.transactionSchema

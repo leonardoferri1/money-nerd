@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { TranslationService } from '../../../shared/services/translation.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { MasksService } from '../../../shared/services/masks.service';
 
 @Component({
   selector: 'app-transactions-grid',
@@ -18,6 +19,8 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrl: './transactions-grid.component.scss',
 })
 export class TransactionsGridComponent implements OnInit {
+  constructor(private masksService: MasksService) {}
+
   private _items: any[] = [];
 
   @Input() set items(value: any[]) {
@@ -68,13 +71,7 @@ export class TransactionsGridComponent implements OnInit {
     return pipe.transform(date, format) ?? '';
   }
 
-  formatCurrency(value: number): string {
-    const locale = this.translationService.currentLang === 'pt' ? 'pt' : 'en';
-    const currencyCode = locale === 'pt' ? 'BRL' : 'USD';
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: currencyCode,
-      minimumFractionDigits: 2,
-    }).format(value);
+  formatCurrency(value: number) {
+    return this.masksService.formatCurrencyPerLanguage(value);
   }
 }

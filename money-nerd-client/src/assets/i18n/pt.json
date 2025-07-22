@@ -37,6 +37,7 @@
   "NEW_OUTCOME": "Nova Despesa",
   "PROCEED": "Proceder",
   "CONFIRM_TRANSACTION_DELETE": "Deseja realmente excluir a transação?",
+  "CONFIRM_LOGOUT": "Deseja realmente sair?",
   "CONFIRM_CATEGORY_DELETE": "Deseja realmente excluir a categoria?",
   "CONFIRM": "Confirmar",
   "CLEAN": "Limpar",
@@ -69,6 +70,8 @@
   "SUPPORTED": ".pdf (Banco Inter, Banco Itau) - .csv (Banco Inter)",
   "MANY_TRANSACTIONS": "Registre várias novas transações de uma vez",
   "SELECT_ACCOUNT": "Selecione uma conta bancária",
+  "WEALTH_GROWTH": "Crescimento de Patrimônio",
+  "INC_EXP": "Entradas e Saídas",
   "VALIDATION": {
     "REQUIRED": "Necessário preencher todos os campos obrigatórios.",
     "PASSWORDS_DO_NOT_MATCH": "As senhas não coincidem.",

@@ -37,6 +37,7 @@
   "NEW_OUTCOME": "New Outcome",
   "PROCEED": "Proceed",
   "CONFIRM_TRANSACTION_DELETE": "Do you wish to delete the transaction?",
+  "CONFIRM_LOGOUT": "Do you wish to logout?",
   "CONFIRM_CATEGORY_DELETE": "Do you wish to delete the category?",
   "CONFIRM": "Confirm",
   "CLEAN": "Clean",
@@ -69,6 +70,8 @@
   "SUPPORTED": ".pdf (Inter Bank, Itau Bank) - .csv (Inter Bank)",
   "MANY_TRANSACTIONS": "Insert many new transactions at once",
   "SELECT_ACCOUNT": "Select a bank account",
+  "WEALTH_GROWTH": "Wealth Growth",
+  "INC_EXP": "Incomes vs Expenses",
   "VALIDATION": {
     "REQUIRED": "All required fields must be filled.",
     "PASSWORDS_DO_NOT_MATCH": "Passwords do not match.",

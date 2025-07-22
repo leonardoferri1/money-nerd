@@ -1,11 +1,22 @@
 import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
+import { TranslationService } from './translation.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MasksService {
-  constructor() {}
+  constructor(private translationService: TranslationService) {}
+
+  formatCurrencyPerLanguage(value: number): string {
+    const locale = this.translationService.currentLang === 'pt' ? 'pt' : 'en';
+    const currencyCode = locale === 'pt' ? 'BRL' : 'USD';
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency: currencyCode,
+      minimumFractionDigits: 2,
+    }).format(value);
+  }
 
   formatarMoeda(value: number | string): string {
     if (!value && value !== 0) {

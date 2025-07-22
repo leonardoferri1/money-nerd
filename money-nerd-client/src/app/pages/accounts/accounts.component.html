@@ -1,1 +1,35 @@
-<p>accounts works!</p>
+<div class="accounts-container" *ngFor="let account of accounts">
+  <h3>{{ account.name }}</h3>
+
+  <div
+    *ngFor="let year of account.transactionsByYear; let i = index"
+    class="year"
+    [class.open]="openedIndex === i"
+    (click)="toggleYear(i)"
+  >
+    <div class="year-info-container">
+      <p>{{ year.year }}</p>
+      <i class="bi bi-chevron-down"></i>
+    </div>
+
+    <div *ngIf="openedIndex === i" class="monthly-summary">
+      <div *ngFor="let month of year.months" class="month-summary">
+        <p>{{ getMonthName(month.month) }}</p>
+        <div class="values">
+          <span class="income">
+            + {{ formatCurrency(month.totalIncome) }}
+          </span>
+          <span class="outcome"
+            >- {{ formatCurrency(month.totalOutcome) }}</span
+          >
+          <span
+            class="balance"
+            [class.negative]="month.totalIncome - month.totalOutcome < 0"
+          >
+            = {{ formatCurrency(month.balance) }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -10,12 +10,15 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Account } from './entities/account.entity';
 import { Model } from 'mongoose';
 import { MongoError } from 'src/users/types/mongo-error';
+import { TransactionsService } from 'src/transactions/transactions.service';
+import { TransactionType } from 'src/transactions/enums/transaction-type.enum';
 
 @Injectable()
 export class AccountsService {
   constructor(
     @InjectModel(Account.name)
     private accountSchema: Model<Account>,
+    private transactionsService: TransactionsService,
   ) {}
 
   async create(createAccountDto: CreateAccountDto, userId: string) {
@@ -36,6 +39,78 @@ export class AccountsService {
       throw new InternalServerErrorException('Failed to create account', {
         cause: error,
       });
+    }
+  }
+
+  async getAccountsSummaryByPeriod(userId: string) {
+    try {
+      const [accounts, transactions] = await Promise.all([
+        this.findAll(userId),
+        this.transactionsService.findAllByUserId(userId),
+      ]);
+
+      const summaryByAccount = transactions.reduce(
+        (acc, tx) => {
+          const accountId =
+            typeof tx.account === 'string'
+              ? tx.account
+              : (tx.account as { _id: string })?._id;
+
+          if (!accountId) return acc;
+
+          const date = new Date(tx.date);
+          const year = date.getFullYear();
+          const month = date.getMonth() + 1;
+
+          if (!acc[accountId]) acc[accountId] = {};
+          if (!acc[accountId][year]) acc[accountId][year] = {};
+          if (!acc[accountId][year][month])
+            acc[accountId][year][month] = { totalIncome: 0, totalOutcome: 0 };
+
+          if (tx.type === TransactionType.Income) {
+            acc[accountId][year][month].totalIncome += tx.value;
+          } else if (tx.type === TransactionType.Outcome) {
+            acc[accountId][year][month].totalOutcome += tx.value;
+          }
+
+          return acc;
+        },
+        {} as Record<
+          string,
+          Record<
+            number,
+            Record<number, { totalIncome: number; totalOutcome: number }>
+          >
+        >,
+      );
+
+      return accounts.map((account) => {
+        const accountSummary = summaryByAccount[account._id.toString()] || {};
+
+        const transactionsByYear = Object.entries(accountSummary).map(
+          ([year, months]) => ({
+            year: +year,
+            months: Object.entries(months).map(([month, totals]) => ({
+              month: +month,
+              totalIncome: totals.totalIncome,
+              totalOutcome: totals.totalOutcome,
+              balance: totals.totalIncome - totals.totalOutcome,
+            })),
+          }),
+        );
+
+        return {
+          _id: account._id,
+          name: account.name,
+          description: account.description,
+          transactionsByYear,
+        };
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Failed to summarize transactions by year/month',
+        { cause: error },
+      );
     }
   }
 

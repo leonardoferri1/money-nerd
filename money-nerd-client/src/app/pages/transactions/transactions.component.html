@@ -63,7 +63,9 @@
   </div>
 
   <app-transactions-table
-    *ngIf="transactionListType == 'table'"
+    *ngIf="
+      transactionListType == 'table' && screenWidth > tableTransactionMedia
+    "
     [items]="transactions"
     (emitEditTransaction)="editTransaction($event)"
     (emitDeleteTransaction)="deleteTransaction($event)"
@@ -73,6 +75,20 @@
     *ngIf="transactionListType == 'grid'"
     [items]="transactions"
   ></app-transactions-grid>
+
+  <div
+    *ngIf="
+      transactionListType == 'table' && screenWidth <= tableTransactionMedia
+    "
+  >
+    <transactions-list
+      *ngFor="let transaction of transactions; let i = index"
+      [transaction]="transaction"
+      [index]="i"
+      (edit)="editTransaction($event)"
+      (delete)="deleteTransaction($event)"
+    ></transactions-list>
+  </div>
 </div>
 
 <app-side-menu [(opened)]="showFilterMenu">

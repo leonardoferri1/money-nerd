@@ -23,6 +23,8 @@ import { AccountsService } from '../../services/accounts.service';
 import { Router } from '@angular/router';
 import { DropdownMenuComponent } from '../web-components/dropdown-menu/dropdown-menu/dropdown-menu.component';
 import { TranslationService } from '../../services/translation.service';
+import { MasksService } from '../../services/masks.service';
+import { TransactionsListComponent } from '../web-components/transactions-list/transactions-list.component';
 
 @Component({
   selector: 'app-many-transactions-modal',
@@ -40,6 +42,7 @@ import { TranslationService } from '../../services/translation.service';
     FormsModule,
     DropdownComponent,
     DropdownMenuComponent,
+    TransactionsListComponent,
   ],
   animations: [
     trigger('modalAnimation', [
@@ -91,7 +94,8 @@ export class ManyTransactionsModalComponent implements OnInit {
     private accountsService: AccountsService,
     private transactionsService: TransactionsService,
     private router: Router,
-    private translationService: TranslationService
+    private translationService: TranslationService,
+    private masksService: MasksService
   ) {}
 
   get transactionThemeColor(): string {
@@ -118,14 +122,8 @@ export class ManyTransactionsModalComponent implements OnInit {
     this.onClose.emit();
   }
 
-  formatCurrency(value: number): string {
-    const locale = this.translationService.currentLang === 'pt' ? 'pt' : 'en';
-    const currencyCode = locale === 'pt' ? 'BRL' : 'USD';
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: currencyCode,
-      minimumFractionDigits: 2,
-    }).format(value);
+  formatCurrency(value: number) {
+    return this.masksService.formatCurrencyPerLanguage(value);
   }
 
   formatDate(date: string | Date): string {
@@ -172,7 +170,10 @@ export class ManyTransactionsModalComponent implements OnInit {
         );
         this.close();
         const currentUrl = this.router.url;
-        if (currentUrl.includes('/transactions')) {
+        if (
+          currentUrl.includes('/transactions') ||
+          currentUrl.includes('/home')
+        ) {
           window.location.reload();
         }
       },

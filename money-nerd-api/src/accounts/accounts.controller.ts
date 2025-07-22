@@ -34,6 +34,11 @@ export class AccountsController {
     return new AccountPresenter(account);
   }
 
+  @Get('account-transactions')
+  async getAccountTransactions(@Req() req: RequestWithUser) {
+    return this.accountsService.getAccountsSummaryByPeriod(req.user._id);
+  }
+
   @Get()
   async findAll(@Req() req: RequestWithUser) {
     const accounts = await this.accountsService.findAll(req.user._id);

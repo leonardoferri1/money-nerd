@@ -10,6 +10,7 @@
           width: isMobile() ? getBarWidth(item.incomes) : '20px'
         }"
       ></div>
+
       <div
         class="bar expense-bar"
         matTooltip="{{ formatCurrency(item.expenses) }}"
@@ -21,7 +22,9 @@
       ></div>
     </div>
     <div class="month-label">
-      {{ "MONTHS_SHORT." + (item.month - 1) | translate }}
+      <p>
+        {{ "MONTHS_SHORT." + (item.month - 1) | translate }}
+      </p>
     </div>
   </div>
 </div>

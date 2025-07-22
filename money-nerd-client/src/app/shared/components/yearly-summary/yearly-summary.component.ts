@@ -3,6 +3,7 @@ import { Component, Input, OnChanges } from '@angular/core';
 import { TranslationService } from '../../services/translation.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MasksService } from '../../services/masks.service';
 
 @Component({
   selector: 'app-yearly-summary',
@@ -17,7 +18,7 @@ export class YearlySummaryComponent implements OnChanges {
 
   maxValue: number = 0;
 
-  constructor(private translate: TranslationService) {}
+  constructor(private masksService: MasksService) {}
 
   ngOnChanges() {
     if (this.summaryData && this.summaryData.length) {
@@ -46,16 +47,10 @@ export class YearlySummaryComponent implements OnChanges {
   }
 
   isMobile(): boolean {
-    return window.innerWidth <= 600;
+    return window.innerWidth <= 1610;
   }
 
-  formatCurrency(value: number): string {
-    const locale = this.translate.currentLang === 'pt' ? 'pt' : 'en';
-    const currencyCode = locale === 'pt' ? 'BRL' : 'USD';
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: currencyCode,
-      minimumFractionDigits: 2,
-    }).format(value);
+  formatCurrency(value: number) {
+    return this.masksService.formatCurrencyPerLanguage(value);
   }
 }

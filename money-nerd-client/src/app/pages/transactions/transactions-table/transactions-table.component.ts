@@ -19,6 +19,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationService } from '../../../shared/services/translation.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NewTransactionModalComponent } from '../../../shared/components/new-transaction-modal/new-transaction-modal.component';
+import { MasksService } from '../../../shared/services/masks.service';
 
 @Component({
   selector: 'app-transactions-table',
@@ -76,7 +77,10 @@ export class TransactionsTableComponent {
   @Output() emitEditTransaction = new EventEmitter<any[]>();
   @Output() emitDeleteTransaction = new EventEmitter<any[]>();
 
-  constructor(private translationService: TranslationService) {}
+  constructor(
+    private translationService: TranslationService,
+    private masksService: MasksService
+  ) {}
 
   isSelected(id: any): boolean {
     return <boolean>this.selectedIds?.includes(id);
@@ -116,14 +120,8 @@ export class TransactionsTableComponent {
     return item[col.field];
   }
 
-  formatCurrency(value: number): string {
-    const locale = this.translationService.currentLang === 'pt' ? 'pt' : 'en';
-    const currencyCode = locale === 'pt' ? 'BRL' : 'USD';
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: currencyCode,
-      minimumFractionDigits: 2,
-    }).format(value);
+  formatCurrency(value: number) {
+    return this.masksService.formatCurrencyPerLanguage(value);
   }
 
   getCellClass(item: any, col: Column): string {

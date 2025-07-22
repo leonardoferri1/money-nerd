@@ -6,10 +6,12 @@ import { UsersModule } from 'src/users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Account, AccountSchema } from './entities/account.entity';
 import { JwtModule } from '@nestjs/jwt';
+import { TransactionsModule } from 'src/transactions/transactions.module';
 
 @Module({
   imports: [
     UsersModule,
+    TransactionsModule,
     MongooseModule.forFeature([
       {
         name: Account.name,

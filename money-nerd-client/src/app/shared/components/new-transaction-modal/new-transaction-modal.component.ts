@@ -22,6 +22,7 @@ import { AccountsService } from '../../services/accounts.service';
 import { Router } from '@angular/router';
 import { DropdownMenuComponent } from '../web-components/dropdown-menu/dropdown-menu/dropdown-menu.component';
 import { TranslationService } from '../../services/translation.service';
+import { MasksService } from '../../services/masks.service';
 @Component({
   selector: 'app-new-transaction-modal',
   standalone: true,
@@ -95,7 +96,7 @@ export class NewTransactionModalComponent implements OnInit {
     private accountsService: AccountsService,
     private transactionsService: TransactionsService,
     private router: Router,
-    private translationService: TranslationService
+    private masksService: MasksService
   ) {
     this.transactionForm = this.formBuilder.group({
       type: [''],
@@ -132,14 +133,8 @@ export class NewTransactionModalComponent implements OnInit {
     this.onClose.emit();
   }
 
-  formatCurrency(value: number): string {
-    const locale = this.translationService.currentLang === 'pt' ? 'pt' : 'en';
-    const currencyCode = locale === 'pt' ? 'BRL' : 'USD';
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: currencyCode,
-      minimumFractionDigits: 2,
-    }).format(value);
+  formatCurrency(value: number) {
+    return this.masksService.formatCurrencyPerLanguage(value);
   }
 
   getCategories() {
@@ -226,7 +221,10 @@ export class NewTransactionModalComponent implements OnInit {
             this.transactionForm.reset();
 
             const currentUrl = this.router.url;
-            if (currentUrl.includes('/transactions')) {
+            if (
+              currentUrl.includes('/transactions') ||
+              currentUrl.includes('/home')
+            ) {
               window.location.reload();
             }
           },
@@ -251,8 +249,6 @@ export class NewTransactionModalComponent implements OnInit {
           account: transaction.account._id,
           category: transaction.category._id,
         });
-
-        console.log(this.transactionForm);
       },
       error: (error) => {
         this.snackBar.openErrorSnackbar(
