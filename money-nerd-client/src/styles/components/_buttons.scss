@@ -138,4 +138,8 @@ a {
   &:hover {
     filter: brightness(110%);
   }
+
+  &:disabled {
+    filter: brightness(70%);
+  }
 }

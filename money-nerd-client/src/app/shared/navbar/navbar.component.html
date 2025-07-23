@@ -12,6 +12,7 @@
         [labelField]="'name'"
         [valueField]="'id'"
         (valueChange)="onLangSelect(currentLang)"
+        *ngIf="screenWidth >= langDropdownMedia"
       ></dropdown>
 
       <div class="vertical-divider"></div>

@@ -23,6 +23,7 @@ export class DropdownMenuComponent implements OnInit {
   @Input() items: any[] = [];
   @Input() selectedItem: string | null = null;
   @Input() opened: boolean = false;
+  @Input() disabled: boolean = false;
   isSmallScreen: boolean = false;
 
   @Output() valueChange = new EventEmitter<any>();

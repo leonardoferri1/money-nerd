@@ -23,6 +23,7 @@
           <button
             class="small-light-button"
             type="button"
+            [disabled]="recurringTransactions.length == 0"
             (click)="onToggleRecurringMenu($event)"
           >
             {{ "RECURRING" | translate }}

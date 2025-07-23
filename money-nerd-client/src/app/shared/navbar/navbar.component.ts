@@ -10,6 +10,8 @@ import { filter } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 import { ModalOverlayService } from '../services/modalOverlay.service';
 import { ConfirmationModalComponent } from '../components/confirmation-modal/confirmation-modal.component';
+import { Subscription } from 'rxjs';
+import { ScreenService } from '../services/screen-service';
 
 @Component({
   selector: 'app-navbar',
@@ -34,11 +36,16 @@ export class NavbarComponent implements OnInit {
   ];
   currentRoute: string = '';
 
+  screenWidth: number = 0;
+  private subscription = new Subscription();
+  langDropdownMedia = 600;
+
   constructor(
     private translation: TranslationService,
     private router: Router,
     private authService: AuthService,
-    private modalOverlayService: ModalOverlayService
+    private modalOverlayService: ModalOverlayService,
+    private screenService: ScreenService
   ) {
     this.currentLang = this.translation.currentLang;
 
@@ -51,6 +58,13 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+
+    this.screenWidth = this.screenService.currentWidth;
+    this.subscription.add(
+      this.screenService.screenWidth$.subscribe((width) => {
+        this.screenWidth = width;
+      })
+    );
   }
 
   shouldHideElement(): boolean {
