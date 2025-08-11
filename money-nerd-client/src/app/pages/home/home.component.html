@@ -1,0 +1,106 @@
+<div class="card-grid">
+  <div class="grid-item category-graph-grid">
+    <div class="grid-body">
+      <div class="general-summary">
+        <div class="card incomes">
+          <h3>{{ formatCurrency(generalExpenses) }}</h3>
+        </div>
+        <div class="card expenses">
+          <h3>{{ formatCurrency(generalIncomes) }}</h3>
+        </div>
+        <div class="card balance">
+          <h3>{{ formatCurrency(generalBalance) }}</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-item category-graph-grid">
+    <div class="grid-header">
+      <div></div>
+      <div style="display: flex; gap: 0.5rem">
+        <app-month-select
+          [(ngModel)]="categorySummaryMonth"
+          [options]="[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
+          (selectedChange)="getCategoriesSummary()"
+        ></app-month-select>
+
+        <app-year-select
+          [(ngModel)]="categorySummaryYear"
+          [options]="years"
+          (selectedChange)="getCategoriesSummary()"
+        ></app-year-select>
+      </div>
+    </div>
+
+    <div class="grid-body">
+      <ng-container *ngIf="categorySummary?.length; else emptyState">
+        <app-category-summary
+          [categories]="categorySummary"
+        ></app-category-summary>
+      </ng-container>
+
+      <ng-template #emptyState>
+        <div class="empty-message">
+          <p>To do</p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="grid-item monthly-expenses-graph-grid">
+    <div class="grid-header">
+      <h2>
+        {{ "INC_EXP" | translate }}
+      </h2>
+
+      <app-year-select
+        [(ngModel)]="yearlySummaryYear"
+        [options]="years"
+        (selectedChange)="getYearlySummary($event)"
+      ></app-year-select>
+    </div>
+
+    <div class="grid-body">
+      <ng-container *ngIf="yearlySummaryData?.length; else emptyState">
+        <app-yearly-summary
+          [summaryData]="yearlySummaryData"
+        ></app-yearly-summary>
+      </ng-container>
+
+      <ng-template #emptyState>
+        <div class="empty-message">
+          <p>To do</p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="grid-item growth-graph-grid">
+    <div class="grid-header">
+      <h2>
+        {{ "WEALTH_GROWTH" | translate }}
+      </h2>
+
+      <app-year-select
+        [(ngModel)]="yearlySummaryYear"
+        [options]="years"
+        (selectedChange)="getGrowthSummary($event)"
+      ></app-year-select>
+    </div>
+
+    <div class="grid-body">
+      <ng-container *ngIf="wealthSummaryData?.length; else emptyState">
+        <app-wealth-growth-summary
+          [monthly]="wealthSummaryData"
+        ></app-wealth-growth-summary>
+      </ng-container>
+
+      <ng-template #emptyState>
+        <div class="empty-message">
+          <p>To do</p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

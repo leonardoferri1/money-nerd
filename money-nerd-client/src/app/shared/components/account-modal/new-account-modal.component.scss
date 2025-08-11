@@ -1,0 +1,100 @@
+@import "variables";
+
+.account-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 1rem;
+  .custom-style-buttons-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+    gap: 1rem;
+    width: 100%;
+  }
+}
+
+.color-icon-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 60;
+}
+
+.color-icon-modal {
+  width: calc(100% - 2rem);
+  position: fixed;
+  box-sizing: border-box;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  opacity: 0;
+  min-width: 200px;
+  max-width: 425px;
+  max-height: 350vh;
+  background: $background-main-lighter;
+  border-radius: 8px;
+  padding: 2rem;
+  z-index: 65;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  overflow: hidden;
+}
+
+.color-icon-modal.open {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.color-icon-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.color-icon-options button.selected {
+  filter: brightness(80%);
+}
+
+.color-icon-options button {
+  width: 32px;
+  height: 32px;
+  padding-bottom: 0.1rem;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  i {
+    font-size: 20px;
+  }
+}
+
+.color-select-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $background-main-hover;
+  border: 0;
+  color: $grey-light;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  border-radius: 4px;
+  gap: 1rem;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $light-background;
+    transition: background-color 0.1s ease;
+  }
+}

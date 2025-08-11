@@ -1,0 +1,17 @@
+<div class="pie-container" *ngIf="processedCategories.length">
+  <svg viewBox="0 0 36 36" class="pie-chart">
+    <circle class="pie-bg" cx="18" cy="18" r="15.9155" />
+    <ng-container *ngFor="let cat of processedCategories">
+      <circle
+        class="pie-slice"
+        cx="18"
+        cy="18"
+        r="15.9155"
+        [attr.stroke]="cat.color"
+        [attr.stroke-dasharray]="cat.percentage + ' ' + (100 - cat.percentage)"
+        [attr.stroke-dashoffset]="cat.offset"
+        matTooltip="{{ formatCurrency(cat.total) }} - {{ cat.name }}"
+      />
+    </ng-container>
+  </svg>
+</div>

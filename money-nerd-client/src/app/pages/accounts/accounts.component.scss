@@ -1,0 +1,113 @@
+@import "variables";
+
+.accounts-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.5rem;
+  margin: auto;
+  background: $list-background;
+  border-radius: 4px;
+  justify-content: space-between;
+  align-items: center;
+  color: $grey-light;
+  padding: 0.3rem 0.4rem 0.3rem 1rem;
+}
+
+.year {
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  background-color: $background-main-hover;
+  transition: background 0.2s ease;
+  border-radius: 4px;
+  width: 100%;
+  margin-bottom: 0.2rem;
+
+  p {
+    margin: 0;
+  }
+}
+
+.year-info-container {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.year.open i {
+  transform: rotate(180deg);
+}
+
+.year i {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.year:hover {
+  filter: brightness(105%);
+}
+
+.monthly-summary {
+  margin-top: 0.5rem;
+  padding-left: 1rem;
+}
+
+.month-summary {
+  display: flex;
+  padding: 0.3rem 0;
+
+  @media (min-width: 550px) {
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 549px) {
+    flex-direction: column;
+  }
+}
+
+.month-summary:not(:last-child) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.values {
+  display: flex;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+  width: 100%;
+  justify-content: flex-end;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: end;
+  }
+
+  span {
+    background: $list-background;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    border-radius: 6px;
+    margin: 0;
+  }
+
+  .income {
+    font-weight: 400;
+
+    color: $light-green;
+  }
+
+  .outcome {
+    font-weight: 400;
+
+    color: $red-theme;
+  }
+
+  .balance {
+    font-weight: 800;
+    color: $light-green;
+
+    &.negative {
+      color: $red-theme;
+    }
+  }
+}

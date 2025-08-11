@@ -1,0 +1,27 @@
+<div class="header-container">
+  <a class="left-container" routerLink="/home" routerLinkActive="active">
+    <img src="img/money-nerd-logo.png" alt="Logo" class="logo-img" />
+  </a>
+
+  <div>
+    <div class="user-container">
+      <dropdown
+        [(ngModel)]="currentLang"
+        [options]="optionsLang"
+        [placeholder]="'LANGUAGE_PLACEH' | translate"
+        [labelField]="'name'"
+        [valueField]="'id'"
+        (valueChange)="onLangSelect(currentLang)"
+        *ngIf="screenWidth >= langDropdownMedia"
+      ></dropdown>
+
+      <div class="vertical-divider"></div>
+
+      <p>{{ currentUser.name }}</p>
+
+      <button class="default-icon-button" (click)="logout()">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+      </button>
+    </div>
+  </div>
+</div>

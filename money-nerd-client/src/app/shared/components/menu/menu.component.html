@@ -1,0 +1,142 @@
+<div class="menu" [ngClass]="{ open: opened }" *ngIf="shouldHideElement()">
+  <button
+    class="toggle-button"
+    matTooltip="{{ opened ? 'Fechar' : 'Abrir' }}"
+    [matTooltipPosition]="'below'"
+    (click)="toggle()"
+  >
+    <i
+      class="fa"
+      [ngClass]="opened ? 'fa-chevron-left' : 'fa-chevron-right'"
+    ></i>
+  </button>
+
+  <div class="menu-container">
+    <div class="menu-outter-content">
+      <div class="dropdown-wrapper">
+        <app-new-item-menu
+          [opened]="showDropdown"
+          [items]="items"
+          [selectedItem]="selected"
+          (valueChange)="newItemButtonClick($event)"
+          (closeChange)="showDropdown = $event"
+        ></app-new-item-menu>
+
+        <button
+          class="new-item-button"
+          (click)="onToggleDropdown($event)"
+          [class.open]="showDropdown"
+        >
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
+
+      <div class="menu-inner-content">
+        <div>
+          <a
+            class="nav-button collapsed"
+            *ngIf="!opened"
+            routerLink="/home"
+            routerLinkActive="active"
+          >
+            <i class="bi bi-house"></i>
+          </a>
+
+          <a
+            class="nav-button closed"
+            *ngIf="opened"
+            routerLink="/home"
+            routerLinkActive="active"
+          >
+            <i class="bi bi-house"></i>
+            <p>Dashboard</p>
+          </a>
+        </div>
+
+        <div>
+          <a
+            class="nav-button collapsed"
+            *ngIf="!opened"
+            routerLink="/transactions"
+            routerLinkActive="active"
+          >
+            <i class="bi bi-currency-dollar"></i>
+          </a>
+
+          <a
+            class="nav-button closed"
+            *ngIf="opened"
+            routerLink="/transactions"
+            routerLinkActive="active"
+          >
+            <i class="bi bi-currency-dollar"></i>
+            <p>
+              {{ "TRANSACTIONS" | translate }}
+            </p>
+          </a>
+        </div>
+
+        <div>
+          <a
+            class="nav-button collapsed"
+            *ngIf="!opened"
+            routerLink="/categories"
+            routerLinkActive="active"
+          >
+            <i class="bi bi-tags"></i>
+          </a>
+
+          <a
+            class="nav-button closed"
+            *ngIf="opened"
+            routerLink="/categories"
+            routerLinkActive="active"
+          >
+            <i class="bi bi-tags"></i>
+            <p>
+              {{ "CATEGORIES" | translate }}
+            </p>
+          </a>
+        </div>
+
+        <div>
+          <a
+            class="nav-button collapsed"
+            *ngIf="!opened"
+            routerLink="/accounts"
+            routerLinkActive="active"
+          >
+            <i class="bi bi-bank"></i>
+          </a>
+
+          <a
+            class="nav-button closed"
+            *ngIf="opened"
+            routerLink="/accounts"
+            routerLinkActive="active"
+          >
+            <i class="bi bi-bank"></i>
+            <p>
+              {{ "ACCOUNTS" | translate }}
+            </p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-new-account-modal [(opened)]="isAccountModalOpen"></app-new-account-modal>
+
+<app-new-category-modal
+  [(opened)]="isCategoryModalOpen"
+></app-new-category-modal>
+
+<app-new-transaction-modal
+  [(opened)]="isTransactionModalOpen"
+  [transactionType]="transactionModalType"
+></app-new-transaction-modal>
+
+<app-many-transactions-modal
+  [(opened)]="isTransactionsModalOpen"
+></app-many-transactions-modal>

@@ -1,0 +1,6 @@
+<label class="switch">
+  <input type="checkbox" [checked]="checked" (change)="toggle()" />
+  <span class="slider" [class]="theme">
+    <i class="bi bi-check" [ngClass]="{ show: checked, hidden: !checked }"></i>
+  </span>
+</label>

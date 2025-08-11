@@ -1,0 +1,11 @@
+<textarea
+  [placeholder]="placeholder"
+  [attr.maxlength]="maxLength"
+  [attr.disabled]="disabled ? true : null"
+  [readonly]="isReadonly"
+  [(ngModel)]="value"
+  (ngModelChange)="onInputChange($event)"
+  [rows]="rows"
+  [cols]="cols"
+  [ngClass]="{ 'invalid-input': invalidValidator }"
+></textarea>

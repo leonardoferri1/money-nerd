@@ -1,0 +1,108 @@
+<div class="modal-overlay" *ngIf="opened" (click)="close()"></div>
+<form [formGroup]="categoryForm" (ngSubmit)="submit()">
+  <div class="money-nerd-modal" *ngIf="opened" @modalAnimation>
+    <div class="money-nerd-modal-header" *ngIf="showCloseButton">
+      <h1>
+        {{ "NEW_CATEGORY" | translate }}
+      </h1>
+
+      <button class="default-icon-button" (click)="close()" type="button">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="money-nerd-modal-body">
+      <div class="category-form">
+        <text-input
+          [placeholder]="'REGISTER_NAME' | translate"
+          [invalidValidator]="invalidName"
+          formControlName="name"
+          (valueChange)="onInputChange()"
+        ></text-input>
+
+        <div class="custom-style-buttons-container">
+          <button
+            class="color-select-button"
+            (click)="changeColor()"
+            type="button"
+          >
+            <p>{{ "COLOR" | translate }}</p>
+            <div
+              class="default-icon-button"
+              [ngStyle]="{ 'background-color': selectedColor }"
+            ></div>
+          </button>
+
+          <button
+            class="color-select-button"
+            (click)="changeIcon()"
+            type="button"
+          >
+            <p>{{ "ICON" | translate }}</p>
+            <div class="grey-icon-button">
+              <i class="{{ selectedIcon }}"></i>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="money-nerd-modal-footer">
+      <button
+        class="confirm-button"
+        type="submit"
+        [disabled]="categoryForm.invalid"
+      >
+        {{ "CONFIRM" | translate }}
+      </button>
+    </div>
+  </div>
+</form>
+
+<div
+  class="color-icon-modal-overlay"
+  *ngIf="colorModalOpen"
+  (click)="closeColorModal()"
+></div>
+
+<div
+  class="color-icon-modal-overlay"
+  *ngIf="iconModalOpen"
+  (click)="closeIconModal()"
+></div>
+
+<div
+  class="color-icon-modal"
+  [ngClass]="{ open: colorModalOpen }"
+  *ngIf="colorModalOpen"
+  @modalAnimation
+>
+  <div class="color-icon-options">
+    <button
+      type="button"
+      *ngFor="let color of availableColors"
+      [ngStyle]="{ 'background-color': color }"
+      (click)="selectColor(color)"
+    >
+      <i class="bi bi-check" *ngIf="selectedColor === color"></i>
+    </button>
+  </div>
+</div>
+
+<div
+  class="color-icon-modal"
+  [ngClass]="{ open: iconModalOpen }"
+  *ngIf="iconModalOpen"
+  @modalAnimation
+>
+  <div class="color-icon-options">
+    <button
+      type="button"
+      *ngFor="let icon of availableIcons"
+      [class.selected]="selectedIcon === icon"
+      (click)="selectIcon(icon)"
+    >
+      <i [ngClass]="icon"></i>
+    </button>
+  </div>
+</div>

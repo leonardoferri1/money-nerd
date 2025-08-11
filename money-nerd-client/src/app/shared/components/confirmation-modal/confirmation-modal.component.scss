@@ -1,0 +1,10 @@
+@import "variables";
+
+.control-panel {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+}

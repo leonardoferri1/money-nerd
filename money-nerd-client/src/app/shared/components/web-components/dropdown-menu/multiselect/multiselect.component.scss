@@ -1,0 +1,146 @@
+@import "../../../../../../styles/variables";
+
+$multiselect-height: 300px;
+
+.custom-multiselect-container {
+  position: relative;
+  width: 100%;
+}
+
+.custom-multiselect-input-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid $grey-base-gov;
+  border-radius: 5px;
+  overflow: hidden;
+  background: #fff;
+  max-height: 38px;
+  padding-right: 5px;
+  padding-left: 8px;
+
+  &.disabled {
+    cursor: not-allowed;
+    background-color: $light-grey;
+  }
+
+  &.invalid {
+    border: 2px solid $input-error;
+  }
+
+  .custom-multiselect-input {
+    flex: 1;
+    padding: 8px;
+    font-size: 13px;
+    border: none;
+    outline: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .custom-multiselect-button {
+    border-radius: 50%;
+    border: 0;
+    width: 27px;
+    height: 27px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    background: none;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba($blue-base-gov, 0.16);
+      transition: background-color 0.1s ease;
+    }
+
+    &:active {
+      background-color: rgba($blue-base-gov, 0.45);
+    }
+
+    i {
+      color: $blue-base-gov !important;
+      font-size: 11px;
+    }
+  }
+}
+
+.custom-multiselect-styling {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  max-height: $multiselect-height;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+
+  &.multiselect-down {
+    top: 100%;
+  }
+
+  &.multiselect-up {
+    bottom: 100%;
+  }
+
+  .multiselect-filter-container {
+    width: 100%;
+    position: relative;
+    display: inline-block;
+
+    i {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: $blue-base-gov;
+      font-size: 16px;
+      pointer-events: none;
+    }
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px;
+    border-bottom: 1px solid $light-grey;
+    min-height: 3rem;
+
+    .multiselect-filter-input {
+    }
+  }
+
+  .custom-multiselect-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px;
+    border-bottom: 1px solid $light-grey;
+    cursor: pointer;
+    transition: background 0.1s;
+    min-height: 3rem;
+    font-size: 13px;
+    font-weight: 500;
+
+    gap: 1rem;
+
+    .checkbox-style {
+      width: 17px !important;
+      height: 17px !important;
+    }
+
+    &:hover {
+      background: $medium-grey;
+    }
+
+    &.selected {
+      background: $blue-base-gov-hover;
+      color: white;
+
+      &:hover {
+        background-color: rgba($blue-base-gov-hover, 0.85);
+        transition: background-color 0.1s ease;
+      }
+    }
+  }
+}

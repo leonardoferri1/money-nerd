@@ -1,0 +1,36 @@
+@import "variables";
+
+input {
+  font-weight: 600;
+  border: 0;
+}
+
+.green-theme {
+  color: #9fcf61;
+
+  &:focus {
+    border: 1px solid $light-green;
+  }
+}
+
+.red-theme {
+  color: $red-theme;
+
+  &:focus {
+    border: 1px solid $input-error;
+  }
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.mandatory-sign {
+  margin: 0;
+  opacity: 50%;
+  margin-top: 3px;
+  color: $grey-light;
+  font-size: 13px;
+}

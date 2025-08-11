@@ -1,0 +1,15 @@
+<div class="overlay" *ngIf="opened" (click)="close()"></div>
+
+<div class="custom-dropdown-styling" *ngIf="opened">
+  <div *ngFor="let item of items">
+    <div
+      class="custom-dropdown-item"
+      (click)="selectOption(item)"
+      [matTooltip]="isSmallScreen ? (item.label | translate) : null"
+      [matTooltipPosition]="'above'"
+    >
+      <i class="{{ item.icon }} {{ item.iconColor }}"></i>
+      <p>{{ item.label | translate }}</p>
+    </div>
+  </div>
+</div>

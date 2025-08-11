@@ -1,0 +1,52 @@
+@import "styles/variables";
+@import "styles/animations";
+@import "styles/components/buttons";
+@import "styles/components/modal";
+@import "styles/components/authpage";
+@import "styles/components/input";
+@import "styles/components/text-area";
+@import "styles/components/general";
+
+* {
+  padding: 0;
+  outline: none;
+  box-sizing: border-box;
+  max-width: 100%;
+  font-family: "Plus Jakarta sans";
+}
+
+body,
+html {
+  overflow-x: hidden;
+  margin: 0 auto;
+}
+
+input,
+textarea,
+button {
+  font-family: "Plus Jakarta sans";
+  font-weight: 400;
+}
+
+input,
+textarea {
+  &:read-only,
+  &:disabled {
+    user-select: none;
+    pointer-events: none;
+    color: #777;
+    border: 1px solid #ccc;
+    cursor: not-allowed;
+  }
+}
+
+.invalid-input {
+  border: 1px solid $input-error;
+}
+
+body {
+  background-color: $background-main;
+  color: var(--base-text);
+  -webkit-font-smoothing: antialiased;
+  font-size: 13px;
+}

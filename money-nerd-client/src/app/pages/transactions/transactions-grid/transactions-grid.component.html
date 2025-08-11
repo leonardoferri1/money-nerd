@@ -1,0 +1,42 @@
+<div class="card-grid">
+  <ng-container
+    *ngFor="let date of groupedTransactions | keyvalue : sortByDate"
+  >
+    <div class="day-card">
+      <div class="day-container">
+        <h3>{{ formatDate(date.key) }}</h3>
+      </div>
+
+      <div class="transactions">
+        <div class="transaction-item" *ngFor="let t of date.value">
+          <div class="left">
+            <i
+              class="{{ t.category.icon }}"
+              [style.color]="t.category.color"
+            ></i>
+          </div>
+          <div
+            class="right"
+            [ngClass]="{
+              income: t.type === 'Income',
+              expense: t.type !== 'Income'
+            }"
+          >
+            {{ formatCurrency(t.value) }}
+          </div>
+        </div>
+      </div>
+
+      <div class="totals">
+        <p
+          [ngClass]="{
+            income: getTotal(date.value) >= 0,
+            expense: getTotal(date.value) < 0
+          }"
+        >
+          {{ formatCurrency(getTotal(date.value)) }}
+        </p>
+      </div>
+    </div>
+  </ng-container>
+</div>

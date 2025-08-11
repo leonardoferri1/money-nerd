@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   mongo:
     build: ./.docker/mongodb
@@ -6,3 +8,22 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=root
     ports:
       - 27017:27017
+    volumes:
+      - mongo_data:/data/db
+
+  api:
+    build: .
+    command: npm run start:prod
+    environment:
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRATION=${JWT_EXPIRATION}
+      - MONGO_URI=mongodb://root:root@mongo:27017/your-db-name?authSource=admin
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongo
+    env_file:
+      - .env
+
+volumes:
+  mongo_data:

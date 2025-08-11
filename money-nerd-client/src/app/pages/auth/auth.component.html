@@ -1,0 +1,12 @@
+<app-login-panel
+  (loginFadeEmit)="panelChange('login')"
+  (formEmit)="submitLogin($event)"
+  [isLoginFadingOut]="isLoginFadingOut"
+  [registering]="registering"
+></app-login-panel>
+<app-register-panel
+  (registerFadeEmit)="panelChange('register')"
+  (formEmit)="submitRegistration($event)"
+  [isRegisterFadingOut]="isRegisterFadingOut"
+  [registering]="registering"
+></app-register-panel>

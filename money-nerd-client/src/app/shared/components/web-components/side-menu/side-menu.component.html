@@ -1,0 +1,10 @@
+<div class="overlay" *ngIf="opened" (click)="close()"></div>
+
+<div class="side-menu" [ngClass]="{ open: opened }">
+  <button class="default-icon-button" (click)="close()">
+    <i class="fa-solid fa-xmark"></i>
+  </button>
+  <div class="side-menu-content">
+    <ng-content></ng-content>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+.spinner-container {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(20, 20, 20, 0.9);
+
+  z-index: 9998;
+}
+
+.spinner-element {
+  display: block;
+  position: absolute;
+  left: 48%;
+  top: 40%;
+}
+
+:host ::ng-deep {
+  div {
+    div {
+      div {
+        svg {
+          circle {
+            stroke: rgb(11, 142, 207) !important;
+            z-index: 9998 !important;
+          }
+        }
+      }
+    }
+  }
+}

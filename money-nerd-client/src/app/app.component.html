@@ -1,0 +1,10 @@
+<app-navbar></app-navbar>
+<app-menu [(opened)]="menuOpened"></app-menu>
+
+<div class="main-container" [class.with-menu]="menuOpened">
+  <router-outlet></router-outlet>
+</div>
+
+<!-- <app-footer></app-footer> -->
+
+<app-loading-spinner></app-loading-spinner>

@@ -1,0 +1,24 @@
+<div class="input-wrapper">
+  <input
+    currencyMask
+    [options]="{
+    allowNegative: allowNegativeValue,
+    align: 'right',
+    prefix: prefix,
+    thousands: '.',
+    decimal: ',',
+    precision: 2,
+  }"
+    [(ngModel)]="value"
+    (ngModelChange)="onInputChange($event)"
+    [placeholder]="placeholder"
+    (focus)="onFocus()"
+    [class]="theme"
+    (blur)="onFocusOut()"
+    [readonly]="isReadonly"
+  />
+
+  <p class="mandatory-sign" *ngIf="isValueInvalid && isMandatory">
+    Deve ter um valor maior que 0
+  </p>
+</div>

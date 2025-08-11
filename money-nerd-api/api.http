@@ -1,71 +1,79 @@
-###
-# @name createAsset
-POST http://localhost:3000/assets
+## Create Admin
+POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-    "name": "Amazon",
-    "symbol": "A1",
-    "price": 100,
-    "image": "AMZN.png"
+    "name": "admin",
+    "email": "admin@user.com",
+    "password": "admin"
 }
 
 ###
 
-@assetId = {{ createAsset.response.body._id }}
+## Create Admin
+DELETE http://localhost:3000/users/e0764689-d1cb-4417-ab43-e72aa45cc2a2
+Authorization: Bearer {{token}}
+
 
 ###
-GET http://localhost:3000/assets
+## GET Users
+GET http://localhost:3000/users
+Authorization: Bearer {{token}}
 
 ###
-GET http://localhost:3000/assets/A1
 
-###
-POST http://localhost:3000/assets/A1/dailies
+# @name adminLogin
+POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-  "date": "2024-12-10",
-  "price": 100
+    "email": "admin@user.com",
+    "password": "admin"
 }
 
 ###
-GET http://localhost:3000/assets/A1/dailies
 
-###
-# @name createWallet
-POST http://localhost:3000/wallets
-
-###
-
-@walletId = {{ createWallet.response.body._id }}
-
-###
-GET http://localhost:3000/wallets
-
-###
-GET http://localhost:3000/wallets/{{ walletId }}
-
-###
-POST http://localhost:3000/wallets/{{ walletId }}/assets
+## Create transactions
+POST http://localhost:3000/transactions
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
-{
-    "assetId": "{{ assetId }}",
-    "shares": 100
-}
+[
+    {
+        "type": 1,
+        "description": "description 1",
+        "date": "2000-10-31T01:30:00.000-05:00",
+        "value": 15,
+        "category": "de71751c-ece7-431c-8e75-2e90ef6c1545"
+    },
+    {
+        "type": 2,
+        "description": "description 2",
+        "date": "2000-10-31T01:30:00.000-05:00",
+        "value": 25,
+        "category": "9fc4ac72-e351-4a6e-a8fb-098a047b6122"
+    }
+]
 
 ###
-POST http://localhost:3000/orders
+
+POST http://localhost:3000/categories
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
-{
-    "walletId": "{{ walletId }}",
-    "assetId": "{{ assetId }}",
-    "shares": 10,
-    "price": 100,
-    "type": "BUY"
+    {
+    "name": "category 1"
 }
 
 ###
-GET http://localhost:3000/orders?walletId=fcc4de1c-f0fb-4c1e-afbb-f259f1672447
+
+###
+
+GET http://localhost:3000/categories
+Authorization: Bearer {{token}}
+
+###
+
+@token = {{ adminLogin.response.body.access_token }}
+
+###

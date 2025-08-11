@@ -1,0 +1,153 @@
+<div class="transactions-main-container">
+  <div class="summary" *ngIf="summary">
+    <div class="incomes-panel">
+      <h1>
+        {{ "MONTH" | translate }}: {{ formatCurrency(summary.incomeMonth) }}
+      </h1>
+      <h2>
+        {{ "YEAR" | translate }}: {{ formatCurrency(summary.incomeYear) }}
+      </h2>
+      <h3>{{ "TOTAL" | translate }}: {{ formatCurrency(summary.income) }}</h3>
+    </div>
+    <div class="expenses-panel">
+      <h1>
+        {{ "MONTH" | translate }}: {{ formatCurrency(summary.expenseMonth) }}
+      </h1>
+      <h2>
+        {{ "YEAR" | translate }}: {{ formatCurrency(summary.expenseYear) }}
+      </h2>
+      <h3>{{ "TOTAL" | translate }}: {{ formatCurrency(summary.expense) }}</h3>
+    </div>
+    <div class="total-panel">
+      <h1>
+        {{ "MONTH" | translate }}: {{ formatCurrency(summary.totalMonth) }}
+      </h1>
+      <h2>{{ "YEAR" | translate }}: {{ formatCurrency(summary.totalYear) }}</h2>
+      <h3>{{ "TOTAL" | translate }}: {{ formatCurrency(summary.total) }}</h3>
+    </div>
+  </div>
+  <div class="year-selector">
+    <button (click)="selectYear(currentYear - 1)">{{ currentYear - 1 }}</button>
+    <button disabled class="selected">{{ currentYear }}</button>
+    <button (click)="selectYear(currentYear + 1)">{{ currentYear + 1 }}</button>
+  </div>
+
+  <div class="month-selector">
+    <button
+      *ngFor="let month of months; index as i"
+      [class.selected]="selectedMonth === i"
+      (click)="selectMonth(i)"
+    >
+      <span>{{ "MONTHS." + month | translate }}</span>
+    </button>
+  </div>
+
+  <div class="transactions-display-control-panel">
+    <button class="default-icon-button" (click)="openFilterMenu()">
+      <i class="bi bi-funnel"></i>
+    </button>
+    <button
+      class="default-icon-button"
+      (click)="switchTransactionsViewMode('grid')"
+      *ngIf="transactionListType == 'table'"
+    >
+      <i class="bi bi-grid"></i>
+    </button>
+    <button
+      class="default-icon-button"
+      (click)="switchTransactionsViewMode('table')"
+      *ngIf="transactionListType == 'grid'"
+    >
+      <i class="bi bi-card-list"></i>
+    </button>
+  </div>
+
+  <app-transactions-table
+    *ngIf="
+      transactionListType == 'table' && screenWidth > tableTransactionMedia
+    "
+    [items]="transactions"
+    (emitEditTransaction)="editTransaction($event)"
+    (emitDeleteTransaction)="deleteTransaction($event)"
+  ></app-transactions-table>
+
+  <app-transactions-grid
+    *ngIf="transactionListType == 'grid'"
+    [items]="transactions"
+  ></app-transactions-grid>
+
+  <div
+    *ngIf="
+      transactionListType == 'table' && screenWidth <= tableTransactionMedia
+    "
+  >
+    <transactions-list
+      *ngFor="let transaction of transactions; let i = index"
+      [transaction]="transaction"
+      [index]="i"
+      (edit)="editTransaction($event)"
+      (delete)="deleteTransaction($event)"
+    ></transactions-list>
+  </div>
+</div>
+
+<app-side-menu [(opened)]="showFilterMenu">
+  <form [formGroup]="transactionFilterForm" class="form-container">
+    <div class="inputs-container">
+      <div style="display: flex; gap: 0.5rem">
+        <div class="filter-camp">
+          <h3>{{ "MIN_VALUE" | translate }}:</h3>
+          <currency-input
+            [prefix]="'CURRENCY' | translate"
+            [isMandatory]="false"
+            formControlName="minValue"
+          ></currency-input>
+        </div>
+
+        <div class="filter-camp">
+          <h3>{{ "MAX_VALUE" | translate }}:</h3>
+          <currency-input
+            [prefix]="'CURRENCY' | translate"
+            [isMandatory]="false"
+            formControlName="maxValue"
+          ></currency-input>
+        </div>
+      </div>
+
+      <dropdown
+        [placeholder]="'ACTIONS.CATEGORY' | translate"
+        formControlName="category"
+        [options]="categories"
+        labelField="name"
+        valueField="_id"
+        [filterIcon]="false"
+        [icon]="'bi bi-tags'"
+      ></dropdown>
+
+      <dropdown
+        [placeholder]="'ACTIONS.ACCOUNT' | translate"
+        formControlName="account"
+        [options]="accounts"
+        labelField="name"
+        valueField="_id"
+        [filterIcon]="false"
+        [icon]="'bi bi-bank'"
+      ></dropdown>
+
+      <text-input
+        [placeholder]="'DESCRIPTION' | translate"
+        formControlName="description"
+        [allowSpecial]="true"
+      ></text-input>
+    </div>
+
+    <div style="display: flex; justify-content: end; gap: 0.5rem">
+      <button type="button" class="cancel-button" (click)="cleanFilters()">
+        {{ "CLEAN" | translate }}
+      </button>
+      <button type="submit" class="confirm-button" (click)="getTransactions()">
+        {{ "CONFIRM" | translate }}
+      </button>
+    </div>
+  </form>
+</app-side-menu>

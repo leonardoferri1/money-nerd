@@ -1,0 +1,90 @@
+@import "variables";
+
+.chart-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 1rem;
+  overflow: auto;
+  background: none;
+  width: 100%;
+  transition: all 0.3s ease;
+  color: $grey-base;
+}
+
+.chart-bar-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60px;
+}
+
+.bars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  height: 200px;
+}
+
+.bar {
+  border-radius: 4px 4px 0 0;
+  transition: all 0.3s ease;
+
+  max-width: none;
+  max-height: none;
+}
+
+.income-bar {
+  background-color: $light-green;
+}
+
+.expense-bar {
+  background-color: $red-theme;
+}
+
+.month-label {
+  font-size: 12px;
+  margin-top: 4px;
+  text-align: center;
+  user-select: none;
+}
+
+@media (max-width: 1610px) {
+  .chart-container {
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 100%;
+    height: 100%;
+  }
+
+  .chart-bar-group {
+    flex-direction: row;
+    justify-content: end;
+    gap: 1rem;
+    width: 100%;
+    height: 100%;
+  }
+
+  .bars {
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 4px;
+    width: 200px;
+    height: auto;
+  }
+
+  .bar {
+    height: 20px !important;
+    border-radius: 4px;
+    width: auto;
+  }
+
+  .month-label {
+    width: auto;
+    text-align: flex-end;
+    font-size: 12px;
+  }
+}
