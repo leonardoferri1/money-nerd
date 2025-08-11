@@ -42,6 +42,13 @@ export class TransactionsService {
     }
   }
 
+  private toUTCDateOnly(dateString: string): Date {
+    const date = new Date(dateString);
+    return new Date(
+      Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),
+    );
+  }
+
   async findAll(userId: string, filters: FilterTransactionsDto) {
     try {
       const query: FilterQuery<TransactionDocument> = { user: userId };
@@ -76,8 +83,21 @@ export class TransactionsService {
       if (Object.keys(valueQuery).length > 0) query.value = valueQuery;
 
       const dateQuery: Record<string, Date> = {};
-      if (filters.startDate) dateQuery.$gte = new Date(filters.startDate);
-      if (filters.endDate) dateQuery.$lte = new Date(filters.endDate);
+      if (filters.startDate) {
+        dateQuery.$gte = this.toUTCDateOnly(filters.startDate);
+      }
+
+      if (filters.endDate) {
+        const end = new Date(filters.endDate);
+        const inclusiveEnd = new Date(
+          Date.UTC(
+            end.getUTCFullYear(),
+            end.getUTCMonth(),
+            end.getUTCDate() + 1,
+          ),
+        );
+        dateQuery.$lt = inclusiveEnd;
+      }
       if (Object.keys(dateQuery).length > 0) query.date = dateQuery;
 
       const transactions = await this.transactionSchema

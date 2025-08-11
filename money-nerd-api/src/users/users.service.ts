@@ -16,12 +16,15 @@ import { MongoError } from './types/mongo-error';
 import { MailService } from 'src/mail/mail.service';
 import { generateCodeEmailHtml } from '../mail/templates/verification-email.template';
 import { generatePasswordResetEmailHtml } from 'src/mail/templates/password-reset-emai.template';
+import { Category } from 'src/categories/entities/category.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name) private userSchema: Model<User>,
     private readonly mailService: MailService,
+    @InjectModel(Category.name)
+    private categorySchema: Model<Category>,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -33,6 +36,8 @@ export class UsersService {
         canLoginWithPassword: true,
         isEmailVerified: false,
       });
+
+      await this.createDefaultCategory(newUser._id.toString());
 
       await this.sendEmailVerificationCode(newUser);
 
@@ -134,7 +139,7 @@ export class UsersService {
         throw new BadRequestException('Expired code.');
       }
 
-      if (await bcrypt.compare(newPassword, user.password)) {
+      if (user.password && (await bcrypt.compare(newPassword, user.password))) {
         throw new BadRequestException(
           'Your new password is the same as the previous one.',
         );
@@ -177,10 +182,6 @@ export class UsersService {
     }
   }
 
-  // update(id: number, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
-  // }
-
   async remove(id: string) {
     try {
       const result = await this.userSchema.deleteOne({
@@ -193,6 +194,19 @@ export class UsersService {
     } catch (error) {
       if (error instanceof NotFoundException) throw error;
       throw new InternalServerErrorException('Failed to delete user');
+    }
+  }
+
+  private async createDefaultCategory(userId: string): Promise<void> {
+    try {
+      await this.categorySchema.create({
+        name: 'Generic',
+        color: '#ec684a',
+        icon: 'bi bi-alarm',
+        user: userId,
+      });
+    } catch (error) {
+      console.error('Error:', error);
     }
   }
 }

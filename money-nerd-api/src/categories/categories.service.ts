@@ -101,7 +101,6 @@ export class CategoriesService {
             },
           },
         ]);
-
       return summary;
     } catch (error) {
       throw new InternalServerErrorException('Failed to fetch summary', {

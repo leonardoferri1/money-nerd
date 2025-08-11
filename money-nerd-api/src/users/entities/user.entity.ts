@@ -22,8 +22,14 @@ export class User {
   @Prop({ unique: true, index: true, maxlength: 75, required: true })
   email: string;
 
-  @Prop({ maxlength: 300, minlength: 6, required: true })
-  password: string;
+  @Prop({
+    maxlength: 300,
+    minlength: 6,
+    required: function (this: User) {
+      return this.provider === 'local';
+    },
+  })
+  password?: string;
 
   @Prop({ type: [String], default: [] })
   refreshTokens: string[];

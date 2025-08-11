@@ -6,6 +6,10 @@ import { User, UserSchema } from './entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailService } from 'src/mail/mail.service';
+import {
+  Category,
+  CategorySchema,
+} from 'src/categories/entities/category.entity';
 
 @Module({
   imports: [
@@ -13,6 +17,10 @@ import { MailService } from 'src/mail/mail.service';
       {
         name: User.name,
         schema: UserSchema,
+      },
+      {
+        name: Category.name,
+        schema: CategorySchema,
       },
     ]),
     JwtModule.registerAsync({

@@ -14,12 +14,15 @@ import { LoginDto } from './login.dto';
 import { User, UserDocument } from 'src/users/entities/user.entity';
 import { RequestWithUser } from './types/request-with-user';
 import { VerifyEmailDto } from 'src/users/dto/verify-email.dto';
+import { Category } from 'src/categories/entities/category.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     private jwtService: JwtService,
     @InjectModel(User.name) private userSchema: Model<UserDocument>,
+    @InjectModel(Category.name)
+    private categorySchema: Model<Category>,
   ) {}
 
   async login(loginDto: LoginDto) {
@@ -30,18 +33,18 @@ export class AuthService {
         throw new NotFoundException('User not found.');
       }
 
+      if (!user.canLoginWithPassword || !user.password) {
+        throw new UnauthorizedException(
+          'Login with password is not allowed for this account.',
+        );
+      }
+
       if (!(await bcrypt.compare(loginDto.password, user.password))) {
         throw new UnauthorizedException('Incorrect password.');
       }
 
       if (!user.isEmailVerified) {
         throw new UnauthorizedException('Please verify your email first.');
-      }
-
-      if (!user.canLoginWithPassword) {
-        throw new UnauthorizedException(
-          'Login with password is not allowed for this account.',
-        );
       }
 
       const payload = {
@@ -160,6 +163,7 @@ export class AuthService {
 
       return { accessToken, refreshToken };
     } catch (error) {
+      console.log(error);
       throw new InternalServerErrorException('Failed to login with Google', {
         cause: error,
       });
@@ -184,6 +188,7 @@ export class AuthService {
           canLoginWithPassword: false,
           isEmailVerified: true,
         });
+        await this.createDefaultCategory(finalUser._id.toString());
       } else {
         finalUser = existingUser;
         await this.userSchema.updateOne(
@@ -192,6 +197,7 @@ export class AuthService {
             $set: { provider: 'github', githubId: githubUser.user.githubId },
           },
         );
+        await this.createDefaultCategory(finalUser._id.toString());
       }
 
       const payload = {
@@ -252,6 +258,26 @@ export class AuthService {
         'E-mail verification failed due to an unexpected error',
         { cause: error },
       );
+    }
+  }
+
+  private async createDefaultCategory(userId: string): Promise<void> {
+    try {
+      const exists = await this.categorySchema.exists({
+        name: 'Generic',
+        user: userId,
+      });
+
+      if (exists) return;
+
+      await this.categorySchema.create({
+        name: 'Generic',
+        color: '#ec684a',
+        icon: 'bi bi-alarm',
+        user: userId,
+      });
+    } catch (error) {
+      console.error('Erro ao criar categoria default:', error);
     }
   }
 }

@@ -9,6 +9,10 @@ import { UsersModule } from 'src/users/users.module';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { GithubStrategy } from './strategies/github.strategy';
+import {
+  Category,
+  CategorySchema,
+} from 'src/categories/entities/category.entity';
 
 @Module({
   imports: [
@@ -24,7 +28,13 @@ import { GithubStrategy } from './strategies/github.strategy';
       }),
       inject: [ConfigService],
     }),
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema },
+      {
+        name: Category.name,
+        schema: CategorySchema,
+      },
+    ]),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, GoogleStrategy, GithubStrategy],
