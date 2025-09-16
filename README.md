@@ -89,8 +89,6 @@ Você pode:
 
 Clonar, estudar e executar o código para fins pessoais e de aprendizado.
 
-Referenciar este repositório em portfólios e trabalhos acadêmicos.
-
 Você NÃO PODE:
 
 Usar este código para fins comerciais.
